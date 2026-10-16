@@ -1,0 +1,4089 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Mystic Insights - Palm Analysis Studio</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAFAFC;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-700 flex flex-col antialiased">
+
+  <!-- =========================================================
+       TOP HEADER
+  ========================================================== -->
+
+  <header
+    class="bg-white border-b border-slate-100 px-8 py-3.5 flex items-center justify-between sticky top-0 z-40 w-full">
+
+    <div class="flex items-center space-x-2.5">
+      <div class="w-8 h-8 text-[#5538EE] flex items-center justify-center">
+        <i data-lucide="sparkles" class="w-6 h-6"></i>
+      </div>
+
+      <span class="text-base font-extrabold text-slate-900 tracking-tight">
+        Mystic Insights
+      </span>
+    </div>
+
+
+    <!-- STEPPER -->
+
+    <nav class="hidden md:flex items-center space-x-3 text-xs font-semibold">
+
+      <!-- Auth -->
+      <div class="flex items-center text-slate-600 space-x-1.5">
+        <div
+          class="w-5 h-5 rounded-full border border-slate-200 flex items-center justify-center text-[10px] text-[#5538EE]">
+          <i data-lucide="check" class="w-3 h-3"></i>
+        </div>
+        <span>Auth</span>
+      </div>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <!-- Profile -->
+      <div class="flex items-center text-slate-600 space-x-1.5">
+        <div
+          class="w-5 h-5 rounded-full border border-slate-200 flex items-center justify-center text-[10px] text-[#5538EE]">
+          <i data-lucide="check" class="w-3 h-3"></i>
+        </div>
+        <span>Profile</span>
+      </div>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <!-- Palm -->
+      <div class="flex items-center space-x-1.5 border-b-2 border-[#5538EE] pb-0.5">
+
+        <div
+          class="w-5 h-5 rounded-full bg-[#5538EE] text-white flex items-center justify-center text-[10px] font-bold">
+          3
+        </div>
+
+        <span class="font-bold text-[#5538EE]">
+          Palm Analysis
+        </span>
+
+      </div>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <!-- Tarot -->
+      <a href="tarot.html" class="flex items-center text-slate-400 hover:text-slate-600 space-x-1.5 transition">
+
+        <div class="w-5 h-5 rounded-full border border-slate-200 flex items-center justify-center text-[10px]">
+          4
+        </div>
+
+        <span>Tarot</span>
+      </a>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <!-- Report -->
+      <div class="flex items-center text-slate-400 space-x-1.5">
+
+        <div class="w-5 h-5 rounded-full border border-slate-200 flex items-center justify-center text-[10px]">
+          5
+        </div>
+
+        <span>Report</span>
+
+      </div>
+
+    </nav>
+
+
+    <!-- USER -->
+
+    <div class="flex items-center space-x-4">
+
+      <button class="text-slate-400 hover:text-slate-600 p-1" title="Notifications">
+
+        <i data-lucide="bell" class="w-5 h-5"></i>
+
+      </button>
+
+      <div class="flex items-center space-x-2 pl-2 border-l border-slate-100 cursor-pointer" onclick="logout()">
+
+        <div class="w-8 h-8 rounded-full bg-[#5538EE] text-white flex items-center justify-center font-bold text-xs">
+
+          <i data-lucide="user" class="w-4 h-4"></i>
+
+        </div>
+
+        <span id="nav-username" class="text-xs font-semibold text-slate-800">
+          Seeker
+        </span>
+
+        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400">
+        </i>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       MAIN WORKSPACE
+  ========================================================== -->
+
+  <div class="flex-1 flex w-full">
+
+
+    <!-- =======================================================
+         SIDEBAR
+    ======================================================== -->
+
+    <aside
+      class="w-64 bg-white border-r border-slate-100 flex flex-col justify-between p-4 shrink-0 min-h-[calc(100vh-61px)]">
+
+      <nav class="space-y-1">
+
+        <!-- Dashboard -->
+
+        <button id="nav-dashboard" onclick="switchSidebarView('dashboard')"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition cursor-pointer">
+
+          <i data-lucide="home" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>Dashboard</span>
+
+        </button>
+
+
+        <!-- Palm -->
+
+        <button id="nav-palm" onclick="switchSidebarView('palm')"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold text-[#5538EE] bg-[#F1EEFE] transition cursor-pointer">
+
+          <i data-lucide="hand" class="w-4 h-4 text-[#5538EE]">
+          </i>
+
+          <span>Palm Analysis</span>
+
+        </button>
+
+
+        <!-- Tarot -->
+
+        <a href="tarot.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+
+          <i data-lucide="layers" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>Tarot Reading</span>
+
+        </a>
+
+
+        <!-- Reports -->
+
+        <a href="report.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+
+          <i data-lucide="file-text" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>Reports</span>
+
+        </a>
+        <!-- Consultation Hub -->
+        <a href="consultation_hub.html" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl
+         text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+          <i data-lucide="messages-square" class="w-4 h-4 text-slate-400"></i>
+          <span>Consultation Hub</span>
+        </a>
+
+        <!-- History -->
+
+        <a href="history.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+
+          <i data-lucide="clock" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>History</span>
+
+        </a>
+
+
+        <!-- Settings -->
+
+        <a href="#"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+
+          <i data-lucide="settings" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>Settings</span>
+
+        </a>
+
+
+        <!-- Support -->
+
+        <a href="#"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition">
+
+          <i data-lucide="help-circle" class="w-4 h-4 text-slate-400">
+          </i>
+
+          <span>Support</span>
+
+        </a>
+
+      </nav>
+
+
+      <!-- PREMIUM CARD -->
+
+      <div class="bg-[#F8F7FF] border border-purple-100 rounded-2xl p-4 text-center mt-6">
+
+        <div
+          class="w-8 h-8 rounded-full bg-white text-[#5538EE] flex items-center justify-center mx-auto mb-2 shadow-xs">
+
+          <i data-lucide="crown" class="w-4 h-4"></i>
+
+        </div>
+
+        <h4 class="text-xs font-bold text-slate-900">
+          Unlock Premium Insights
+        </h4>
+
+        <p class="text-[10px] text-slate-500 mt-1 leading-snug">
+          Get deeper analysis and personalized guidance.
+        </p>
+
+        <button
+          class="mt-3 w-full py-2.5 px-3 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl transition shadow-xs">
+
+          Upgrade Now
+
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- =======================================================
+         MAIN VIEW
+    ======================================================== -->
+
+    <div class="flex-1 overflow-y-auto">
+
+
+      <!-- =====================================================
+           PALM ANALYSIS
+      ====================================================== -->
+
+      <main id="view-palm-analysis" class="p-8 space-y-6">
+
+        <div>
+
+          <h2 class="text-xl font-extrabold text-slate-900">
+            Palm Image Upload & Line Detection Studio
+          </h2>
+
+          <p class="text-xs text-slate-500 mt-1">
+            Upload a clear palm image to detect key lines, landmarks
+            and generate evidence-based palmistry insights.
+          </p>
+
+        </div>
+
+
+        <!-- ===================================================
+             STUDIO GRID
+        ==================================================== -->
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+
+          <!-- =================================================
+               UPLOAD
+          ================================================== -->
+
+          <div class="lg:col-span-3 space-y-4">
+
+            <div id="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"
+              ondrop="handleDrop(event)"
+              class="border-2 border-dashed border-indigo-200 hover:border-[#5538EE] bg-[#FAF9FF] rounded-2xl p-6 flex flex-col items-center justify-center text-center transition min-h-[280px]">
+
+              <div
+                class="w-12 h-12 rounded-full bg-white text-[#5538EE] shadow-xs flex items-center justify-center mb-3">
+
+                <i data-lucide="upload-cloud" class="w-6 h-6">
+                </i>
+
+              </div>
+
+              <span class="text-xs font-bold text-slate-800">
+                Drag & Drop Palm Image
+              </span>
+
+              <span class="text-[10px] text-slate-400 my-2">
+                or
+              </span>
+
+
+              <!-- CAMERA -->
+
+              <button type="button" onclick="openCameraModal()"
+                class="border border-purple-200 hover:border-[#5538EE] bg-white text-[#5538EE] font-semibold text-xs py-2 px-4 rounded-xl flex items-center space-x-2 transition shadow-xs cursor-pointer">
+
+                <i data-lucide="camera" class="w-4 h-4">
+                </i>
+
+                <span>Click to Capture</span>
+
+              </button>
+
+
+              <!-- FILE -->
+
+              <button type="button" onclick="triggerFileInput()"
+                class="text-[10px] text-slate-400 hover:text-[#5538EE] underline mt-2 cursor-pointer">
+
+                browse local file
+
+              </button>
+
+
+              <input type="file" id="palm-file-input" accept="image/jpeg,image/png,image/webp" class="hidden"
+                onchange="handleFileSelected(event)" />
+
+            </div>
+
+
+            <!-- TIPS -->
+
+            <div class="bg-white border border-slate-100 rounded-2xl p-4 text-left shadow-xs">
+
+              <h5 class="text-[11px] font-bold text-slate-800 mb-2">
+
+                Tips for best results
+
+              </h5>
+
+              <ul class="text-[10px] text-slate-500 space-y-1.5 list-disc list-inside">
+
+                <li>Use clear, balanced lighting</li>
+                <li>Keep hand open and relaxed</li>
+                <li>Background should be plain</li>
+                <li>Capture entire wrist to fingertips</li>
+
+              </ul>
+
+            </div>
+
+
+            <div class="text-[10px] text-slate-400">
+
+              <p>Supported formats: JPG, PNG, WEBP</p>
+              <p>Maximum size: 10MB</p>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               PALM PREVIEW
+          ================================================== -->
+
+          <div class="lg:col-span-6 bg-white border border-slate-100 rounded-2xl p-4 shadow-xs relative">
+
+            <div class="flex items-center justify-between mb-3">
+
+              <h4 class="text-xs font-bold text-slate-800">
+
+                Palm Preview & Detected Lines
+
+              </h4>
+
+              <span id="analysis-status" class="text-[10px] px-2 py-1 rounded-md bg-slate-100 text-slate-500">
+
+                Waiting for image
+
+              </span>
+
+            </div>
+
+
+            <!-- IMAGE + SVG -->
+
+            <div id="palm-viewport"
+              class="relative w-full aspect-[4/5] bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center border border-slate-100">
+
+              <img id="palm-display-img" src="assets/hand_diagram.png" alt="Palm Scan Preview"
+                class="w-full h-full object-contain transition-transform duration-200" />
+
+
+              <!-- DYNAMIC SVG -->
+
+              <svg id="landmark-svg"
+                class="absolute inset-0 w-full h-full pointer-events-none transition-transform duration-200"
+                viewBox="0 0 1000 1000" preserveAspectRatio="none">
+
+                <!-- Paths are inserted dynamically -->
+
+              </svg>
+
+
+              <!-- ZOOM -->
+
+              <div
+                class="absolute bottom-4 right-4 bg-white rounded-xl shadow-md border border-slate-100 flex flex-col p-1 space-y-1 z-10">
+
+                <button onclick="adjustZoom(0.1)"
+                  class="w-7 h-7 flex items-center justify-center text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-50 cursor-pointer">
+
+                  <i data-lucide="plus" class="w-4 h-4">
+                  </i>
+
+                </button>
+
+                <button onclick="adjustZoom(-0.1)"
+                  class="w-7 h-7 flex items-center justify-center text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-50 cursor-pointer">
+
+                  <i data-lucide="minus" class="w-4 h-4">
+                  </i>
+
+                </button>
+
+                <button onclick="resetZoom()"
+                  class="w-7 h-7 flex items-center justify-center text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-50 cursor-pointer">
+
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5">
+                  </i>
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="flex flex-wrap gap-3 mt-3 text-[9px]">
+
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Life
+              </span>
+
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                Head
+              </span>
+
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                Heart
+              </span>
+
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                Fate
+              </span>
+
+              <span class="flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                Sun
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               DETECTED METRICS
+          ================================================== -->
+
+          <div class="lg:col-span-3 bg-white border border-slate-100 rounded-2xl p-5 shadow-xs space-y-5">
+
+            <h4 class="text-xs font-bold text-slate-900">
+
+              Detected Metrics
+
+            </h4>
+
+
+            <div class="space-y-4 text-xs">
+
+
+              <!-- LIFE -->
+
+              <div class="flex items-center justify-between">
+
+                <div>
+
+                  <p class="font-bold text-slate-800">
+                    Life Line
+                  </p>
+
+                  <p id="val-life" class="text-[11px] text-slate-400">
+
+                    Waiting for analysis
+
+                  </p>
+
+                </div>
+
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-50">
+                </div>
+
+              </div>
+
+
+              <!-- HEART -->
+
+              <div class="flex items-center justify-between">
+
+                <div>
+
+                  <p class="font-bold text-slate-800">
+                    Heart Line
+                  </p>
+
+                  <p id="val-heart" class="text-[11px] text-slate-400">
+
+                    Waiting for analysis
+
+                  </p>
+
+                </div>
+
+                <div class="w-2.5 h-2.5 rounded-full bg-pink-500 ring-4 ring-pink-50">
+                </div>
+
+              </div>
+
+
+              <!-- HEAD -->
+
+              <div class="flex items-center justify-between">
+
+                <div>
+
+                  <p class="font-bold text-slate-800">
+                    Head Line
+                  </p>
+
+                  <p id="val-head" class="text-[11px] text-slate-400">
+
+                    Waiting for analysis
+
+                  </p>
+
+                </div>
+
+                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 ring-4 ring-blue-50">
+                </div>
+
+              </div>
+
+
+              <!-- FATE -->
+
+              <div class="flex items-center justify-between">
+
+                <div>
+
+                  <p class="font-bold text-slate-800">
+                    Fate Line
+                  </p>
+
+                  <p id="val-fate" class="text-[11px] text-slate-400">
+
+                    Waiting for analysis
+
+                  </p>
+
+                </div>
+
+                <div class="w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-amber-50">
+                </div>
+
+              </div>
+
+
+              <!-- SUN -->
+
+              <div class="flex items-center justify-between">
+
+                <div>
+
+                  <p class="font-bold text-slate-800">
+                    Sun Line
+                  </p>
+
+                  <p id="val-sun" class="text-[11px] text-slate-400">
+
+                    Waiting for analysis
+
+                  </p>
+
+                </div>
+
+                <div class="w-2.5 h-2.5 rounded-full bg-purple-500 ring-4 ring-purple-50">
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- CONFIDENCE -->
+
+            <div class="pt-4 border-t border-slate-100">
+
+              <span class="text-[11px] font-medium text-slate-500">
+
+                Analysis Confidence
+
+              </span>
+
+              <div class="text-2xl font-black text-slate-900 mt-1" id="confidence-percentage">
+
+                —
+
+              </div>
+
+              <div class="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+
+                <div id="confidence-bar" class="bg-[#5538EE] h-full rounded-full transition-all duration-500"
+                  style="width: 0%;">
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- HAND TYPE -->
+
+            <div class="pt-4 border-t border-slate-100">
+
+              <span class="text-[11px] font-medium text-slate-500">
+
+                Detected Hand Type
+
+              </span>
+
+              <p id="hand-type" class="text-sm font-bold text-slate-900 mt-1">
+
+                —
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ===================================================
+             WORKFLOW
+        ==================================================== -->
+
+        <div
+          class="bg-white border border-slate-100 rounded-2xl p-4 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+
+
+          <div class="flex items-center space-x-3 w-full md:w-auto">
+
+
+            <!-- STEP 1 -->
+
+            <div id="workflow-step-1"
+              class="flex items-center space-x-2.5 bg-[#FAF9FF] border border-purple-100 px-4 py-2 rounded-xl">
+
+              <i data-lucide="sparkles" class="w-4 h-4 text-[#5538EE]">
+              </i>
+
+              <div>
+
+                <p class="text-[11px] font-bold text-slate-900">
+
+                  Preprocess Image
+
+                </p>
+
+                <p class="text-[9px] text-slate-500">
+
+                  Enhance & Clean
+
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300">
+            </i>
+
+
+            <!-- STEP 2 -->
+
+            <div id="workflow-step-2"
+              class="flex items-center space-x-2.5 bg-white border border-slate-200 px-4 py-2 rounded-xl">
+
+              <span
+                class="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-[9px] font-bold text-slate-600">
+                2
+              </span>
+
+              <div>
+
+                <p class="text-[11px] font-bold text-slate-800">
+
+                  Extract Features
+
+                </p>
+
+                <p class="text-[9px] text-slate-500">
+
+                  Detect lines & landmarks
+
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-300">
+            </i>
+
+
+            <!-- STEP 3 -->
+
+            <div id="workflow-step-3"
+              class="flex items-center space-x-2.5 bg-white border border-slate-200 px-4 py-2 rounded-xl">
+
+              <span
+                class="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-[9px] font-bold text-slate-600">
+                3
+              </span>
+
+              <div>
+
+                <p class="text-[11px] font-bold text-slate-800">
+
+                  Generate Analysis
+
+                </p>
+
+                <p class="text-[9px] text-slate-500">
+
+                  Interpretation
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- BUTTONS -->
+
+          <div class="flex items-center gap-3 w-full md:w-auto">
+
+
+            <button id="btn-generate-analysis" onclick="runPalmAnalysis()"
+              class="w-full md:w-auto px-7 py-3 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl shadow-md shadow-[#5538EE]/20 flex items-center justify-center space-x-2 transition cursor-pointer">
+
+              <i data-lucide="sparkles" class="w-4 h-4">
+              </i>
+
+              <span id="btn-label">
+                Generate Analysis
+              </span>
+
+            </button>
+
+
+            <button id="btn-next-tarot" onclick="goToTarot()"
+              class="hidden px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-600/20 flex items-center justify-center space-x-1.5 transition cursor-pointer">
+
+              <span>
+                Proceed to Tarot
+              </span>
+
+              <i data-lucide="arrow-right" class="w-4 h-4">
+              </i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- ERROR / MESSAGE -->
+
+        <div id="analysis-message" class="hidden rounded-xl px-4 py-3 text-xs">
+        </div>
+
+        <!-- CLIENT FEEDBACK: shown after a successful palm analysis -->
+        <section id="client-feedback-section"
+          class="hidden bg-white border border-purple-100 rounded-2xl p-6 shadow-sm space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-[#5538EE] flex items-center justify-center shrink-0">
+              <i data-lucide="star" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">How was your palm reading?</h3>
+              <p class="text-xs text-slate-500 mt-1">Your feedback helps your spiritual consultant understand your
+                experience.</p>
+            </div>
+          </div>
+          <form id="client-feedback-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="feedback-consultant-id" class="block text-xs font-semibold text-slate-700 mb-1.5">Assigned
+                  consultant ID</label>
+                <input id="feedback-consultant-id" name="consultant_id" required
+                  placeholder="Paste your consultant UUID" autocomplete="off"
+                  class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs outline-none focus:border-[#5538EE] focus:ring-2 focus:ring-purple-100" />
+                <p class="text-[10px] text-slate-400 mt-1">Use the ID supplied by your assigned consultant.</p>
+              </div>
+              <div>
+                <label for="feedback-rating" class="block text-xs font-semibold text-slate-700 mb-1.5">Your
+                  rating</label>
+                <select id="feedback-rating" name="rating" required
+                  class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs outline-none focus:border-[#5538EE]">
+                  <option value="">Choose a rating</option>
+                  <option value="5">★★★★★ — Excellent</option>
+                  <option value="4">★★★★☆ — Good</option>
+                  <option value="3">★★★☆☆ — Okay</option>
+                  <option value="2">★★☆☆☆ — Poor</option>
+                  <option value="1">★☆☆☆☆ — Very poor</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="feedback-comments" class="block text-xs font-semibold text-slate-700 mb-1.5">Comments
+                (optional)</label>
+              <textarea id="feedback-comments" name="comments" rows="3" maxlength="2000"
+                placeholder="Share what was useful or what could be improved…"
+                class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs outline-none focus:border-[#5538EE] focus:ring-2 focus:ring-purple-100"></textarea>
+            </div>
+            <div id="feedback-message" class="hidden rounded-xl px-3 py-2 text-xs" role="status" aria-live="polite">
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="text-[10px] text-slate-400">Feedback is submitted to your assigned consultant.</p>
+              <button id="submit-feedback-btn" type="submit"
+                class="px-5 py-2.5 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl transition disabled:opacity-60 disabled:cursor-not-allowed">Submit
+                feedback</button>
+            </div>
+          </form>
+        </section>
+
+      </main>
+
+
+      <!-- =====================================================
+           DASHBOARD VIEW
+      ====================================================== -->
+
+      <main id="view-dashboard-overview" class="hidden p-8 space-y-6">
+
+        <div>
+
+          <h2 class="text-xl font-extrabold text-slate-900">
+
+            Welcome Back to Mystic Insights
+
+          </h2>
+
+          <p class="text-xs text-slate-500 mt-1">
+
+            Access your historical insights, palm analysis
+            and tarot readings.
+
+          </p>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-2">
+
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-[#5538EE] flex items-center justify-center">
+
+              <i data-lucide="hand" class="w-5 h-5">
+              </i>
+
+            </div>
+
+            <h4 class="text-sm font-bold text-slate-900">
+
+              Palmistry Scans
+
+            </h4>
+
+            <p id="dashboard-palm-count" class="text-2xl font-black text-slate-900">
+
+              —
+
+            </p>
+
+            <p class="text-[11px] text-slate-400">
+
+              Stored palm analyses
+
+            </p>
+
+          </div>
+
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-2">
+
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-[#5538EE] flex items-center justify-center">
+
+              <i data-lucide="layers" class="w-5 h-5">
+              </i>
+
+            </div>
+
+            <h4 class="text-sm font-bold text-slate-900">
+
+              Tarot Readings
+
+            </h4>
+
+            <p id="dashboard-tarot-count" class="text-2xl font-black text-slate-900">
+
+              —
+
+            </p>
+
+            <p class="text-[11px] text-slate-400">
+
+              Tarot history
+
+            </p>
+
+          </div>
+
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-xs space-y-2">
+
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-[#5538EE] flex items-center justify-center">
+
+              <i data-lucide="activity" class="w-5 h-5">
+              </i>
+
+            </div>
+
+            <h4 class="text-sm font-bold text-slate-900">
+
+              Latest Confidence
+
+            </h4>
+
+            <p id="dashboard-confidence" class="text-2xl font-black text-slate-900">
+
+              —
+
+            </p>
+
+            <p class="text-[11px] text-slate-400">
+
+              Latest palm analysis
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             PERSONALIZED INTELLIGENCE
+        ==================================================== -->
+
+        <section id="dashboard-intelligence-section" class="space-y-4">
+
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">
+                Your Personalized Intelligence
+              </h3>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                A reflective summary generated from your latest combined reading.
+              </p>
+            </div>
+
+            <span id="dashboard-intelligence-status"
+              class="text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+              No combined reading loaded
+            </span>
+          </div>
+
+
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+            <!-- PERSONALITY -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
+
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-purple-50 text-[#5538EE] flex items-center justify-center">
+                  <i data-lucide="user-round" class="w-4 h-4"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Personality Profile
+                  </h4>
+                  <p class="text-[9px] text-slate-400">
+                    Symbolic personality themes
+                  </p>
+                </div>
+              </div>
+
+              <p id="dashboard-personality-summary" class="text-[11px] leading-relaxed text-slate-600">
+                Complete a combined palm and Tarot reading to see your profile.
+              </p>
+
+              <div id="dashboard-personality-traits" class="flex flex-wrap gap-1.5 mt-3">
+              </div>
+
+            </div>
+
+
+            <!-- THEMES -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
+
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Top Themes
+                  </h4>
+                  <p class="text-[9px] text-slate-400">
+                    Areas emphasized by the reading
+                  </p>
+                </div>
+              </div>
+
+              <div id="dashboard-top-themes" class="space-y-2">
+                <p class="text-[11px] text-slate-400">
+                  No themes available yet.
+                </p>
+              </div>
+
+            </div>
+
+
+            <!-- LIFE TRENDS -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
+
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <i data-lucide="trending-up" class="w-4 h-4"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Life Trend Areas
+                  </h4>
+                  <p class="text-[9px] text-slate-400">
+                    Reflective areas for attention
+                  </p>
+                </div>
+              </div>
+
+              <div id="dashboard-life-trends" class="space-y-2">
+                <p class="text-[11px] text-slate-400">
+                  No life trends available yet.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            <!-- PRIORITY RECOMMENDATIONS -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
+
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                  <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Priority Recommendations
+                  </h4>
+                  <p class="text-[9px] text-slate-400">
+                    Practical reflection prompts from your reading
+                  </p>
+                </div>
+              </div>
+
+              <div id="dashboard-recommendations" class="space-y-2">
+                <p class="text-[11px] text-slate-400">
+                  No recommendations available yet.
+                </p>
+              </div>
+
+            </div>
+
+
+            <!-- OPPORTUNITIES -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs">
+
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                  <i data-lucide="compass" class="w-4 h-4"></i>
+                </div>
+
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Opportunities for Reflection
+                  </h4>
+                  <p class="text-[9px] text-slate-400">
+                    Areas highlighted by the life-trends engine
+                  </p>
+                </div>
+              </div>
+
+              <div id="dashboard-opportunities" class="space-y-2">
+                <p class="text-[11px] text-slate-400">
+                  No opportunities available yet.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="bg-[#FAF9FF] border border-purple-100 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between gap-4">
+
+              <div>
+                <h4 class="text-xs font-bold text-slate-900">
+                  Combined Insight Score
+                </h4>
+                <p class="text-[10px] text-slate-500 mt-0.5">
+                  A weighted system score based on the available reading evidence.
+                </p>
+              </div>
+
+              <div id="dashboard-insight-score" class="text-2xl font-black text-[#5538EE]">
+                —
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs flex items-center justify-between">
+
+          <div>
+
+            <h3 class="text-sm font-bold text-slate-900">
+
+              Ready to start a new palm scan?
+
+            </h3>
+
+            <p class="text-xs text-slate-500 mt-0.5">
+
+              Open the line detection studio and upload a palm image.
+
+            </p>
+
+          </div>
+
+          <button onclick="switchSidebarView('palm')"
+            class="px-5 py-2.5 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer">
+
+            Open Palm Studio
+
+          </button>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       CAMERA MODAL
+  ========================================================== -->
+
+  <div id="camera-modal"
+    class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-4">
+
+
+      <div class="flex items-center justify-between">
+
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+
+          <i data-lucide="camera" class="w-4 h-4 text-[#5538EE]">
+          </i>
+
+          Live Palm Capture
+
+        </h3>
+
+        <button onclick="closeCameraModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+
+          <i data-lucide="x" class="w-5 h-5">
+          </i>
+
+        </button>
+
+      </div>
+
+
+      <div class="relative w-full aspect-[4/5] bg-slate-950 rounded-2xl overflow-hidden border border-slate-200">
+
+        <video id="webcam-video" autoplay playsinline class="w-full h-full object-cover">
+        </video>
+
+        <div
+          class="absolute inset-0 border-2 border-dashed border-white/40 m-6 rounded-2xl pointer-events-none flex items-center justify-center">
+
+          <span
+            class="text-[10px] text-white/80 uppercase font-semibold bg-black/50 px-3 py-1 rounded-full backdrop-blur-xs">
+
+            Center Open Palm Here
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="flex items-center justify-end space-x-3">
+
+        <button onclick="closeCameraModal()"
+          class="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-semibold rounded-xl hover:bg-slate-50 cursor-pointer">
+
+          Cancel
+
+        </button>
+
+        <button onclick="takeWebcamSnapshot()"
+          class="px-5 py-2 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer">
+
+          <i data-lucide="aperture" class="w-4 h-4">
+          </i>
+
+          Snap Photo
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script>
+
+    /* =========================================================
+       CONFIGURATION
+    ========================================================== */
+
+    const API_BASE = "http://127.0.0.1:8000/api/v1";
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+    const SUPPORTED_TYPES = [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+
+    /* =========================================================
+       STATE
+    ========================================================== */
+
+    let token = localStorage.getItem("access_token");
+
+    let currentZoom = 1.0;
+
+    let selectedFile = null;
+
+    let liveCameraStream = null;
+
+    let lastPalmResult = null;
+    let currentUserId = null;
+
+
+    /* =========================================================
+       LINE COLORS
+    ========================================================== */
+
+    const LINE_COLORS = {
+      life_line: "#10B981",
+      head_line: "#3B82F6",
+      heart_line: "#EC4899",
+      fate_line: "#F59E0B",
+      sun_line: "#8B5CF6"
+    };
+
+
+    /* =========================================================
+       INITIALIZATION
+    ========================================================== */
+
+    lucide.createIcons();
+
+
+    window.addEventListener("DOMContentLoaded", async () => {
+
+      if (!token) {
+
+        window.location.href = "index.html";
+
+        return;
+
+      }
+
+
+      const authenticated = await loadCurrentUser();
+
+      if (!authenticated) {
+        return;
+      }
+
+
+      await loadDashboardStats();
+      loadPersonalizedDashboard();
+
+      await restorePreviousPalmState();
+
+    });
+
+
+    /* =========================================================
+       CURRENT USER
+    ========================================================== */
+
+    async function loadCurrentUser() {
+
+      try {
+
+        const res = await fetch(`${API_BASE}/users/me`, {
+
+          method: "GET",
+
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+          }
+
+        });
+
+
+        if (res.status === 401) {
+
+          logout();
+
+          return false;
+
+        }
+
+
+        if (!res.ok) {
+
+          throw new Error("Could not load the current user.");
+
+        }
+
+
+        const me = await res.json();
+        currentUserId = me.id || me.user_id || me.user?.id || null;
+
+
+        /*
+          Profile is nested in the current backend response.
+        */
+
+        const displayName =
+          me.profile?.full_name ||
+          me.email?.split("@")[0] ||
+          "Seeker";
+
+
+        document.getElementById("nav-username").innerText =
+          displayName;
+
+
+        return true;
+
+
+      } catch (error) {
+
+        console.error("Current user error:", error);
+
+        logout();
+
+        return false;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       DASHBOARD STATISTICS
+    ========================================================== */
+
+    async function loadDashboardStats() {
+
+      if (!token) {
+        return;
+      }
+
+
+      try {
+
+        const res = await fetch(
+          `${API_BASE}/readings/dashboard-stats`,
+          {
+            method: "GET",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Accept": "application/json"
+            }
+          }
+        );
+
+
+        if (res.status === 401) {
+
+          console.warn(
+            "Dashboard statistics request was unauthorized."
+          );
+
+          logout();
+
+          return;
+
+        }
+
+
+        let data = null;
+
+
+        try {
+          data = await res.json();
+        } catch {
+          throw new Error(
+            `Server returned HTTP ${res.status}.`
+          );
+        }
+
+
+        if (!res.ok) {
+          throw new Error(
+            data?.detail ||
+            "Failed to load dashboard statistics."
+          );
+        }
+
+
+        /*
+          dashboard-stats returns the values inside `stats`.
+          Example:
+          {
+            "status": "success",
+            "stats": {
+              "palm_readings": 1,
+              "tarot_readings": 1,
+              "total_readings": 2,
+              "latest_confidence": 0.87
+            }
+          }
+        */
+        const stats = data?.stats || data || {};
+
+        const palmCount =
+          document.getElementById(
+            "dashboard-palm-count"
+          );
+
+        if (palmCount) {
+          const value = Number(
+            stats.palm_readings ??
+            stats.palmistry_scans ??
+            0
+          );
+
+          palmCount.innerText =
+            `${Number.isFinite(value) ? value : 0} Scans`;
+        }
+
+
+        const tarotCount =
+          document.getElementById(
+            "dashboard-tarot-count"
+          );
+
+        if (tarotCount) {
+          const value = Number(
+            stats.tarot_readings ??
+            0
+          );
+
+          tarotCount.innerText =
+            `${Number.isFinite(value) ? value : 0} Readings`;
+        }
+
+
+        const confidence =
+          document.getElementById(
+            "dashboard-confidence"
+          );
+
+        if (confidence) {
+          const rawConfidence =
+            Number(stats.latest_confidence);
+
+          if (Number.isFinite(rawConfidence)) {
+            const percentage =
+              rawConfidence >= 0 && rawConfidence <= 1
+                ? rawConfidence * 100
+                : rawConfidence;
+
+            confidence.innerText =
+              `${percentage.toFixed(1)}%`;
+          } else {
+            confidence.innerText = "—";
+          }
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard statistics error:",
+          error
+        );
+
+        const palmCount =
+          document.getElementById(
+            "dashboard-palm-count"
+          );
+
+        const tarotCount =
+          document.getElementById(
+            "dashboard-tarot-count"
+          );
+
+        if (palmCount) {
+          palmCount.innerText = "—";
+        }
+
+        if (tarotCount) {
+          tarotCount.innerText = "—";
+        }
+
+      }
+
+    }
+
+
+
+    /* =========================================================
+       PERSONALIZED DASHBOARD INTELLIGENCE
+    ========================================================== */
+
+    function loadPersonalizedDashboard() {
+
+      const status =
+        document.getElementById(
+          "dashboard-intelligence-status"
+        );
+
+      const raw =
+        sessionStorage.getItem(
+          "composite_report_data"
+        );
+
+      if (!raw) {
+
+        resetPersonalizedDashboard();
+
+        if (status) {
+          status.innerText =
+            "No combined reading loaded";
+          status.className =
+            "text-[10px] px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500";
+        }
+
+        return;
+      }
+
+      try {
+
+        const data =
+          JSON.parse(raw);
+
+        const report =
+          data?.report ||
+          data?.result?.report ||
+          data;
+
+        if (!report || typeof report !== "object") {
+          throw new Error(
+            "Invalid composite report structure."
+          );
+        }
+
+        renderPersonalizedDashboard(
+          report
+        );
+
+        if (status) {
+          status.innerText =
+            "Latest combined reading";
+          status.className =
+            "text-[10px] px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-600";
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Could not load personalized dashboard:",
+          error
+        );
+
+        resetPersonalizedDashboard();
+
+        if (status) {
+          status.innerText =
+            "Reading data unavailable";
+          status.className =
+            "text-[10px] px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600";
+        }
+
+      }
+
+    }
+
+
+    function renderPersonalizedDashboard(
+      report
+    ) {
+
+      const personality =
+        report.personality_intelligence ||
+        report.intelligence?.personality ||
+        {};
+
+      const recommendations =
+        report.recommendation_intelligence ||
+        report.intelligence?.recommendations ||
+        {};
+
+      const lifeTrends =
+        report.life_trends_intelligence ||
+        report.intelligence?.life_trends ||
+        {};
+
+      const personalityProfile =
+        personality.personality_profile ||
+        {};
+
+      const summary =
+        personalityProfile.summary ||
+        "The latest reading does not contain a personality summary.";
+
+      setDashboardText(
+        "dashboard-personality-summary",
+        summary
+      );
+
+      renderDashboardTags(
+        "dashboard-personality-traits",
+        personalityProfile.core_traits
+      );
+
+      renderDashboardThemes(
+        "dashboard-top-themes",
+        recommendations.top_themes
+      );
+
+      renderDashboardList(
+        "dashboard-recommendations",
+        recommendations.priority_recommendations ||
+        recommendations.recommendations,
+        "No priority recommendations available."
+      );
+
+      renderDashboardList(
+        "dashboard-life-trends",
+        lifeTrends.life_trends,
+        "No life-trend areas available."
+      );
+
+      renderDashboardList(
+        "dashboard-opportunities",
+        lifeTrends.opportunities,
+        "No opportunities available."
+      );
+
+      const score =
+        report.overall_insight_score ??
+        report.insight_score ??
+        dataNumber(
+          report,
+          "overall_score"
+        );
+
+      const scoreElement =
+        document.getElementById(
+          "dashboard-insight-score"
+        );
+
+      if (scoreElement) {
+
+        const numericScore =
+          Number(score);
+
+        scoreElement.innerText =
+          Number.isFinite(numericScore)
+            ? `${numericScore.toFixed(1)}%`
+            : "—";
+
+      }
+
+    }
+
+
+    function setDashboardText(
+      elementId,
+      value
+    ) {
+
+      const element =
+        document.getElementById(
+          elementId
+        );
+
+      if (!element) {
+        return;
+      }
+
+      const text =
+        value === null ||
+          value === undefined ||
+          value === ""
+          ? "—"
+          : String(value);
+
+      element.innerText = text;
+
+    }
+
+
+    function renderDashboardTags(
+      elementId,
+      items
+    ) {
+
+      const container =
+        document.getElementById(
+          elementId
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      if (!Array.isArray(items) || !items.length) {
+
+        const empty =
+          document.createElement("span");
+
+        empty.className =
+          "text-[10px] text-slate-400";
+
+        empty.innerText =
+          "No personality themes available.";
+
+        container.appendChild(empty);
+
+        return;
+      }
+
+      items
+        .filter(
+          item =>
+            item !== null &&
+            item !== undefined &&
+            String(item).trim()
+        )
+        .slice(0, 8)
+        .forEach(item => {
+
+          const tag =
+            document.createElement("span");
+
+          tag.className =
+            "px-2 py-1 rounded-lg bg-purple-50 text-[#5538EE] text-[9px] font-semibold";
+
+          tag.innerText =
+            formatDashboardLabel(
+              String(item)
+            );
+
+          container.appendChild(tag);
+
+        });
+
+    }
+
+
+    function renderDashboardThemes(
+      elementId,
+      themes
+    ) {
+
+      const container =
+        document.getElementById(
+          elementId
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      if (!Array.isArray(themes) || !themes.length) {
+
+        const empty =
+          document.createElement("p");
+
+        empty.className =
+          "text-[11px] text-slate-400";
+
+        empty.innerText =
+          "No themes available yet.";
+
+        container.appendChild(empty);
+
+        return;
+      }
+
+      themes
+        .slice(0, 5)
+        .forEach(theme => {
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "flex items-center justify-between gap-3";
+
+          const name =
+            document.createElement("span");
+
+          name.className =
+            "text-[10px] font-semibold text-slate-700";
+
+          name.innerText =
+            formatDashboardLabel(
+              theme?.theme ||
+              theme?.name ||
+              theme?.category ||
+              "Theme"
+            );
+
+          const score =
+            document.createElement("span");
+
+          score.className =
+            "text-[10px] font-bold text-[#5538EE]";
+
+          const rawScore =
+            theme?.score ??
+            theme?.relevance_score ??
+            theme?.strength;
+
+          const numericScore =
+            Number(rawScore);
+
+          score.innerText =
+            Number.isFinite(numericScore)
+              ? `${numericScore.toFixed(1)}`
+              : "—";
+
+          row.appendChild(name);
+          row.appendChild(score);
+          container.appendChild(row);
+
+        });
+
+    }
+
+
+    function renderDashboardList(
+      elementId,
+      items,
+      emptyText
+    ) {
+
+      const container =
+        document.getElementById(
+          elementId
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      if (!Array.isArray(items) || !items.length) {
+
+        const empty =
+          document.createElement("p");
+
+        empty.className =
+          "text-[11px] text-slate-400";
+
+        empty.innerText =
+          emptyText;
+
+        container.appendChild(empty);
+
+        return;
+      }
+
+      items
+        .slice(0, 4)
+        .forEach((item, index) => {
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "flex items-start gap-2";
+
+          const marker =
+            document.createElement("span");
+
+          marker.className =
+            "w-5 h-5 shrink-0 rounded-md bg-slate-50 text-[#5538EE] flex items-center justify-center text-[9px] font-bold";
+
+          marker.innerText =
+            String(index + 1);
+
+          const content =
+            document.createElement("div");
+
+          const title =
+            document.createElement("p");
+
+          title.className =
+            "text-[10px] font-bold text-slate-800";
+
+          title.innerText =
+            formatDashboardLabel(
+              item?.title ||
+              item?.name ||
+              item?.area ||
+              item?.theme ||
+              "Insight"
+            );
+
+          const description =
+            document.createElement("p");
+
+          description.className =
+            "text-[10px] leading-relaxed text-slate-500 mt-0.5";
+
+          description.innerText =
+            item?.description ||
+            item?.recommendation ||
+            item?.summary ||
+            item?.reflection_prompt ||
+            item?.rationale ||
+            "Reflect on this area using the context of your latest reading.";
+
+          content.appendChild(title);
+          content.appendChild(description);
+
+          row.appendChild(marker);
+          row.appendChild(content);
+
+          container.appendChild(row);
+
+        });
+
+    }
+
+
+    function formatDashboardLabel(
+      value
+    ) {
+
+      return String(value)
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, char =>
+          char.toUpperCase()
+        );
+
+    }
+
+
+    function dataNumber(
+      object,
+      key
+    ) {
+
+      const value =
+        object?.[key];
+
+      return Number.isFinite(
+        Number(value)
+      )
+        ? Number(value)
+        : null;
+
+    }
+
+
+    function resetPersonalizedDashboard() {
+
+      setDashboardText(
+        "dashboard-personality-summary",
+        "Complete a combined palm and Tarot reading to see your personalized intelligence."
+      );
+
+      renderDashboardTags(
+        "dashboard-personality-traits",
+        []
+      );
+
+      renderDashboardThemes(
+        "dashboard-top-themes",
+        []
+      );
+
+      renderDashboardList(
+        "dashboard-recommendations",
+        [],
+        "No recommendations available yet."
+      );
+
+      renderDashboardList(
+        "dashboard-life-trends",
+        [],
+        "No life-trend areas available yet."
+      );
+
+      renderDashboardList(
+        "dashboard-opportunities",
+        [],
+        "No opportunities available yet."
+      );
+
+      setDashboardText(
+        "dashboard-insight-score",
+        "—"
+      );
+
+    }
+
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================== */
+
+    function logout() {
+
+      localStorage.removeItem("access_token");
+
+      sessionStorage.removeItem("palm_reading_id");
+
+      sessionStorage.removeItem("palm_features");
+
+      sessionStorage.removeItem("analyzed_palm_image");
+
+      sessionStorage.removeItem("composite_report_data");
+
+      window.location.href = "index.html";
+
+    }
+
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================== */
+
+    function switchSidebarView(view) {
+
+      const isPalm = view === "palm";
+
+
+      document
+        .getElementById("view-palm-analysis")
+        .classList
+        .toggle("hidden", !isPalm);
+
+
+      document
+        .getElementById("view-dashboard-overview")
+        .classList
+        .toggle("hidden", isPalm);
+
+
+      const navPalm =
+        document.getElementById("nav-palm");
+
+      const navDash =
+        document.getElementById("nav-dashboard");
+
+
+      if (isPalm) {
+
+        navPalm.className =
+          "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold text-[#5538EE] bg-[#F1EEFE] transition cursor-pointer";
+
+        navDash.className =
+          "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition cursor-pointer";
+
+      } else {
+
+        navDash.className =
+          "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold text-[#5538EE] bg-[#F1EEFE] transition cursor-pointer";
+
+        navPalm.className =
+          "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition cursor-pointer";
+
+        loadDashboardStats();
+        loadPersonalizedDashboard();
+
+      }
+
+
+      lucide.createIcons();
+
+    }
+
+
+    /* =========================================================
+       CAMERA
+    ========================================================== */
+
+    async function openCameraModal() {
+
+      const modal =
+        document.getElementById("camera-modal");
+
+
+      modal.classList.remove("hidden");
+
+      lucide.createIcons();
+
+
+      try {
+
+        if (!navigator.mediaDevices?.getUserMedia) {
+
+          throw new Error(
+            "Camera access is not supported by this browser."
+          );
+
+        }
+
+
+        liveCameraStream =
+          await navigator.mediaDevices.getUserMedia({
+
+            video: {
+              facingMode: "user",
+              width: { ideal: 720 },
+              height: { ideal: 960 }
+            }
+
+          });
+
+
+        document.getElementById(
+          "webcam-video"
+        ).srcObject = liveCameraStream;
+
+
+      } catch (error) {
+
+        alert(
+          "Camera permission denied or camera device not found."
+        );
+
+        closeCameraModal();
+
+      }
+
+    }
+
+
+    function closeCameraModal() {
+
+      const modal =
+        document.getElementById("camera-modal");
+
+
+      modal.classList.add("hidden");
+
+
+      if (liveCameraStream) {
+
+        liveCameraStream
+          .getTracks()
+          .forEach(track => track.stop());
+
+        liveCameraStream = null;
+
+      }
+
+    }
+
+
+    function takeWebcamSnapshot() {
+
+      const video =
+        document.getElementById("webcam-video");
+
+
+      if (
+        !video.videoWidth ||
+        !video.videoHeight
+      ) {
+
+        alert("Camera is not ready yet.");
+
+        return;
+
+      }
+
+
+      const canvas =
+        document.createElement("canvas");
+
+
+      canvas.width =
+        video.videoWidth;
+
+      canvas.height =
+        video.videoHeight;
+
+
+      const ctx =
+        canvas.getContext("2d");
+
+
+      ctx.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      canvas.toBlob(
+        blob => {
+
+          if (!blob) {
+
+            alert(
+              "Could not capture the camera image."
+            );
+
+            return;
+
+          }
+
+
+          selectedFile =
+            new File(
+              [blob],
+              "webcam_palm.png",
+              {
+                type: "image/png"
+              }
+            );
+
+
+          const dataUrl =
+            canvas.toDataURL("image/png");
+
+
+          document.getElementById(
+            "palm-display-img"
+          ).src = dataUrl;
+
+
+          sessionStorage.setItem(
+            "analyzed_palm_image",
+            dataUrl
+          );
+
+
+          setAnalysisStatus(
+            "Image ready for analysis",
+            "ready"
+          );
+
+
+          closeCameraModal();
+
+        },
+        "image/png"
+      );
+
+    }
+
+
+    /* =========================================================
+       FILE UPLOAD
+    ========================================================== */
+
+    function triggerFileInput() {
+
+      document
+        .getElementById("palm-file-input")
+        .click();
+
+    }
+
+
+    function handleFileSelected(event) {
+
+      const file =
+        event.target.files?.[0];
+
+
+      if (file) {
+
+        loadFile(file);
+
+      }
+
+    }
+
+
+    function handleDragOver(event) {
+
+      event.preventDefault();
+
+
+      document
+        .getElementById("drop-zone")
+        .classList
+        .add(
+          "border-[#5538EE]",
+          "bg-purple-50/50"
+        );
+
+    }
+
+
+    function handleDragLeave(event) {
+
+      event.preventDefault();
+
+
+      document
+        .getElementById("drop-zone")
+        .classList
+        .remove(
+          "border-[#5538EE]",
+          "bg-purple-50/50"
+        );
+
+    }
+
+
+    function handleDrop(event) {
+
+      event.preventDefault();
+
+
+      document
+        .getElementById("drop-zone")
+        .classList
+        .remove(
+          "border-[#5538EE]",
+          "bg-purple-50/50"
+        );
+
+
+      const file =
+        event.dataTransfer.files?.[0];
+
+
+      if (file) {
+
+        loadFile(file);
+
+      }
+
+    }
+
+
+    function loadFile(file) {
+
+      if (
+        !SUPPORTED_TYPES.includes(
+          file.type
+        )
+      ) {
+
+        showMessage(
+          "Please upload a JPG, PNG or WEBP image.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        file.size > MAX_FILE_SIZE
+      ) {
+
+        showMessage(
+          "Image size must be 10MB or less.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      selectedFile = file;
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload = event => {
+
+        const dataUrl =
+          event.target.result;
+
+
+        document.getElementById(
+          "palm-display-img"
+        ).src = dataUrl;
+
+
+        sessionStorage.setItem(
+          "analyzed_palm_image",
+          dataUrl
+        );
+
+
+        setAnalysisStatus(
+          "Image ready for analysis",
+          "ready"
+        );
+
+
+        showMessage(
+          "Palm image loaded successfully.",
+          "success"
+        );
+
+      };
+
+
+      reader.onerror = () => {
+
+        showMessage(
+          "Could not read the selected image.",
+          "error"
+        );
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+    }
+
+
+    /* =========================================================
+       ZOOM
+    ========================================================== */
+
+    function adjustZoom(delta) {
+
+      currentZoom =
+        Math.min(
+          Math.max(
+            0.8,
+            currentZoom + delta
+          ),
+          1.8
+        );
+
+
+      applyZoom();
+
+    }
+
+
+    function resetZoom() {
+
+      currentZoom = 1.0;
+
+      applyZoom();
+
+    }
+
+
+    function applyZoom() {
+
+      const image =
+        document.getElementById(
+          "palm-display-img"
+        );
+
+
+      const svg =
+        document.getElementById(
+          "landmark-svg"
+        );
+
+
+      image.style.transform =
+        `scale(${currentZoom})`;
+
+      svg.style.transform =
+        `scale(${currentZoom})`;
+
+    }
+
+
+    /* =========================================================
+       PALM ANALYSIS
+    ========================================================== */
+
+    async function runPalmAnalysis() {
+
+      const btn =
+        document.getElementById(
+          "btn-generate-analysis"
+        );
+
+
+      const label =
+        document.getElementById(
+          "btn-label"
+        );
+
+
+      const nextBtn =
+        document.getElementById(
+          "btn-next-tarot"
+        );
+
+
+      if (!token) {
+
+        logout();
+
+        return;
+
+      }
+
+
+      if (!selectedFile) {
+
+        showMessage(
+          "Please select or capture a palm image first.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !SUPPORTED_TYPES.includes(
+          selectedFile.type
+        )
+      ) {
+
+        showMessage(
+          "Unsupported image format.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        selectedFile.size > MAX_FILE_SIZE
+      ) {
+
+        showMessage(
+          "Image size must be 10MB or less.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      btn.disabled = true;
+
+      nextBtn.classList.add("hidden");
+
+      label.innerText =
+        "Analyzing Palm Lines...";
+
+
+      setAnalysisStatus(
+        "Analyzing...",
+        "loading"
+      );
+
+
+      clearAnalysisMessage();
+      document.getElementById("client-feedback-section")?.classList.add("hidden");
+      document.getElementById("feedback-message")?.classList.add("hidden");
+
+      clearDetectedMetrics();
+
+      clearLineOverlay();
+
+
+      setWorkflowStep(2);
+
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "file",
+        selectedFile,
+        selectedFile.name
+      );
+
+
+      try {
+
+        /*
+          IMPORTANT:
+          Correct backend route:
+          POST /api/v1/palm/analyze
+        */
+
+        const res =
+          await fetch(
+            `${API_BASE}/palm/analyze`,
+            {
+              method: "POST",
+
+              headers: {
+                "Authorization":
+                  `Bearer ${token}`
+              },
+
+              body: formData
+            }
+          );
+
+
+        let data = null;
+
+
+        try {
+
+          data = await res.json();
+
+        } catch {
+
+          throw new Error(
+            `Server returned HTTP ${res.status}.`
+          );
+
+        }
+
+
+        if (!res.ok) {
+
+          throw new Error(
+            data?.detail ||
+            "Palm analysis failed."
+          );
+
+        }
+
+
+        /*
+          Store complete result.
+        */
+
+        lastPalmResult = data;
+
+
+        /*
+          Store reading ID.
+        */
+
+        if (data.reading_id) {
+
+          sessionStorage.setItem(
+            "palm_reading_id",
+            data.reading_id
+          );
+
+        }
+
+
+        /*
+          Extract features.
+        */
+
+        const features =
+          data.result?.features || {};
+
+
+        sessionStorage.setItem(
+          "palm_features",
+          JSON.stringify(features)
+        );
+
+
+        /*
+          Keep the image available for later pages.
+        */
+
+        if (
+          document.getElementById(
+            "palm-display-img"
+          ).src
+        ) {
+
+          sessionStorage.setItem(
+            "analyzed_palm_image",
+            document.getElementById(
+              "palm-display-img"
+            ).src
+          );
+
+        }
+
+
+        /*
+          Render actual backend data.
+        */
+
+        renderPalmAnalysis(
+          features,
+          data.result
+        );
+
+
+        setWorkflowStep(3);
+
+
+        label.innerText =
+          "Analysis Complete ✓";
+
+
+        btn.disabled = false;
+
+
+        nextBtn.classList.remove(
+          "hidden"
+        );
+
+
+        setAnalysisStatus(
+          "Analysis complete",
+          "success"
+        );
+
+
+        showMessage(
+          "Palm analysis completed successfully.",
+          "success"
+        );
+
+        const feedbackSection = document.getElementById("client-feedback-section");
+        if (feedbackSection) {
+          feedbackSection.classList.remove("hidden");
+          if (window.lucide) lucide.createIcons();
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Palm analysis error:",
+          error
+        );
+
+
+        label.innerText =
+          "Generate Analysis";
+
+
+        btn.disabled = false;
+
+
+        setAnalysisStatus(
+          "Analysis failed",
+          "error"
+        );
+
+
+        showMessage(
+          error.message ||
+          "Palm analysis failed. Please try again.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       RENDER PALM ANALYSIS
+    ========================================================== */
+
+    function renderPalmAnalysis(
+      features,
+      result
+    ) {
+
+      const lines =
+        features.major_lines || {};
+
+
+      /*
+        Render metrics.
+      */
+
+      renderLineMetric(
+        "val-life",
+        lines.life_line
+      );
+
+
+      renderLineMetric(
+        "val-heart",
+        lines.heart_line
+      );
+
+
+      renderLineMetric(
+        "val-head",
+        lines.head_line
+      );
+
+
+      renderLineMetric(
+        "val-fate",
+        lines.fate_line
+      );
+
+
+      renderLineMetric(
+        "val-sun",
+        lines.sun_line
+      );
+
+
+      /*
+        Hand type.
+      */
+
+      const handType =
+        features.hand_type?.type ||
+        features.hand_type?.name ||
+        resolveElementHandType(
+          features.hand_type
+        ) ||
+        "Unknown";
+
+
+      document.getElementById(
+        "hand-type"
+      ).innerText = handType;
+
+
+      /*
+        Draw actual trajectories.
+      */
+
+      drawDetectedLines(lines);
+
+
+      /*
+        Confidence.
+      */
+
+      const confidence =
+        getAnalysisConfidence(
+          result,
+          features
+        );
+
+
+      renderConfidence(
+        confidence
+      );
+
+
+      /*
+        Dashboard latest confidence.
+      */
+
+      document.getElementById(
+        "dashboard-confidence"
+      ).innerText =
+        confidence !== null
+          ? `${confidence.toFixed(1)}%`
+          : "—";
+
+
+      /*
+        Refresh database-backed dashboard statistics
+        after a successful palm analysis.
+      */
+
+      loadDashboardStats();
+
+
+    }
+
+
+    /* =========================================================
+       LINE METRICS
+    ========================================================== */
+
+    function renderLineMetric(
+      elementId,
+      line
+    ) {
+
+      const element =
+        document.getElementById(
+          elementId
+        );
+
+
+      if (!line) {
+
+        element.innerText =
+          "Not detected";
+
+        element.className =
+          "text-[11px] text-slate-400";
+
+        return;
+
+      }
+
+
+      const evidence =
+        line.image_evidence || {};
+
+
+      const characteristics =
+        line.characteristics || {};
+
+
+      const clarity =
+        toPercent(
+          evidence.clarity_score
+        );
+
+
+      const support =
+        toPercent(
+          evidence.support_ratio
+        );
+
+
+      const continuity =
+        toPercent(
+          characteristics.continuity_proxy
+        );
+
+
+      const curvatureLevel =
+        characteristics.curvature_level;
+
+
+      const parts = [];
+
+
+      if (clarity !== null) {
+
+        parts.push(
+          `Clarity ${clarity}%`
+        );
+
+      }
+
+
+      if (support !== null) {
+
+        parts.push(
+          `Support ${support}%`
+        );
+
+      }
+
+
+      if (
+        curvatureLevel
+      ) {
+
+        parts.push(
+          curvatureLevel
+        );
+
+      }
+
+
+      element.innerText =
+        parts.length
+          ? parts.join(" • ")
+          : "Candidate detected";
+
+
+      element.className =
+        "text-[11px] text-slate-500";
+
+    }
+
+
+    /* =========================================================
+       CONFIDENCE
+    ========================================================== */
+
+    function getAnalysisConfidence(
+      result,
+      features
+    ) {
+
+      /*
+        Current palm backend returns
+        analysis_confidence at result level.
+
+        We also support a few fallback locations
+        so the frontend remains resilient.
+      */
+
+      const raw =
+        result?.analysis_confidence ??
+        features?.analysis_confidence ??
+        lastPalmResult?.analysis_confidence;
+
+
+      if (
+        typeof raw !== "number" ||
+        Number.isNaN(raw)
+      ) {
+
+        return null;
+
+      }
+
+
+      /*
+        Backend confidence is 0-1.
+        If backend ever returns 0-100,
+        handle that too.
+      */
+
+      if (raw <= 1) {
+
+        return raw * 100;
+
+      }
+
+
+      return Math.min(
+        Math.max(raw, 0),
+        100
+      );
+
+    }
+
+
+    function renderConfidence(
+      percentage
+    ) {
+
+      const label =
+        document.getElementById(
+          "confidence-percentage"
+        );
+
+
+      const bar =
+        document.getElementById(
+          "confidence-bar"
+        );
+
+
+      if (
+        percentage === null ||
+        Number.isNaN(percentage)
+      ) {
+
+        label.innerText = "—";
+
+        bar.style.width = "0%";
+
+        return;
+
+      }
+
+
+      const safe =
+        Math.min(
+          Math.max(
+            percentage,
+            0
+          ),
+          100
+        );
+
+
+      label.innerText =
+        `${safe.toFixed(1)}%`;
+
+
+      bar.style.width =
+        `${safe}%`;
+
+    }
+
+
+    /* =========================================================
+       DETECTED LINE OVERLAY
+    ========================================================== */
+
+    function drawDetectedLines(
+      lines
+    ) {
+
+      const svg =
+        document.getElementById(
+          "landmark-svg"
+        );
+
+
+      svg.innerHTML = "";
+
+
+      const lineNames = [
+        "life_line",
+        "head_line",
+        "heart_line",
+        "fate_line",
+        "sun_line"
+      ];
+
+
+      for (
+        const lineName of lineNames
+      ) {
+
+        const line =
+          lines[lineName];
+
+
+        if (!line) {
+
+          continue;
+
+        }
+
+
+        const coordinates =
+          line.coordinates;
+
+
+        if (
+          !Array.isArray(
+            coordinates
+          ) ||
+          coordinates.length < 2
+        ) {
+
+          continue;
+
+        }
+
+
+        const points =
+          coordinates
+            .filter(point =>
+              point &&
+              typeof point.x === "number" &&
+              typeof point.y === "number"
+            )
+            .map(point => ({
+
+              x: point.x * 1000,
+
+              y: point.y * 1000
+
+            }));
+
+
+        if (
+          points.length < 2
+        ) {
+
+          continue;
+
+        }
+
+
+        /*
+          Build a smooth-ish polyline.
+
+          We deliberately use the backend trajectory
+          instead of hardcoded palmistry lines.
+        */
+
+        const d =
+          points
+            .map(
+              (point, index) =>
+                `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`
+            )
+            .join(" ");
+
+
+        const path =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+          );
+
+
+        path.setAttribute(
+          "d",
+          d
+        );
+
+
+        path.setAttribute(
+          "fill",
+          "none"
+        );
+
+
+        path.setAttribute(
+          "stroke",
+          LINE_COLORS[lineName]
+        );
+
+
+        path.setAttribute(
+          "stroke-width",
+          lineName === "life_line"
+            ? "7"
+            : "6"
+        );
+
+
+        path.setAttribute(
+          "stroke-linecap",
+          "round"
+        );
+
+
+        path.setAttribute(
+          "stroke-linejoin",
+          "round"
+        );
+
+
+        /*
+          Slight transparency keeps the
+          actual palm image visible.
+        */
+
+        path.setAttribute(
+          "opacity",
+          "0.88"
+        );
+
+
+        /*
+          Add SVG title for accessibility/debugging.
+        */
+
+        const title =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "title"
+          );
+
+
+        title.textContent =
+          formatLineName(
+            lineName
+          );
+
+
+        path.appendChild(title);
+
+
+        svg.appendChild(path);
+
+
+        /*
+          Add small landmark circles
+          at detected trajectory points.
+        */
+
+        points.forEach(
+          point => {
+
+            const circle =
+              document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+              );
+
+
+            circle.setAttribute(
+              "cx",
+              point.x
+            );
+
+
+            circle.setAttribute(
+              "cy",
+              point.y
+            );
+
+
+            circle.setAttribute(
+              "r",
+              "7"
+            );
+
+
+            circle.setAttribute(
+              "fill",
+              "#FFFFFF"
+            );
+
+
+            circle.setAttribute(
+              "stroke",
+              LINE_COLORS[lineName]
+            );
+
+
+            circle.setAttribute(
+              "stroke-width",
+              "3"
+            );
+
+
+            svg.appendChild(
+              circle
+            );
+
+          }
+        );
+
+      }
+
+    }
+
+
+    function clearLineOverlay() {
+
+      document.getElementById(
+        "landmark-svg"
+      ).innerHTML = "";
+
+    }
+
+
+    /* =========================================================
+       HAND TYPE
+    ========================================================== */
+
+    function resolveElementHandType(
+      handType
+    ) {
+
+      if (!handType) {
+
+        return null;
+
+      }
+
+
+      const element =
+        String(
+          handType.element || ""
+        ).toLowerCase();
+
+
+      if (
+        element.includes("water")
+      ) {
+
+        return "Water Hand";
+
+      }
+
+
+      if (
+        element.includes("fire")
+      ) {
+
+        return "Fire Hand";
+
+      }
+
+
+      if (
+        element.includes("earth")
+      ) {
+
+        return "Earth Hand";
+
+      }
+
+
+      if (
+        element.includes("air")
+      ) {
+
+        return "Air Hand";
+
+      }
+
+
+      return null;
+
+    }
+
+
+    /* =========================================================
+       RESTORE PREVIOUS STATE
+    ========================================================== */
+
+    async function restorePreviousPalmState() {
+
+      const image =
+        sessionStorage.getItem(
+          "analyzed_palm_image"
+        );
+
+
+      /*
+        Restore both the preview and the actual File object.
+        The preview can be restored from sessionStorage, but
+        the original File object does not survive a page reload.
+      */
+      if (image) {
+
+        document.getElementById(
+          "palm-display-img"
+        ).src = image;
+
+        try {
+
+          const response = await fetch(image);
+
+          if (!response.ok) {
+            throw new Error("Could not restore the saved palm image.");
+          }
+
+          const blob = await response.blob();
+
+          const mimeType =
+            SUPPORTED_TYPES.includes(blob.type)
+              ? blob.type
+              : image.startsWith("data:image/jpeg")
+                ? "image/jpeg"
+                : image.startsWith("data:image/webp")
+                  ? "image/webp"
+                  : "image/png";
+
+          const extension =
+            mimeType === "image/jpeg"
+              ? "jpg"
+              : mimeType === "image/webp"
+                ? "webp"
+                : "png";
+
+          selectedFile = new File(
+            [blob],
+            `restored_palm_image.${extension}`,
+            { type: mimeType }
+          );
+
+          setAnalysisStatus(
+            "Image ready for analysis",
+            "ready"
+          );
+
+        } catch (error) {
+
+          console.warn(
+            "Could not restore the selected palm image:",
+            error
+          );
+
+          selectedFile = null;
+
+        }
+
+      }
+
+
+      const savedFeatures =
+        sessionStorage.getItem(
+          "palm_features"
+        );
+
+
+      if (!savedFeatures) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const features =
+          JSON.parse(
+            savedFeatures
+          );
+
+
+        const lines =
+          features.major_lines || {};
+
+
+        renderLineMetric(
+          "val-life",
+          lines.life_line
+        );
+
+
+        renderLineMetric(
+          "val-heart",
+          lines.heart_line
+        );
+
+
+        renderLineMetric(
+          "val-head",
+          lines.head_line
+        );
+
+
+        renderLineMetric(
+          "val-fate",
+          lines.fate_line
+        );
+
+
+        renderLineMetric(
+          "val-sun",
+          lines.sun_line
+        );
+
+
+        const handType =
+          features.hand_type?.type ||
+          features.hand_type?.name ||
+          resolveElementHandType(
+            features.hand_type
+          ) ||
+          "Unknown";
+
+
+        document.getElementById(
+          "hand-type"
+        ).innerText = handType;
+
+
+        drawDetectedLines(
+          lines
+        );
+
+
+        setAnalysisStatus(
+          "Previous analysis loaded",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.warn(
+          "Could not restore previous palm state:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       CLEAR METRICS
+    ========================================================== */
+
+    function clearDetectedMetrics() {
+
+      const ids = [
+        "val-life",
+        "val-heart",
+        "val-head",
+        "val-fate",
+        "val-sun"
+      ];
+
+
+      ids.forEach(id => {
+
+        const element =
+          document.getElementById(id);
+
+
+        element.innerText =
+          "Analyzing...";
+
+
+        element.className =
+          "text-[11px] text-slate-400";
+
+      });
+
+
+      document.getElementById(
+        "hand-type"
+      ).innerText =
+        "Analyzing...";
+
+
+      renderConfidence(null);
+
+    }
+
+
+    /* =========================================================
+       WORKFLOW STEP
+    ========================================================== */
+
+    function setWorkflowStep(
+      activeStep
+    ) {
+
+      const steps = [
+        document.getElementById(
+          "workflow-step-1"
+        ),
+        document.getElementById(
+          "workflow-step-2"
+        ),
+        document.getElementById(
+          "workflow-step-3"
+        )
+      ];
+
+
+      steps.forEach(
+        (step, index) => {
+
+          if (
+            index + 1 <= activeStep
+          ) {
+
+            step.classList.remove(
+              "bg-white",
+              "border-slate-200"
+            );
+
+            step.classList.add(
+              "bg-[#FAF9FF]",
+              "border-purple-100"
+            );
+
+          } else {
+
+            step.classList.remove(
+              "bg-[#FAF9FF]",
+              "border-purple-100"
+            );
+
+            step.classList.add(
+              "bg-white",
+              "border-slate-200"
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================== */
+
+    function setAnalysisStatus(
+      text,
+      type
+    ) {
+
+      const element =
+        document.getElementById(
+          "analysis-status"
+        );
+
+
+      element.innerText = text;
+
+
+      element.className =
+        "text-[10px] px-2 py-1 rounded-md";
+
+
+      if (type === "success") {
+
+        element.classList.add(
+          "bg-emerald-50",
+          "text-emerald-600"
+        );
+
+      } else if (
+        type === "error"
+      ) {
+
+        element.classList.add(
+          "bg-rose-50",
+          "text-rose-600"
+        );
+
+      } else if (
+        type === "loading"
+      ) {
+
+        element.classList.add(
+          "bg-purple-50",
+          "text-[#5538EE]"
+        );
+
+      } else {
+
+        element.classList.add(
+          "bg-slate-100",
+          "text-slate-500"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       CLIENT FEEDBACK SUBMISSION
+    ========================================================== */
+
+    function showFeedbackMessage(message, type = "success") {
+      const element = document.getElementById("feedback-message");
+      if (!element) return;
+      element.textContent = message;
+      element.className = "rounded-xl px-3 py-2 text-xs " +
+        (type === "error" ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-700");
+    }
+
+    async function submitClientFeedback(event) {
+      event.preventDefault();
+      const form = document.getElementById("client-feedback-form");
+      const button = document.getElementById("submit-feedback-btn");
+      const consultantId = document.getElementById("feedback-consultant-id").value.trim();
+      const rating = Number(document.getElementById("feedback-rating").value);
+      const comments = document.getElementById("feedback-comments").value.trim();
+      const readingId = lastPalmResult?.reading_id || sessionStorage.getItem("palm_reading_id");
+
+      if (!token || !currentUserId) {
+        showFeedbackMessage("Your session could not be verified. Please sign in again.", "error");
+        return;
+      }
+      if (!consultantId) {
+        showFeedbackMessage("Enter the ID of your assigned consultant.", "error");
+        return;
+      }
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+        showFeedbackMessage("Choose a rating from 1 to 5.", "error");
+        return;
+      }
+
+      const payload = {
+        consultant_id: consultantId,
+        rating,
+        comments: comments || null
+      };
+      if (readingId) payload.reading_id = readingId;
+
+      button.disabled = true;
+      button.textContent = "Submitting…";
+      try {
+        const response = await fetch(
+          `${API_BASE}/spiritual-consultant/clients/${encodeURIComponent(currentUserId)}/feedback`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+        let result = {};
+        try { result = await response.json(); } catch (_) { /* response may have no JSON body */ }
+        if (!response.ok) {
+          const detail = result?.detail;
+          throw new Error(typeof detail === "string" ? detail : `Feedback submission failed (HTTP ${response.status}).`);
+        }
+        showFeedbackMessage("Thank you! Your feedback was submitted successfully.");
+        form.reset();
+        // Avoid duplicate submissions for this completed reading in this page session.
+        button.textContent = "Feedback submitted";
+        button.disabled = true;
+      } catch (error) {
+        showFeedbackMessage(error.message || "Could not submit feedback. Please try again.", "error");
+        button.disabled = false;
+        button.textContent = "Submit feedback";
+      }
+    }
+
+    document.getElementById("client-feedback-form")?.addEventListener("submit", submitClientFeedback);
+
+    /* =========================================================
+       MESSAGE
+    ========================================================== */
+
+    function showMessage(
+      message,
+      type
+    ) {
+
+      const element =
+        document.getElementById(
+          "analysis-message"
+        );
+
+
+      element.innerText =
+        message;
+
+
+      element.classList.remove(
+        "hidden",
+        "bg-rose-50",
+        "text-rose-600",
+        "bg-emerald-50",
+        "text-emerald-600"
+      );
+
+
+      if (type === "error") {
+
+        element.classList.add(
+          "bg-rose-50",
+          "text-rose-600"
+        );
+
+      } else {
+
+        element.classList.add(
+          "bg-emerald-50",
+          "text-emerald-600"
+        );
+
+      }
+
+    }
+
+
+    function clearAnalysisMessage() {
+
+      const element =
+        document.getElementById(
+          "analysis-message"
+        );
+
+
+      element.classList.add(
+        "hidden"
+      );
+
+
+      element.innerText = "";
+
+    }
+
+
+    /* =========================================================
+       NAVIGATION TO TAROT
+    ========================================================== */
+
+    function goToTarot() {
+
+      const palmReadingId =
+        sessionStorage.getItem(
+          "palm_reading_id"
+        );
+
+
+      if (!palmReadingId) {
+
+        showMessage(
+          "Palm analysis ID is missing. Please run the analysis again.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      window.location.href =
+        "tarot.html";
+
+    }
+
+
+    /* =========================================================
+       UTILITIES
+    ========================================================== */
+
+    function toPercent(
+      value
+    ) {
+
+      if (
+        typeof value !== "number" ||
+        Number.isNaN(value)
+      ) {
+
+        return null;
+
+      }
+
+
+      return Math.round(
+        value * 100
+      );
+
+    }
+
+
+    function formatLineName(
+      lineName
+    ) {
+
+      return lineName
+        .replace("_line", "")
+        .replace(
+          /^./,
+          char => char.toUpperCase()
+        ) + " Line";
+
+    }
+
+  </script>
+
+</body>
+
+</html>

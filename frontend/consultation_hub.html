@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultation Hub | Mystic Insights</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background: #f8fafc;
+    }
+
+    .field {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      outline: none;
+    }
+
+    .field:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px #8b5cf620;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .primary {
+      background: #6d28d9;
+      color: white;
+    }
+
+    .primary:hover {
+      background: #5b21b6;
+    }
+
+    .secondary {
+      border: 1px solid #e2e8f0;
+      background: white;
+    }
+
+    .secondary:hover {
+      background: #f8fafc;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-800">
+
+  <header class="sticky top-0 z-20 border-b bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <div class="rounded-xl bg-violet-700 p-3 text-white">
+          <i data-lucide="sparkles"></i>
+        </div>
+        <div>
+          <h1 class="font-bold">Mystic Insights</h1>
+          <p class="text-xs text-slate-500">Consultation Hub</p>
+        </div>
+      </a>
+      <button id="refreshBtn" class="btn secondary flex items-center gap-2 text-sm">
+        <i data-lucide="refresh-cw" class="h-4 w-4"></i> Refresh
+      </button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-8">
+
+    <section class="mb-8 rounded-3xl bg-gradient-to-r from-violet-950 to-indigo-700 p-7 text-white md:p-10">
+      <p class="mb-3 text-sm font-semibold tracking-widest text-violet-200">
+        PERSONAL GUIDANCE
+      </p>
+      <h2 class="text-3xl font-bold md:text-4xl">
+        Find clarity with a trusted guide.
+      </h2>
+      <p class="mt-3 max-w-2xl text-sm leading-6 text-violet-100 md:text-base">
+        Connect with Tarot Readers and Spiritual Consultants. Explore available
+        consultation modes, request a session, and manage your bookings.
+      </p>
+    </section>
+
+    <div id="notice" class="mb-6 hidden rounded-xl border p-4 text-sm" role="status"></div>
+
+    <section class="mb-8 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl border bg-white p-5">
+        <p class="text-sm text-slate-500">Professionals</p>
+        <p id="totalProfessionals" class="mt-2 text-3xl font-bold">—</p>
+      </div>
+      <div class="rounded-2xl border bg-white p-5">
+        <p class="text-sm text-slate-500">Online now</p>
+        <p id="totalOnline" class="mt-2 text-3xl font-bold text-emerald-600">—</p>
+      </div>
+      <div class="rounded-2xl border bg-white p-5">
+        <p class="text-sm text-slate-500">My bookings</p>
+        <p id="totalBookings" class="mt-2 text-3xl font-bold text-violet-700">—</p>
+      </div>
+    </section>
+
+    <!-- Professional directory -->
+    <section class="mb-10">
+      <div class="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+        <div>
+          <h2 class="text-xl font-bold">Explore professionals</h2>
+          <p class="mt-1 text-sm text-slate-500">
+            Find someone who suits your consultation needs.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 sm:flex-row">
+          <input id="searchInput" class="field sm:w-64" placeholder="Search professionals...">
+          <select id="roleFilter" class="field sm:w-56">
+            <option value="">All professional types</option>
+            <option value="Tarot Reader">Tarot Reader</option>
+            <option value="Spiritual Consultant">Spiritual Consultant</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="professionalsGrid" class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <p class="text-sm text-slate-500">Loading professionals...</p>
+      </div>
+    </section>
+
+    <!-- Booking form and booking history -->
+    <section class="mb-10 grid gap-6 lg:grid-cols-2">
+
+      <div class="rounded-2xl border bg-white p-5 md:p-6">
+        <div class="mb-5 flex items-center gap-3">
+          <div class="rounded-xl bg-violet-100 p-3 text-violet-700">
+            <i data-lucide="calendar-plus"></i>
+          </div>
+          <div>
+            <h2 class="font-bold">Book a consultation</h2>
+            <p class="text-xs text-slate-500">Request a session with a professional.</p>
+          </div>
+        </div>
+
+        <form id="bookingForm" class="space-y-4">
+          <div>
+            <label for="professionalSelect" class="mb-1.5 block text-sm font-semibold">
+              Professional
+            </label>
+            <select id="professionalSelect" class="field" required>
+              <option value="">Choose a professional</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="modeSelect" class="mb-1.5 block text-sm font-semibold">
+              Consultation mode
+            </label>
+            <select id="modeSelect" class="field" required>
+              <option value="CHAT">Chat</option>
+              <option value="VOICE">Voice call</option>
+              <option value="VIDEO">Video call</option>
+            </select>
+            <p id="modeHelp" class="mt-1 text-xs text-slate-500">
+              Select a professional to see supported modes.
+            </p>
+          </div>
+
+          <div>
+            <label for="scheduledAt" class="mb-1.5 block text-sm font-semibold">
+              Date and time
+            </label>
+            <input id="scheduledAt" type="datetime-local" class="field" required>
+          </div>
+
+          <div>
+            <label for="durationSelect" class="mb-1.5 block text-sm font-semibold">
+              Duration
+            </label>
+            <select id="durationSelect" class="field">
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">60 minutes</option>
+            </select>
+          </div>
+
+          <p class="rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-800">
+            Booking requests are pending until handled by your backend workflow.
+            This form does not process payments.
+          </p>
+
+          <button id="bookBtn" type="submit" class="btn primary w-full">
+            Request booking
+          </button>
+        </form>
+      </div>
+
+      <div class="rounded-2xl border bg-white p-5 md:p-6">
+        <div class="mb-5 flex items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold">My bookings</h2>
+            <p class="mt-1 text-xs text-slate-500">View or cancel your sessions.</p>
+          </div>
+          <button id="loadBookingsBtn" class="btn secondary text-sm">
+            Refresh
+          </button>
+        </div>
+
+        <div id="bookingsList" class="space-y-3">
+          <p class="text-sm text-slate-500">Loading bookings...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional-only availability controls -->
+    <section id="availabilitySection"
+      class="mb-10 hidden rounded-2xl border border-violet-200 bg-violet-50/50 p-5 md:p-6">
+      <h2 class="font-bold">My professional availability</h2>
+      <p class="mt-1 text-sm text-slate-600">
+        Manage your online status, booking availability, and consultation modes.
+      </p>
+
+      <form id="availabilityForm" class="mt-5 space-y-5">
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="flex items-center gap-3 rounded-xl border bg-white p-4">
+            <input id="isOnline" type="checkbox" class="h-4 w-4 accent-violet-700">
+            <span class="text-sm font-semibold">Online now</span>
+          </label>
+          <label class="flex items-center gap-3 rounded-xl border bg-white p-4">
+            <input id="acceptingBookings" type="checkbox" class="h-4 w-4 accent-violet-700">
+            <span class="text-sm font-semibold">Accepting bookings</span>
+          </label>
+        </div>
+
+        <p class="text-sm font-semibold">Supported modes</p>
+        <div class="flex flex-wrap gap-5 text-sm">
+          <label class="flex items-center gap-2">
+            <input id="supportsChat" type="checkbox" class="accent-violet-700"> Chat
+          </label>
+          <label class="flex items-center gap-2">
+            <input id="supportsVoice" type="checkbox" class="accent-violet-700"> Voice
+          </label>
+          <label class="flex items-center gap-2">
+            <input id="supportsVideo" type="checkbox" class="accent-violet-700"> Video
+          </label>
+        </div>
+
+        <button id="saveAvailabilityBtn" type="submit" class="btn primary">
+          Save availability
+        </button>
+      </form>
+    </section>
+
+
+    <!-- Chat modal -->
+    <div id="chatModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4">
+
+      <section class="flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        style="height: min(680px, 90vh);">
+
+        <header class="flex items-center justify-between border-b p-4">
+          <div>
+            <h2 id="chatTitle" class="font-bold">Consultation chat</h2>
+            <p id="chatConnectionStatus" class="mt-1 text-xs text-slate-500">
+              Not connected
+            </p>
+          </div>
+          <button id="closeChatBtn" type="button" class="rounded-lg border px-3 py-2 text-sm">
+            Close
+          </button>
+        </header>
+
+        <div id="chatMessages" class="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4" aria-live="polite">
+          <p class="text-center text-sm text-slate-500">Loading messages...</p>
+        </div>
+
+        <form id="chatForm" class="flex gap-2 border-t bg-white p-4">
+          <input id="chatInput" class="field min-w-0 flex-1" maxlength="2000" placeholder="Write a message..."
+            autocomplete="off" required>
+          <button id="sendChatBtn" type="submit" class="btn primary" disabled>
+            Send
+          </button>
+        </form>
+
+      </section>
+    </div>
+
+
+    <footer class="py-6 text-center text-xs text-slate-400">
+      Mystic Insights · Consultation Hub
+    </footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       CONFIGURATION
+       ========================================================= */
+
+    const API_BASE = "http://127.0.0.1:8000/api/v1";
+    const HUB_API = `${API_BASE}/consultation-hub`;
+
+    const state = {
+      token: null,
+      userRole: null,
+      currentUserId: null,
+      professionals: [],
+      bookings: []
+    };
+
+    const $ = id => document.getElementById(id);
+
+    /* =========================================================
+       AUTHENTICATION
+       Finds common JWT storage keys.
+       If your login uses a different key, update findToken().
+       ========================================================= */
+
+    function findToken() {
+      const keys = [
+        "access_token", "token", "accessToken",
+        "authToken", "auth_token", "jwt", "jwt_token"
+      ];
+
+      for (const storage of [localStorage, sessionStorage]) {
+        for (const key of keys) {
+          const value = storage.getItem(key);
+          if (!value) continue;
+
+          try {
+            const parsed = JSON.parse(value);
+            if (typeof parsed === "string" && parsed.split(".").length === 3) {
+              return parsed;
+            }
+            if (parsed && typeof parsed === "object") {
+              for (const k of keys) {
+                if (typeof parsed[k] === "string" &&
+                  parsed[k].split(".").length === 3) {
+                  return parsed[k];
+                }
+              }
+            }
+          } catch (_) {
+            if (value.split(".").length === 3) return value;
+          }
+        }
+
+        // Also check custom storage keys containing a JWT.
+        for (let i = 0; i < storage.length; i++) {
+          const key = storage.key(i);
+          const value = storage.getItem(key);
+          if (!value) continue;
+
+          if (/token|auth|jwt/i.test(key) &&
+            value.trim().split(".").length === 3) {
+            return value.trim();
+          }
+
+          try {
+            const parsed = JSON.parse(value);
+            if (parsed && typeof parsed === "object") {
+              for (const k of keys) {
+                if (typeof parsed[k] === "string" &&
+                  parsed[k].split(".").length === 3) {
+                  return parsed[k];
+                }
+              }
+            }
+          } catch (_) { }
+        }
+      }
+      return null;
+    }
+
+    function readJwtRole(token) {
+      if (!token) return null;
+
+      try {
+        const payload = JSON.parse(
+          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+        );
+        return payload.role || payload.user_role ||
+          payload.userRole || payload.roles?.[0] || null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function readJwtUserId(token) {
+      if (!token) return null;
+
+      try {
+        const payload = JSON.parse(
+          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+        );
+
+        return payload.sub || payload.user_id || payload.id || null;
+      } catch (error) {
+        console.error("Could not read user ID from JWT:", error);
+        return null;
+      }
+    }
+
+    /* =========================================================
+       API HELPER
+       ========================================================= */
+
+    async function api(path, options = {}) {
+      const requestHeaders = { ...(options.headers || {}) };
+
+      if (options.body) {
+        requestHeaders["Content-Type"] = "application/json";
+      }
+      if (state.token) {
+        requestHeaders.Authorization = `Bearer ${state.token}`;
+      }
+
+      const response = await fetch(`${HUB_API}${path}`, {
+        ...options,
+        headers: requestHeaders
+      });
+
+      const raw = await response.text();
+      let data = null;
+
+      try {
+        data = raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        data = raw;
+      }
+
+      if (!response.ok) {
+        let message = data?.detail || data?.message ||
+          `Request failed with status ${response.status}`;
+
+        if (Array.isArray(message)) {
+          message = message.map(x => x.msg || JSON.stringify(x)).join("; ");
+        }
+
+        if (response.status === 401) {
+          message = "Your login session is missing or expired. Sign in again.";
+        } else if (response.status === 403) {
+          message = "Your account does not have permission for this action.";
+        }
+
+        throw new Error(message);
+      }
+
+      return data;
+    }
+
+    /* =========================================================
+       GENERAL HELPERS
+       ========================================================= */
+
+    function notify(message, type = "info") {
+      const el = $("notice");
+      const styles = {
+        success: "border-emerald-200 bg-emerald-50 text-emerald-800",
+        error: "border-rose-200 bg-rose-50 text-rose-800",
+        warning: "border-amber-200 bg-amber-50 text-amber-800",
+        info: "border-violet-200 bg-violet-50 text-violet-800"
+      };
+
+      el.className = `mb-6 rounded-xl border p-4 text-sm ${styles[type] || styles.info}`;
+      el.textContent = message;
+      el.classList.remove("hidden");
+    }
+
+    function clearNotice() {
+      $("notice").classList.add("hidden");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      })[ch]);
+    }
+
+    function getId(p) {
+      return p.professional_id || p.id || p.user_id;
+    }
+
+    function getName(p) {
+      return p.full_name || p.name || p.display_name || p.email || "Professional";
+    }
+
+    function getRole(p) {
+      return p.professional_type || p.role || p.user_role ||
+        p.professional_role || "Professional";
+    }
+
+    function getModes(p) {
+      const modes = p.supported_modes || p.consultation_modes || p.modes;
+
+      if (Array.isArray(modes)) {
+        return modes.map(m => String(m).toUpperCase());
+      }
+
+      const result = [];
+      if (p.supports_chat === true) result.push("CHAT");
+      if (p.supports_voice === true) result.push("VOICE");
+      if (p.supports_video === true) result.push("VIDEO");
+      return result;
+    }
+
+    function isOnline(p) {
+      return p.is_online === true;
+    }
+
+    function acceptsBookings(p) {
+      return p.accepting_bookings === true;
+    }
+
+    function professionalAccount() {
+      const role = String(state.userRole || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ");
+
+      return role.includes("tarot reader") ||
+        role.includes("spiritual consultant");
+    }
+
+    function formatDate(value) {
+      if (!value) return "Time not provided";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime())
+        ? String(value)
+        : date.toLocaleString([], {
+          dateStyle: "medium",
+          timeStyle: "short"
+        });
+    }
+
+    function setMinimumDate() {
+      const now = new Date(Date.now() + 5 * 60 * 1000);
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      $("scheduledAt").min = now.toISOString().slice(0, 16);
+    }
+
+    function statusStyle(status) {
+      const value = String(status || "UNKNOWN").toUpperCase();
+
+      if (["CONFIRMED", "COMPLETED"].includes(value)) {
+        return "bg-emerald-100 text-emerald-800";
+      }
+      if (["CANCELLED", "REJECTED"].includes(value)) {
+        return "bg-rose-100 text-rose-800";
+      }
+      if (value === "PENDING") {
+        return "bg-amber-100 text-amber-800";
+      }
+      return "bg-slate-100 text-slate-700";
+    }
+
+    /* =========================================================
+       PROFESSIONAL DIRECTORY
+       ========================================================= */
+
+    function renderProfessionals() {
+      const query = $("searchInput").value.trim().toLowerCase();
+      const roleFilter = $("roleFilter").value;
+
+      const filtered = state.professionals.filter(p => {
+        const searchable = `${getName(p)} ${getRole(p)} ${p.email || ""}`.toLowerCase();
+        return searchable.includes(query) &&
+          (!roleFilter || getRole(p) === roleFilter);
+      });
+
+      $("totalProfessionals").textContent = state.professionals.length;
+      $("totalOnline").textContent =
+        state.professionals.filter(isOnline).length;
+
+      const grid = $("professionalsGrid");
+
+      if (!filtered.length) {
+        grid.innerHTML = `
+      <div class="rounded-2xl border bg-white p-8 text-center md:col-span-2 xl:col-span-3">
+        <p class="font-semibold">No professionals found</p>
+        <p class="mt-1 text-sm text-slate-500">Try changing your search or filter.</p>
+      </div>`;
+      } else {
+        grid.innerHTML = filtered.map(p => {
+          const modes = getModes(p);
+          const online = isOnline(p);
+          const accepting = acceptsBookings(p);
+          const name = getName(p);
+          const role = getRole(p);
+          const id = getId(p);
+          const avatar = name.split(/\s+/).map(x => x[0]).slice(0, 2).join("");
+
+          return `
+        <article class="flex flex-col rounded-2xl border bg-white p-5 shadow-sm transition hover:border-violet-300">
+          <div class="flex items-start gap-3">
+            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-violet-100 font-bold text-violet-800">
+              ${escapeHtml(avatar.toUpperCase())}
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="break-words font-bold">${escapeHtml(name)}</h3>
+              <p class="mt-1 text-sm text-slate-500">${escapeHtml(role)}</p>
+              <div class="mt-2 flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full px-2.5 py-1 ${online ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}">
+                  ${online ? "● Online" : "● Offline"}
+                </span>
+                <span class="rounded-full px-2.5 py-1 ${accepting ? "bg-violet-50 text-violet-700" : "bg-slate-100 text-slate-500"}">
+                  ${accepting ? "Accepting bookings" : "Unavailable"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              Consultation modes
+            </p>
+            <div class="flex flex-wrap gap-2">
+              ${modes.length
+              ? modes.map(m => `<span class="rounded-lg border px-2.5 py-1.5 text-xs">${escapeHtml(m)}</span>`).join("")
+              : `<span class="text-xs text-slate-400">No modes listed</span>`}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="chooseProfessional btn mt-5 w-full ${online && accepting && modes.length ? "primary" : "secondary"}"
+            data-id="${escapeHtml(id)}"
+            ${online && accepting && modes.length ? "" : "disabled"}
+          >
+            ${online && accepting && modes.length
+              ? "Choose professional"
+              : "Currently unavailable"}
+          </button>
+        </article>`;
+        }).join("");
+      }
+
+      grid.querySelectorAll(".chooseProfessional").forEach(button => {
+        button.addEventListener("click", () => {
+          $("professionalSelect").value = button.dataset.id;
+          updateModes();
+          $("bookingForm").scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+      });
+
+      populateProfessionalSelect();
+    }
+
+    function populateProfessionalSelect() {
+      const select = $("professionalSelect");
+      const previous = select.value;
+
+      const bookable = state.professionals.filter(p =>
+        isOnline(p) && acceptsBookings(p) && getModes(p).length > 0
+      );
+
+      select.innerHTML = `<option value="">Choose a professional</option>` +
+        bookable.map(p => `
+      <option value="${escapeHtml(getId(p))}">
+        ${escapeHtml(getName(p))} — ${escapeHtml(getRole(p))}
+      </option>`).join("");
+
+      if (bookable.some(p => String(getId(p)) === previous)) {
+        select.value = previous;
+      }
+
+      updateModes();
+    }
+
+    function updateModes() {
+      const p = state.professionals.find(
+        item => String(getId(item)) === $("professionalSelect").value
+      );
+
+      const select = $("modeSelect");
+      const labels = {
+        CHAT: "Chat",
+        VOICE: "Voice call",
+        VIDEO: "Video call"
+      };
+
+      const previous = select.value;
+      const modes = p ? getModes(p) : ["CHAT", "VOICE", "VIDEO"];
+
+      select.innerHTML = modes.map(mode => `
+    <option value="${escapeHtml(mode)}">
+      ${escapeHtml(labels[mode] || mode)}
+    </option>`).join("");
+
+      if (modes.includes(previous)) select.value = previous;
+
+      $("modeHelp").textContent = p
+        ? `Supported modes: ${modes.map(m => labels[m] || m).join(", ") || "None"}`
+        : "Available modes depend on the selected professional.";
+    }
+
+    /* =========================================================
+       LOAD PROFESSIONALS
+       ========================================================= */
+
+    async function loadProfessionals() {
+      $("professionalsGrid").innerHTML =
+        `<p class="text-sm text-slate-500">Loading professionals...</p>`;
+
+      try {
+        const data = await api("/professionals");
+
+        state.professionals = Array.isArray(data)
+          ? data
+          : (data.professionals || data.items || data.results || []);
+
+        renderProfessionals();
+      } catch (error) {
+        $("professionalsGrid").innerHTML = `
+      <div class="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-800 md:col-span-2 xl:col-span-3">
+        <p class="font-semibold">Could not load professionals.</p>
+        <p class="mt-2">${escapeHtml(error.message)}</p>
+        <p class="mt-2 text-xs">
+          Check that FastAPI is running at ${escapeHtml(API_BASE)}.
+          If the browser reports a CORS error, configure CORS in your backend.
+        </p>
+      </div>`;
+      }
+    }
+
+    /* =========================================================
+       CREATE BOOKING
+       ========================================================= */
+
+    async function submitBooking(event) {
+      event.preventDefault();
+      clearNotice();
+
+      if (!state.token) {
+        notify("No JWT was found. Sign in first, then check your login code's token storage key.", "warning");
+        return;
+      }
+
+      const professionalId = $("professionalSelect").value;
+      const professional = state.professionals.find(
+        p => String(getId(p)) === professionalId
+      );
+
+      if (!professional) {
+        notify("Please select a professional who is accepting bookings.", "warning");
+        return;
+      }
+
+      const dateValue = $("scheduledAt").value;
+      const date = new Date(dateValue);
+
+      if (!dateValue || Number.isNaN(date.getTime()) || date <= new Date()) {
+        notify("Please select a valid future date and time.", "warning");
+        return;
+      }
+
+      const mode = $("modeSelect").value;
+      if (!getModes(professional).includes(mode)) {
+        notify("That consultation mode is not supported by this professional.", "warning");
+        return;
+      }
+
+      const payload = {
+        professional_id: professionalId,
+        professional_type: getRole(professional),
+        consultation_mode: mode,
+        scheduled_at: date.toISOString(),
+        duration_minutes: Number($("durationSelect").value)
+      };
+
+      const button = $("bookBtn");
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Requesting booking...";
+
+      try {
+        const result = await api("/bookings", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        const bookingId = result?.id || result?.booking_id;
+        notify(
+          `Booking request created. Status: ${result?.status || "PENDING"}` +
+          (bookingId ? `. Booking ID: ${bookingId}` : ""),
+          "success"
+        );
+
+        $("bookingForm").reset();
+        setMinimumDate();
+        updateModes();
+        await loadBookings();
+      } catch (error) {
+        notify(error.message, "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
+    /* =========================================================
+       BOOKING HISTORY
+       ========================================================= */
+
+    async function loadBookings() {
+      $("bookingsList").innerHTML =
+        `<p class="text-sm text-slate-500">Loading bookings...</p>`;
+
+      try {
+        const data = await api("/bookings/me");
+        state.bookings = Array.isArray(data)
+          ? data
+          : (data.bookings || data.items || data.results || []);
+
+        renderBookings();
+      } catch (error) {
+        state.bookings = [];
+        $("totalBookings").textContent = "—";
+        $("bookingsList").innerHTML = `
+      <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
+        ${escapeHtml(error.message)}
+      </div>`;
+      }
+    }
+
+    function renderBookings() {
+      $("totalBookings").textContent = state.bookings.length;
+
+      const list = $("bookingsList");
+      const isProfessional = professionalAccount();
+
+      if (!state.bookings.length) {
+        list.innerHTML = `
+      <div class="rounded-xl border border-dashed p-7 text-center">
+        <p class="font-semibold">No bookings yet</p>
+        <p class="mt-1 text-sm text-slate-500">
+          ${isProfessional
+            ? "Incoming consultation requests will appear here."
+            : "Your booking requests will appear here."}
+        </p>
+      </div>`;
+        return;
+      }
+
+      list.innerHTML = state.bookings.map(booking => {
+        const id = booking.id || booking.booking_id;
+        const status = String(booking.status || "PENDING").toUpperCase();
+        const active = ["PENDING", "CONFIRMED"].includes(status);
+        const pending = status === "PENDING";
+        const mode = booking.consultation_mode || "CHAT";
+        const amount = booking.amount != null
+          ? `₹${booking.amount}`
+          : "—";
+
+        const name = isProfessional
+          ? (
+            booking.client_name ||
+            booking.customer_name ||
+            booking.user_name ||
+            "Client"
+          )
+          : (
+            booking.professional_name ||
+            booking.reader_name ||
+            booking.consultant_name ||
+            booking.professional_type ||
+            "Professional"
+          );
+
+        let actionButtons = "";
+
+        if (isProfessional && pending) {
+          actionButtons = `
+        <div class="flex gap-2">
+          <button
+            type="button"
+            class="respondBooking rounded-lg bg-emerald-600 px-3 py-1.5
+                   text-xs font-semibold text-white hover:bg-emerald-700"
+            data-id="${escapeHtml(id || "")}"
+            data-action="CONFIRMED">
+            Confirm
+          </button>
+
+          <button
+            type="button"
+            class="respondBooking rounded-lg border border-rose-200 px-3 py-1.5
+                   text-xs font-semibold text-rose-700 hover:bg-rose-50"
+            data-id="${escapeHtml(id || "")}"
+            data-action="REJECTED">
+            Reject
+          </button>
+        </div>`;
+
+        } else if (!isProfessional && active) {
+          actionButtons = `
+        <button
+          type="button"
+          class="cancelBooking rounded-lg border border-rose-200 px-3 py-1.5
+                 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+          data-id="${escapeHtml(id || "")}">
+          Cancel booking
+        </button>`;
+        }
+
+        if (status === "CONFIRMED" && mode.toUpperCase() === "CHAT") {
+          actionButtons += `
+        <button
+          type="button"
+          class="openChatBtn btn primary text-sm"
+          data-id="${escapeHtml(id || "")}">
+          Open chat
+        </button>`;
+        }
+
+
+        return `
+      <article class="rounded-xl border p-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="font-semibold">${escapeHtml(name)}</p>
+            <p class="mt-1 text-xs text-slate-500">
+              ${escapeHtml(booking.professional_type || "Consultation")}
+              · ${escapeHtml(mode)}
+              · ${Number(booking.duration_minutes || 30)} minutes
+            </p>
+          </div>
+
+          <span class="rounded-full px-2.5 py-1 text-xs font-semibold
+                       ${statusStyle(status)}">
+            ${escapeHtml(status)}
+          </span>
+        </div>
+
+        <p class="mt-3 text-sm text-slate-600">
+          ${escapeHtml(formatDate(booking.scheduled_at))}
+        </p>
+
+        <p class="mt-1 text-sm text-slate-500">
+          Amount: ${escapeHtml(amount)}
+        </p>
+
+        <div class="mt-3 flex flex-wrap items-center justify-between
+                    gap-2 border-t pt-3">
+          <p class="break-all text-xs text-slate-400">
+            ID: ${escapeHtml(id || "—")}
+          </p>
+
+          ${actionButtons}
+        </div>
+      </article>`;
+      }).join("");
+
+
+      list.querySelectorAll(".openChatBtn").forEach(button => {
+        button.addEventListener("click", () => {
+          openChat(button.dataset.id);
+        });
+      });
+
+
+      list.querySelectorAll(".cancelBooking").forEach(button => {
+        button.addEventListener("click", () => {
+          cancelBooking(button.dataset.id);
+        });
+      });
+
+      list.querySelectorAll(".respondBooking").forEach(button => {
+        button.addEventListener("click", () => {
+          respondToBooking(
+            button.dataset.id,
+            button.dataset.action
+          );
+        });
+      });
+    }
+
+
+
+    async function cancelBooking(id) {
+      if (!id) return;
+      if (!confirm("Are you sure you want to cancel this booking?")) return;
+
+      clearNotice();
+
+      try {
+        await api(`/bookings/${encodeURIComponent(id)}/cancel`, {
+          method: "PATCH"
+        });
+        notify("Booking cancelled successfully.", "success");
+        await loadBookings();
+      } catch (error) {
+        notify(error.message, "error");
+      }
+    }
+
+    /* =========================================================
+       PROFESSIONAL AVAILABILITY
+       ========================================================= */
+
+    async function loadAvailability() {
+      if (!professionalAccount()) return;
+
+      $("availabilitySection").classList.remove("hidden");
+
+      try {
+        const data = await api("/me/availability");
+
+        $("isOnline").checked = data.is_online === true;
+        $("acceptingBookings").checked = data.accepting_bookings !== false;
+        $("supportsChat").checked = data.supports_chat !== false;
+        $("supportsVoice").checked = data.supports_voice === true;
+        $("supportsVideo").checked = data.supports_video !== false;
+      } catch (error) {
+        notify(
+          "Could not load your availability. Check your professional account and backend response: " + error.message,
+          "warning"
+        );
+      }
+    }
+
+    async function saveAvailability(event) {
+      event.preventDefault();
+      clearNotice();
+
+      const button = $("saveAvailabilityBtn");
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      const payload = {
+        is_online: $("isOnline").checked,
+        accepting_bookings: $("acceptingBookings").checked,
+        supports_chat: $("supportsChat").checked,
+        supports_voice: $("supportsVoice").checked,
+        supports_video: $("supportsVideo").checked
+      };
+
+      try {
+        await api("/me/availability", {
+          method: "PUT",
+          body: JSON.stringify(payload)
+        });
+
+        notify("Availability saved successfully.", "success");
+        await loadProfessionals();
+      } catch (error) {
+        notify(error.message, "error");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Save availability";
+      }
+    }
+
+    /* =========================================================
+       INITIALIZATION AND EVENTS
+       ========================================================= */
+
+    async function initialize() {
+      state.token = findToken();
+      state.userRole = readJwtRole(state.token);
+      state.currentUserId = readJwtUserId(state.token);
+
+      if (!state.token) {
+        notify(
+          "No login token was detected. The directory may still load, but booking history and protected actions require you to sign in.",
+          "warning"
+        );
+      }
+
+      if (professionalAccount()) {
+        $("availabilitySection").classList.remove("hidden");
+      }
+
+      setMinimumDate();
+
+      await Promise.all([
+        loadProfessionals(),
+        loadBookings()
+      ]);
+
+      await loadAvailability();
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    $("searchInput").addEventListener("input", renderProfessionals);
+    $("roleFilter").addEventListener("change", renderProfessionals);
+    $("professionalSelect").addEventListener("change", updateModes);
+    $("bookingForm").addEventListener("submit", submitBooking);
+    $("availabilityForm").addEventListener("submit", saveAvailability);
+    $("loadBookingsBtn").addEventListener("click", loadBookings);
+
+    $("refreshBtn").addEventListener("click", async () => {
+      clearNotice();
+      state.token = findToken();
+      state.userRole = readJwtRole(state.token);
+
+      await Promise.all([
+        loadProfessionals(),
+        loadBookings()
+      ]);
+
+      await loadAvailability();
+    });
+
+
+    /* =========================================================
+       CHAT INTEGRATION
+       ========================================================= */
+
+    let activeChatBookingId = null;
+    let activeChatSocket = null;
+
+    function chatStatus(message, connected = false) {
+      $("chatConnectionStatus").textContent = message;
+      $("chatConnectionStatus").className =
+        "mt-1 text-xs " + (connected ? "text-emerald-600" : "text-slate-500");
+      $("sendChatBtn").disabled = !connected;
+    }
+
+    function renderChatMessage(item) {
+      const container = $("chatMessages");
+      const message = document.createElement("div");
+      const mine = item.sender_id === state.currentUserId;
+
+      message.className = `flex ${mine ? "justify-end" : "justify-start"}`;
+
+      const bubble = document.createElement("div");
+      bubble.className =
+        "max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-sm " +
+        (mine
+          ? "bg-violet-700 text-white"
+          : "border bg-white text-slate-800");
+
+      const content = document.createElement("p");
+      content.textContent = item.message || "";
+
+      const timestamp = document.createElement("p");
+      timestamp.className = "mt-1 text-[10px] opacity-70";
+      timestamp.textContent = item.created_at
+        ? new Date(item.created_at).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+        : "";
+
+      bubble.append(content, timestamp);
+      message.appendChild(bubble);
+      container.appendChild(message);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function loadChatHistory(bookingId) {
+      const result = await api(
+        `/bookings/${encodeURIComponent(bookingId)}/chat/messages?limit=50`
+      );
+
+      $("chatMessages").replaceChildren();
+
+      const messages = Array.isArray(result)
+        ? result
+        : (result.messages || []);
+
+      if (!messages.length) {
+        const empty = document.createElement("p");
+        empty.className = "py-8 text-center text-sm text-slate-500";
+        empty.textContent = "No messages yet. Start the conversation.";
+        $("chatMessages").appendChild(empty);
+        return;
+      }
+
+      messages.forEach(renderChatMessage);
+    }
+
+    function closeChat() {
+      if (activeChatSocket) {
+        activeChatSocket.close();
+        activeChatSocket = null;
+      }
+
+      activeChatBookingId = null;
+      $("chatModal").classList.add("hidden");
+      $("chatModal").classList.remove("flex");
+      chatStatus("Not connected");
+    }
+
+    async function openChat(bookingId) {
+      const booking = state.bookings.find(
+        item => String(item.id || item.booking_id) === String(bookingId)
+      );
+
+      if (!booking ||
+        String(booking.status).toUpperCase() !== "CONFIRMED" ||
+        String(booking.consultation_mode).toUpperCase() !== "CHAT") {
+        notify("Chat is available only for confirmed chat bookings.", "warning");
+        return;
+      }
+
+      if (!state.token) {
+        notify("Please sign in again to use chat.", "warning");
+        return;
+      }
+
+      closeChat();
+      activeChatBookingId = bookingId;
+
+      $("chatTitle").textContent = "Consultation chat";
+      $("chatMessages").replaceChildren();
+
+      $("chatModal").classList.remove("hidden");
+      $("chatModal").classList.add("flex");
+      chatStatus("Loading messages...");
+
+      try {
+        await loadChatHistory(bookingId);
+      } catch (error) {
+        notify("Could not load chat history: " + error.message, "error");
+        closeChat();
+        return;
+      }
+
+      const wsBase = API_BASE.replace(/^http/, "ws");
+      const wsUrl =
+        `${wsBase}/consultation-hub/bookings/${encodeURIComponent(bookingId)}` +
+        `/chat/ws?token=${encodeURIComponent(state.token)}`;
+
+      const socket = new WebSocket(wsUrl);
+      activeChatSocket = socket;
+
+      socket.addEventListener("open", () => {
+        if (activeChatSocket === socket) {
+          chatStatus("Connected", true);
+        }
+      });
+
+      socket.addEventListener("message", event => {
+        if (activeChatSocket !== socket) return;
+
+        try {
+          const data = JSON.parse(event.data);
+
+          // Ignore non-message events such as connection acknowledgements.
+          if (data.type === "message" && data.message) {
+            renderChatMessage(data);
+          }
+        } catch (error) {
+          console.error("Invalid chat response:", error);
+        }
+      });
+
+      socket.addEventListener("error", () => {
+        if (activeChatSocket === socket) {
+          chatStatus("Connection error");
+        }
+      });
+
+      socket.addEventListener("close", () => {
+        if (activeChatSocket === socket) {
+          chatStatus("Disconnected");
+          activeChatSocket = null;
+        }
+      });
+    }
+
+    $("chatForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const message = $("chatInput").value.trim();
+
+      if (!message || !activeChatSocket ||
+        activeChatSocket.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      // This matches a handler that uses websocket.receive_text()
+      // and saves the received text as the message.
+      activeChatSocket.send(message);
+      $("chatInput").value = "";
+    });
+
+    $("closeChatBtn").addEventListener("click", closeChat);
+
+    $("chatModal").addEventListener("click", event => {
+      if (event.target === $("chatModal")) closeChat();
+    });
+
+    $("chatMessages").addEventListener("DOMNodeInserted", () => {
+      $("chatMessages").scrollTop = $("chatMessages").scrollHeight;
+    });
+
+
+
+    initialize();
+  </script>
+
+</body>
+
+</html>

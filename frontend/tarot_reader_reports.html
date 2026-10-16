@@ -1,0 +1,943 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Reports | Tarot Reader Workspace</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      background: #f8fafc;
+      color: #172033;
+    }
+
+    .report-card {
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .report-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .prose-content {
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      line-height: 1.75;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+      }
+
+      .no-print,
+      #report-list-panel,
+      #page-header {
+        display: none !important;
+      }
+
+      #report-detail-panel {
+        display: block !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      main {
+        max-width: none !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+  <header id="page-header"
+    class="no-print bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4
+                flex flex-wrap items-center justify-between gap-4">
+
+      <a href="tarot_reader.html"
+        class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-violet-100
+                    flex items-center justify-center">
+          <i data-lucide="sparkles"
+             class="w-6 h-6 text-violet-700"></i>
+        </div>
+
+        <div>
+          <h1 class="font-bold text-lg">Tarot Reader Workspace</h1>
+          <p class="text-xs text-slate-500">
+            Saved reports and reading history
+          </p>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <a href="tarot_reader.html"
+          class="px-4 py-2 rounded-xl border border-slate-200
+                 hover:bg-slate-50 text-sm font-semibold">
+          <i data-lucide="arrow-left"
+             class="inline w-4 h-4 mr-1"></i>
+          Dashboard
+        </a>
+
+        <button id="logout-btn"
+          class="px-4 py-2 rounded-xl bg-slate-900 text-white
+                 hover:bg-slate-700 text-sm font-semibold">
+          <i data-lucide="log-out"
+             class="inline w-4 h-4 mr-1"></i>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+
+    <section class="no-print rounded-3xl p-7 sm:p-9 text-white
+                    bg-gradient-to-r from-indigo-950
+                    via-violet-900 to-purple-800">
+      <p class="text-violet-200 text-xs font-bold tracking-widest">
+        REPORT MANAGEMENT
+      </p>
+
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">
+        Saved reading reports
+      </h2>
+
+      <p class="text-violet-100 mt-3 max-w-2xl leading-relaxed">
+        Browse reports for your actively assigned clients, review
+        summaries and actionable steps, and print individual reports.
+      </p>
+    </section>
+
+    <div id="status-message"
+      role="status"
+      aria-live="polite"
+      class="no-print rounded-xl border border-slate-200
+             bg-white p-4 text-sm text-slate-600">
+      Loading saved reports...
+    </div>
+
+    <section id="report-list-panel" class="no-print space-y-5">
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+        <article class="bg-white border border-slate-200
+                        rounded-2xl p-5">
+          <p class="text-sm text-slate-500">Reports on this page</p>
+          <p id="page-report-count"
+             class="text-3xl font-bold mt-2">—</p>
+        </article>
+
+        <article class="bg-white border border-slate-200
+                        rounded-2xl p-5">
+          <p class="text-sm text-slate-500">Clients represented</p>
+          <p id="page-client-count"
+             class="text-3xl font-bold mt-2">—</p>
+        </article>
+
+        <article class="bg-white border border-slate-200
+                        rounded-2xl p-5">
+          <p class="text-sm text-slate-500">Page number</p>
+          <p id="page-number"
+             class="text-3xl font-bold mt-2">1</p>
+        </article>
+
+      </div>
+
+      <div class="bg-white border border-slate-200
+                  rounded-2xl p-5 space-y-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+          <div class="md:col-span-2">
+            <label for="search-input"
+              class="block text-sm font-semibold mb-2">
+              Search reports
+            </label>
+
+            <div class="relative">
+              <i data-lucide="search"
+                 class="absolute left-3 top-3 w-4 h-4
+                        text-slate-400"></i>
+
+              <input id="search-input"
+                type="search"
+                placeholder="Search title, client, summary..."
+                class="w-full rounded-xl border border-slate-200
+                       pl-10 pr-4 py-2.5 outline-none
+                       focus:ring-2 focus:ring-violet-300" />
+            </div>
+          </div>
+
+          <div>
+            <label for="type-filter"
+              class="block text-sm font-semibold mb-2">
+              Reading type
+            </label>
+
+            <select id="type-filter"
+              class="w-full rounded-xl border border-slate-200
+                     px-3 py-2.5 bg-white outline-none
+                     focus:ring-2 focus:ring-violet-300">
+              <option value="">All types</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p id="filter-summary" class="text-sm text-slate-500">
+            Showing saved reports
+          </p>
+
+          <div class="flex gap-2">
+            <button id="clear-filters-btn"
+              class="px-4 py-2 rounded-xl border border-slate-200
+                     hover:bg-slate-50 text-sm font-semibold">
+              Clear filters
+            </button>
+
+            <button id="refresh-btn"
+              class="px-4 py-2 rounded-xl bg-violet-700 text-white
+                     hover:bg-violet-800 text-sm font-semibold">
+              <i data-lucide="refresh-cw"
+                 class="inline w-4 h-4 mr-1"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="report-list"
+        class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      </div>
+
+      <div id="empty-state"
+        class="hidden bg-white border border-slate-200
+               rounded-2xl p-10 text-center">
+        <i data-lucide="files"
+           class="w-10 h-10 mx-auto text-slate-400"></i>
+
+        <h3 class="text-lg font-bold mt-4">No reports found</h3>
+
+        <p id="empty-message"
+           class="text-sm text-slate-500 mt-2">
+          Try changing your search or filters.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-between items-center gap-3">
+        <p id="pagination-info"
+           class="text-sm text-slate-500">
+          Page 1
+        </p>
+
+        <div class="flex gap-2">
+          <button id="previous-btn"
+            class="px-4 py-2 rounded-xl border border-slate-200
+                   bg-white text-sm font-semibold
+                   disabled:opacity-40 disabled:cursor-not-allowed">
+            Previous
+          </button>
+
+          <button id="next-btn"
+            class="px-4 py-2 rounded-xl border border-slate-200
+                   bg-white text-sm font-semibold
+                   disabled:opacity-40 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="report-detail-panel"
+      class="hidden bg-white border border-slate-200
+             rounded-3xl shadow-sm overflow-hidden">
+
+      <div class="no-print border-b border-slate-200 p-4 sm:p-5
+                  flex flex-wrap items-center justify-between gap-3">
+
+        <button id="back-to-list-btn"
+          class="px-4 py-2 rounded-xl border border-slate-200
+                 hover:bg-slate-50 text-sm font-semibold">
+          <i data-lucide="arrow-left"
+             class="inline w-4 h-4 mr-1"></i>
+          Back to reports
+        </button>
+
+        <div class="flex flex-wrap gap-2">
+          <button id="print-btn"
+            class="px-4 py-2 rounded-xl bg-violet-700 text-white
+                   hover:bg-violet-800 text-sm font-semibold">
+            <i data-lucide="printer"
+               class="inline w-4 h-4 mr-1"></i>
+            Print / Save PDF
+          </button>
+        </div>
+      </div>
+
+      <div id="report-detail-content" class="p-5 sm:p-9">
+        <p class="text-slate-500">Select a report to view its details.</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    const API_BASE = "http://127.0.0.1:8000/api/v1";
+    const PAGE_SIZE = 5;
+
+    const state = {
+      reports: [],
+      offset: 0,
+      hasMore: false,
+      loading: false,
+      selectedReport: null,
+      requestId: 0
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function getToken() {
+      return localStorage.getItem("access_token");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function safeJson(value) {
+      try {
+        return JSON.stringify(value, null, 2);
+      } catch {
+        return String(value ?? "");
+      }
+    }
+
+    function formatDate(value) {
+      if (!value) return "Date unavailable";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Date unavailable";
+      }
+
+      return date.toLocaleString();
+    }
+
+    function formatType(value) {
+      return String(value || "UNKNOWN")
+        .replace(/[_-]+/g, " ")
+        .toLowerCase()
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    }
+
+    function setStatus(message, isError = false) {
+      const element = $("status-message");
+      element.textContent = message;
+
+      element.className =
+        "no-print rounded-xl border p-4 text-sm " +
+        (isError
+          ? "border-red-200 bg-red-50 text-red-700"
+          : "border-slate-200 bg-white text-slate-600");
+    }
+
+    async function apiRequest(path, options = {}) {
+      const token = getToken();
+
+      if (!token) {
+        window.location.href = "login.html";
+        throw new Error("Your session has expired. Please log in.");
+      }
+
+      const response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers: {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`,
+          ...(options.headers || {})
+        }
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem("access_token");
+        window.location.href = "login.html";
+        throw new Error("Your session has expired. Please log in again.");
+      }
+
+      const text = await response.text();
+      let data = {};
+
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error("The server returned an invalid response.");
+        }
+      }
+
+      if (!response.ok) {
+        const detail = data.detail;
+        const message = typeof detail === "string"
+          ? detail
+          : `Request failed with status ${response.status}.`;
+
+        throw new Error(message);
+      }
+
+      return data;
+    }
+
+    function getFilteredReports() {
+      const query = $("search-input").value.trim().toLowerCase();
+      const type = $("type-filter").value;
+
+      return state.reports.filter((report) => {
+        const searchable = [
+          report.report_title,
+          report.report_summary,
+          report.client_email,
+          report.client_id,
+          report.reading_id,
+          report.reading_type
+        ].join(" ").toLowerCase();
+
+        const matchesQuery = !query || searchable.includes(query);
+        const matchesType = !type || report.reading_type === type;
+
+        return matchesQuery && matchesType;
+      });
+    }
+
+    function updateTypeFilter() {
+      const select = $("type-filter");
+      const previousValue = select.value;
+
+      const types = [...new Set(
+        state.reports
+          .map((report) => report.reading_type)
+          .filter(Boolean)
+      )].sort();
+
+      select.innerHTML =
+        '<option value="">All types</option>' +
+        types.map((type) =>
+          `<option value="${escapeHtml(type)}">${escapeHtml(formatType(type))}</option>`
+        ).join("");
+
+      if (types.includes(previousValue)) {
+        select.value = previousValue;
+      }
+    }
+
+    function renderReports() {
+      const filtered = getFilteredReports();
+      const list = $("report-list");
+
+      $("page-report-count").textContent = state.reports.length;
+
+      $("page-client-count").textContent = new Set(
+        state.reports.map((report) => report.client_id)
+      ).size;
+
+      $("page-number").textContent =
+        String(Math.floor(state.offset / PAGE_SIZE) + 1);
+
+      $("filter-summary").textContent =
+        `Showing ${filtered.length} of ${state.reports.length} reports on this page`;
+
+      $("pagination-info").textContent =
+        `Page ${Math.floor(state.offset / PAGE_SIZE) + 1}`;
+
+      $("previous-btn").disabled = state.offset === 0 || state.loading;
+      $("next-btn").disabled = !state.hasMore || state.loading;
+
+      $("empty-state").classList.toggle("hidden", filtered.length > 0);
+      list.classList.toggle("hidden", filtered.length === 0);
+
+      if (filtered.length === 0) {
+        $("empty-message").textContent = state.reports.length
+          ? "No reports match your current search or filters."
+          : "There are no saved reports on this page.";
+      }
+
+      list.innerHTML = filtered.map((report) => {
+        const title = report.report_title || "Untitled report";
+        const summary = report.report_summary || "No summary available.";
+        const client = report.client_email || report.client_id || "Unknown client";
+        const score = report.overall_insight_score;
+
+        return `
+          <article class="report-card bg-white border border-slate-200
+                          rounded-2xl p-5 flex flex-col gap-4">
+
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <span class="inline-flex rounded-full bg-violet-100
+                             text-violet-800 px-3 py-1 text-xs font-semibold">
+                  ${escapeHtml(formatType(report.reading_type))}
+                </span>
+
+                <h3 class="font-bold text-lg mt-3 break-words">
+                  ${escapeHtml(title)}
+                </h3>
+              </div>
+
+              <i data-lucide="file-text"
+                 class="w-6 h-6 text-violet-600 shrink-0"></i>
+            </div>
+
+            <p class="text-sm text-slate-600 leading-relaxed">
+              ${escapeHtml(summary.length > 230
+                ? summary.slice(0, 230) + "…"
+                : summary)}
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3
+                        rounded-xl bg-slate-50 p-3 text-sm">
+
+              <div>
+                <p class="text-slate-500 text-xs">Client</p>
+                <p class="font-medium break-all mt-1">
+                  ${escapeHtml(client)}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-slate-500 text-xs">Reading date</p>
+                <p class="font-medium mt-1">
+                  ${escapeHtml(formatDate(report.reading_created_at))}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-slate-500 text-xs">Insight score</p>
+                <p class="font-medium mt-1">
+                  ${score == null ? "Not available" : escapeHtml(score)}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-slate-500 text-xs">Report ID</p>
+                <p class="font-medium mt-1 break-all">
+                  ${escapeHtml(report.report_id)}
+                </p>
+              </div>
+            </div>
+
+            <button
+              class="open-report-btn mt-auto w-full rounded-xl
+                     bg-slate-900 text-white py-3 px-4
+                     hover:bg-violet-800 font-semibold text-sm"
+              data-client-id="${escapeHtml(report.client_id)}"
+              data-reading-id="${escapeHtml(report.reading_id)}">
+              <i data-lucide="book-open"
+                 class="inline w-4 h-4 mr-1"></i>
+              Open full report
+            </button>
+
+          </article>
+        `;
+      }).join("");
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    async function loadReports() {
+      if (state.loading) return;
+
+      state.loading = true;
+      const requestId = ++state.requestId;
+
+      $("refresh-btn").disabled = true;
+      $("previous-btn").disabled = true;
+      $("next-btn").disabled = true;
+
+      setStatus("Loading saved reports...");
+
+      try {
+        const params = new URLSearchParams({
+          limit: String(PAGE_SIZE),
+          offset: String(state.offset)
+        });
+
+        const data = await apiRequest(
+          `/tarot-reader/reports?${params.toString()}`
+        );
+
+        if (requestId !== state.requestId) return;
+
+        if (data.status !== "success" || !Array.isArray(data.reports)) {
+          throw new Error("The reports API returned an unexpected response.");
+        }
+
+        state.reports = data.reports;
+        state.hasMore = Boolean(data.has_more);
+
+        updateTypeFilter();
+        renderReports();
+
+        setStatus(
+          state.reports.length
+            ? `Loaded ${state.reports.length} saved report(s).`
+            : "No saved reports were returned for this page."
+        );
+
+      } catch (error) {
+        if (requestId !== state.requestId) return;
+
+        console.error("Failed to load reports:", error);
+        setStatus(error.message || "Could not load saved reports.", true);
+        state.reports = [];
+        state.hasMore = false;
+        renderReports();
+
+      } finally {
+        if (requestId === state.requestId) {
+          state.loading = false;
+          $("refresh-btn").disabled = false;
+          $("previous-btn").disabled = state.offset === 0;
+          $("next-btn").disabled = !state.hasMore;
+        }
+      }
+    }
+
+    function renderObjectSection(title, value) {
+      if (value == null || value === "") return "";
+
+      if (typeof value === "string" || typeof value === "number") {
+        return `
+          <section class="mt-6">
+            <h3 class="font-bold text-lg mb-3">${escapeHtml(title)}</h3>
+            <div class="prose-content text-slate-700">
+              ${escapeHtml(value)}
+            </div>
+          </section>
+        `;
+      }
+
+      if (Array.isArray(value)) {
+        return `
+          <section class="mt-6">
+            <h3 class="font-bold text-lg mb-3">${escapeHtml(title)}</h3>
+            <ul class="list-disc pl-6 space-y-2 text-slate-700">
+              ${value.map((item) =>
+                `<li>${escapeHtml(
+                  typeof item === "object" ? safeJson(item) : item
+                )}</li>`
+              ).join("")}
+            </ul>
+          </section>
+        `;
+      }
+
+      return `
+        <section class="mt-6">
+          <h3 class="font-bold text-lg mb-3">${escapeHtml(title)}</h3>
+          <pre class="prose-content text-sm bg-slate-50
+                      border border-slate-200 rounded-xl p-4">${escapeHtml(safeJson(value))}</pre>
+        </section>
+      `;
+    }
+
+    function renderFullReport(report, reading) {
+      const title = report?.report_title || "Saved reading report";
+      const summary = report?.report_summary || "No report summary available.";
+      const analysis = reading?.analysis_data || {};
+
+      const steps = report?.actionable_steps;
+      let stepsHtml = "";
+
+      if (Array.isArray(steps)) {
+        stepsHtml = `
+          <section class="mt-8">
+            <h3 class="font-bold text-xl mb-4">Actionable steps</h3>
+            ${steps.length
+              ? `<ol class="list-decimal pl-6 space-y-3 text-slate-700 leading-relaxed">
+                  ${steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+                </ol>`
+              : '<p class="text-slate-500">No actionable steps saved.</p>'}
+          </section>
+        `;
+      } else if (steps && typeof steps === "object") {
+        stepsHtml = renderObjectSection("Actionable steps", steps);
+      }
+
+      let interpretationHtml = "";
+
+      if (analysis.interpretation) {
+        interpretationHtml += renderObjectSection(
+          "Palmistry interpretation",
+          analysis.interpretation
+        );
+      }
+
+      if (analysis.synthesis) {
+        interpretationHtml += renderObjectSection(
+          "Synthesis",
+          analysis.synthesis
+        );
+      }
+
+      if (analysis.narrative) {
+        interpretationHtml += renderObjectSection(
+          "Narrative",
+          analysis.narrative
+        );
+      }
+
+      if (analysis.tarot_reading) {
+        interpretationHtml += renderObjectSection(
+          "Tarot reading",
+          analysis.tarot_reading
+        );
+      }
+
+      if (analysis.recommendations) {
+        interpretationHtml += renderObjectSection(
+          "Recommendations",
+          analysis.recommendations
+        );
+      }
+
+      if (analysis.life_trends) {
+        interpretationHtml += renderObjectSection(
+          "Life trends",
+          analysis.life_trends
+        );
+      }
+
+      if (analysis.personality_insights) {
+        interpretationHtml += renderObjectSection(
+          "Personality insights",
+          analysis.personality_insights
+        );
+      }
+
+      const score = reading?.overall_insight_score;
+      const client = state.selectedReport?.client_email ||
+        state.selectedReport?.client_id || "Unknown client";
+
+      $("report-detail-content").innerHTML = `
+        <div class="max-w-4xl mx-auto">
+
+          <div class="border-b border-slate-200 pb-6">
+            <p class="text-xs font-bold tracking-widest text-violet-700">
+              SAVED READING REPORT
+            </p>
+
+            <h1 class="text-3xl sm:text-4xl font-bold mt-3">
+              ${escapeHtml(title)}
+            </h1>
+
+            <p class="text-slate-500 mt-3">
+              ${escapeHtml(formatType(reading?.reading_type))}
+              · ${escapeHtml(formatDate(reading?.created_at))}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+            <div class="rounded-xl bg-slate-50 p-4">
+              <p class="text-xs text-slate-500">Client</p>
+              <p class="font-semibold mt-2 break-all">
+                ${escapeHtml(client)}
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-slate-50 p-4">
+              <p class="text-xs text-slate-500">Insight score</p>
+              <p class="font-semibold mt-2">
+                ${score == null ? "Not available" : escapeHtml(score)}
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-slate-50 p-4">
+              <p class="text-xs text-slate-500">Reading ID</p>
+              <p class="font-semibold mt-2 text-sm break-all">
+                ${escapeHtml(reading?.reading_id || "")}
+              </p>
+            </div>
+          </div>
+
+          <section class="mt-8">
+            <h2 class="font-bold text-xl mb-3">Report summary</h2>
+            <div class="prose-content text-slate-700">
+              ${escapeHtml(summary)}
+            </div>
+          </section>
+
+          ${stepsHtml}
+          ${interpretationHtml}
+
+          <section class="mt-8">
+            <h3 class="font-bold text-lg mb-3">Saved analysis data</h3>
+            <details class="border border-slate-200 rounded-xl p-4">
+              <summary class="cursor-pointer font-semibold">
+                Show raw analysis data
+              </summary>
+              <pre class="prose-content text-xs bg-slate-50
+                          rounded-xl p-4 mt-4">${escapeHtml(safeJson(analysis))}</pre>
+            </details>
+          </section>
+
+          <p class="text-xs text-slate-400 mt-10 border-t
+                    border-slate-200 pt-4">
+            This report displays saved reading data. Interpretations
+            are for reflection and should not be treated as factual
+            predictions or professional advice.
+          </p>
+
+        </div>
+      `;
+    }
+
+    async function openReport(clientId, readingId) {
+      if (!clientId || !readingId) {
+        setStatus("This report is missing its client or reading ID.", true);
+        return;
+      }
+
+      const report = state.reports.find((item) =>
+        item.client_id === clientId && item.reading_id === readingId
+      );
+
+      if (!report) {
+        setStatus("The selected report is not available on this page.", true);
+        return;
+      }
+
+      state.selectedReport = report;
+
+      $("report-list-panel").classList.add("hidden");
+      $("report-detail-panel").classList.remove("hidden");
+
+      $("report-detail-content").innerHTML = `
+        <div class="py-12 text-center text-slate-500">
+          Loading full reading details...
+        </div>
+      `;
+
+      try {
+        const params = new URLSearchParams();
+        const detail = await apiRequest(
+          `/tarot-reader/clients/${encodeURIComponent(clientId)}` +
+          `/readings/${encodeURIComponent(readingId)}` +
+          (params.toString() ? `?${params}` : "")
+        );
+
+        const reading = detail.reading || detail.data?.reading;
+        const detailReport = detail.report || detail.data?.report;
+
+        if (!reading) {
+          throw new Error("The reading details were not returned by the API.");
+        }
+
+        // Use the report-list result as a fallback if the detail response
+        // doesn't include the report object.
+        const reportToRender = detailReport || report;
+
+        renderFullReport(reportToRender, reading);
+        setStatus("Full report loaded.");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+      } catch (error) {
+        console.error("Failed to open report:", error);
+
+        $("report-detail-content").innerHTML = `
+          <div class="rounded-xl bg-red-50 border border-red-200
+                      p-5 text-red-700">
+            <h3 class="font-bold">Unable to load this report</h3>
+            <p class="text-sm mt-2">${escapeHtml(error.message)}</p>
+            <p class="text-sm mt-2">
+              Return to the report list and try again.
+            </p>
+          </div>
+        `;
+
+        setStatus(error.message || "Unable to load the report.", true);
+      }
+    }
+
+    function showReportList() {
+      $("report-detail-panel").classList.add("hidden");
+      $("report-list-panel").classList.remove("hidden");
+      state.selectedReport = null;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    $("report-list").addEventListener("click", (event) => {
+      const button = event.target.closest(".open-report-btn");
+      if (!button) return;
+
+      openReport(
+        button.dataset.clientId,
+        button.dataset.readingId
+      );
+    });
+
+    $("search-input").addEventListener("input", renderReports);
+    $("type-filter").addEventListener("change", renderReports);
+
+    $("clear-filters-btn").addEventListener("click", () => {
+      $("search-input").value = "";
+      $("type-filter").value = "";
+      renderReports();
+    });
+
+    $("refresh-btn").addEventListener("click", loadReports);
+
+    $("previous-btn").addEventListener("click", () => {
+      if (state.offset === 0) return;
+      state.offset = Math.max(0, state.offset - PAGE_SIZE);
+      loadReports();
+    });
+
+    $("next-btn").addEventListener("click", () => {
+      if (!state.hasMore) return;
+      state.offset += PAGE_SIZE;
+      loadReports();
+    });
+
+    $("back-to-list-btn").addEventListener("click", showReportList);
+
+    $("print-btn").addEventListener("click", () => {
+      window.print();
+    });
+
+    $("logout-btn").addEventListener("click", () => {
+      localStorage.removeItem("access_token");
+      window.location.href = "login.html";
+    });
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    loadReports();
+  </script>
+
+</body>
+</html>

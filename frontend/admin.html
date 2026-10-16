@@ -1,0 +1,1084 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mystic Insights — Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #FAFAFC;
+    }
+
+    .brand { color: #5538EE; }
+    .brand-bg { background: #5538EE; }
+
+    .soft-shadow {
+      box-shadow: 0 10px 35px rgba(25, 20, 70, .04);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-700">
+
+  <!-- Header -->
+  <header class="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-5 md:px-8 sticky top-0 z-20">
+    <a href="dashboard.html" class="flex items-center gap-3 text-slate-950 font-extrabold tracking-tight">
+      <span class="w-9 h-9 rounded-xl brand-bg text-white flex items-center justify-center">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+      </span>
+      Mystic Insights
+      <span class="hidden sm:inline text-xs font-semibold text-slate-400 ml-1">ADMIN</span>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <span id="admin-email" class="hidden sm:inline text-xs text-slate-500">Administrator</span>
+      <button onclick="logout()" class="border border-slate-200 hover:bg-slate-50 rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        Log out
+      </button>
+    </div>
+  </header>
+
+  <div class="flex min-h-[calc(100vh-64px)]">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:flex w-60 bg-white border-r border-slate-100 p-4 flex-col justify-between shrink-0">
+      <nav class="space-y-1">
+        <a href="#overview" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold brand bg-violet-50">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          Admin Dashboard
+        </a>
+
+        <a href="#pending-registrations" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          Pending Registrations
+        </a>
+
+        <a href="#users" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          User management
+        </a>
+
+        <a href="#analytics" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="chart-no-axes-combined" class="w-4 h-4"></i>
+          Platform analytics
+        </a>
+
+        <a href="#reading-statistics" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="chart-column" class="w-4 h-4"></i>
+          Reading statistics
+        </a>
+
+        <a href="#system-reports" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+          System reports
+        </a>
+
+        <a href="#activity-logs" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="history" class="w-4 h-4"></i>
+          Admin activity log
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 min-w-0 p-5 md:p-8">
+
+      <!-- Overview -->
+      <section id="overview">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+          <div>
+            <p class="text-[10px] font-extrabold uppercase tracking-[.18em] brand mb-2">Platform control center</p>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-950">Admin Dashboard</h1>
+            <p class="text-sm text-slate-500 mt-2">Monitor platform activity and manage registered users.</p>
+          </div>
+
+          <button id="refresh-button" onclick="loadAdminData()" class="brand-bg hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 text-xs font-bold flex items-center justify-center gap-2">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            Refresh data
+          </button>
+        </div>
+
+        <div id="page-message" class="hidden mb-5 rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+
+        <!-- Summary cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-7">
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 soft-shadow">
+            <div class="flex justify-between items-start">
+              <span class="w-10 h-10 rounded-xl bg-violet-50 brand flex items-center justify-center">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </span>
+              <span class="text-[10px] font-bold text-slate-400">ALL ACCOUNTS</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">Total users</p>
+            <p id="total-users" class="text-3xl font-extrabold text-slate-950 mt-1">—</p>
+          </article>
+
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 soft-shadow">
+            <div class="flex justify-between items-start">
+              <span class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+              </span>
+              <span class="text-[10px] font-bold text-slate-400">ALL TYPES</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">Total readings</p>
+            <p id="total-readings" class="text-3xl font-extrabold text-slate-950 mt-1">—</p>
+          </article>
+
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 soft-shadow">
+            <div class="flex justify-between items-start">
+              <span class="w-10 h-10 rounded-xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center">
+                <i data-lucide="hand" class="w-5 h-5"></i>
+              </span>
+              <span class="text-[10px] font-bold text-slate-400">PALMISTRY</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">Palm readings</p>
+            <p id="palm-readings" class="text-3xl font-extrabold text-slate-950 mt-1">—</p>
+          </article>
+
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 soft-shadow">
+            <div class="flex justify-between items-start">
+              <span class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </span>
+              <span class="text-[10px] font-bold text-slate-400">TAROT + COMPOSITE</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">Tarot and synthesized</p>
+            <p id="tarot-readings" class="text-3xl font-extrabold text-slate-950 mt-1">—</p>
+          </article>
+        </div>
+
+        <!-- Reading and role breakdown -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-7">
+          <article class="xl:col-span-2 bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow">
+            <div class="flex items-center justify-between gap-3 mb-5">
+              <div>
+                <h2 class="font-extrabold text-slate-950">Reading breakdown</h2>
+                <p class="text-xs text-slate-500 mt-1">Counts returned by the backend</p>
+              </div>
+              <i data-lucide="chart-no-axes-column" class="w-5 h-5 brand"></i>
+            </div>
+            <div id="reading-breakdown" class="space-y-4">
+              <p class="text-sm text-slate-400">Loading statistics…</p>
+            </div>
+          </article>
+
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow">
+            <h2 class="font-extrabold text-slate-950">Users by role</h2>
+            <p class="text-xs text-slate-500 mt-1 mb-5">Registered account roles</p>
+            <div id="role-breakdown" class="space-y-3">
+              <p class="text-sm text-slate-400">Loading statistics…</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Platform analytics -->
+      <section id="analytics" class="mb-7 scroll-mt-24">
+        <div class="mb-4">
+          <p class="text-[10px] font-extrabold uppercase tracking-[.18em] brand mb-2">Insights</p>
+          <h2 class="text-xl font-extrabold text-slate-950">Platform analytics</h2>
+          <p class="text-sm text-slate-500 mt-1">Current account and reading distribution from the platform API.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow">
+            <h3 class="font-extrabold text-slate-950">Account distribution</h3>
+            <p class="text-xs text-slate-500 mt-1 mb-5">Registered users grouped by role</p>
+            <div id="analytics-role-breakdown" class="space-y-3">
+              <p class="text-sm text-slate-400">Loading analytics…</p>
+            </div>
+          </article>
+
+          <article class="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow">
+            <h3 class="font-extrabold text-slate-950">Reading activity mix</h3>
+            <p class="text-xs text-slate-500 mt-1 mb-5">Share of recorded reading types</p>
+            <div id="analytics-reading-breakdown" class="space-y-3">
+              <p class="text-sm text-slate-400">Loading analytics…</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Reading statistics -->
+      <section id="reading-statistics" class="mb-7 scroll-mt-24">
+        <div class="mb-4">
+          <p class="text-[10px] font-extrabold uppercase tracking-[.18em] brand mb-2">Reading activity</p>
+          <h2 class="text-xl font-extrabold text-slate-950">Reading statistics</h2>
+          <p class="text-sm text-slate-500 mt-1">Counts for Palmistry, Tarot, and other recorded reading types.</p>
+        </div>
+
+        <article class="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow">
+          <div class="flex items-center justify-between gap-3 mb-5">
+            <div>
+              <h3 class="font-extrabold text-slate-950">Readings by type</h3>
+              <p class="text-xs text-slate-500 mt-1">Values are supplied by the backend</p>
+            </div>
+            <i data-lucide="chart-column" class="w-5 h-5 brand"></i>
+          </div>
+          <div id="reading-statistics-breakdown" class="space-y-4">
+            <p class="text-sm text-slate-400">Loading statistics…</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- System reports -->
+      <section id="system-reports" class="mb-7 scroll-mt-24">
+        <div class="mb-4">
+          <p class="text-[10px] font-extrabold uppercase tracking-[.18em] brand mb-2">Exports</p>
+          <h2 class="text-xl font-extrabold text-slate-950">System reports</h2>
+          <p class="text-sm text-slate-500 mt-1">Generate a downloadable snapshot of the current platform statistics.</p>
+        </div>
+
+        <article class="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 soft-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-extrabold text-slate-950">Platform summary report</h3>
+            <p class="text-xs text-slate-500 mt-1">Includes totals, user-role counts, reading-type counts, and generation time.</p>
+            <p id="report-status" class="text-xs text-slate-400 mt-3">Refresh data to ensure the report is up to date.</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <button onclick="downloadReport('json')" class="brand-bg hover:bg-violet-700 text-white rounded-xl px-4 py-2.5 text-xs font-bold">Download JSON</button>
+            <button onclick="downloadReport('csv')" class="border border-slate-200 hover:bg-slate-50 rounded-xl px-4 py-2.5 text-xs font-bold">Download CSV</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- Professional registration approval -->
+      <section id="pending-registrations" class="bg-white border border-slate-100 rounded-2xl soft-shadow overflow-hidden mb-7 scroll-mt-24">
+        <div class="p-5 md:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="font-extrabold text-slate-950">Professional Registration Approval</h2>
+            <p class="text-xs text-slate-500 mt-1">Review Tarot Reader and Spiritual Consultant applications.</p>
+          </div>
+
+          <button id="pending-refresh-button" onclick="loadPendingRegistrations()" class="border border-slate-200 hover:bg-slate-50 rounded-xl px-4 py-2.5 text-xs font-bold">
+            Refresh applications
+          </button>
+        </div>
+
+        <div class="p-5 md:p-6">
+          <p id="pending-status" class="text-sm text-slate-500 mb-4" role="status" aria-live="polite">Loading applications…</p>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left min-w-[750px]">
+              <thead class="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th class="px-4 py-3 font-bold">Email</th>
+                  <th class="px-4 py-3 font-bold">Requested role</th>
+                  <th class="px-4 py-3 font-bold">Registered</th>
+                  <th class="px-4 py-3 font-bold">Status</th>
+                  <th class="px-4 py-3 font-bold">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="pending-registrations-table" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="5" class="px-4 py-8 text-center text-sm text-slate-400">Loading applications…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- User management -->
+      <section id="users" class="bg-white border border-slate-100 rounded-2xl soft-shadow overflow-hidden scroll-mt-24">
+        <div class="p-5 md:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-extrabold text-slate-950">User management</h2>
+            <p class="text-xs text-slate-500 mt-1">Browse registered accounts and update account roles. Changes are saved to the backend.</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="search-input" type="search" placeholder="Search email…" class="border border-slate-200 rounded-xl px-3 py-2.5 text-xs outline-none focus:border-violet-400" />
+
+            <select id="role-filter" class="border border-slate-200 rounded-xl px-3 py-2.5 text-xs bg-white outline-none focus:border-violet-400">
+              <option value="">All roles</option>
+              <option value="User">User</option>
+              <option value="Tarot Reader">Tarot Reader</option>
+              <option value="Spiritual Consultant">Spiritual Consultant</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+
+            <button onclick="loadUsers(0)" class="border border-slate-200 hover:bg-slate-50 rounded-xl px-4 py-2.5 text-xs font-bold">Search</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left min-w-[850px]">
+            <thead class="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th class="px-5 py-3 font-bold">Email</th>
+                <th class="px-5 py-3 font-bold">Role</th>
+                <th class="px-5 py-3 font-bold">Registered</th>
+                <th class="px-5 py-3 font-bold">User ID</th>
+                <th class="px-5 py-3 font-bold">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="users-table" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="5" class="px-5 py-8 text-center text-sm text-slate-400">Loading users…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-5 py-4 border-t border-slate-100 flex items-center justify-between gap-3">
+          <p id="pagination-info" class="text-[11px] text-slate-500">—</p>
+          <div class="flex gap-2">
+            <button id="prev-button" onclick="changePage(-1)" disabled class="border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-40">Previous</button>
+            <button id="next-button" onclick="changePage(1)" disabled class="border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-40">Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin activity log -->
+      <section id="activity-logs" class="mb-7 mt-7 scroll-mt-24">
+        <div class="mb-4">
+          <p class="text-[10px] font-extrabold uppercase tracking-[.18em] brand mb-2">Audit trail</p>
+          <h2 class="text-xl font-extrabold text-slate-950">Admin activity log</h2>
+          <p class="text-sm text-slate-500 mt-1">Review administrative actions recorded by the backend, including user-role and registration approval changes.</p>
+        </div>
+
+        <article class="bg-white border border-slate-100 rounded-2xl soft-shadow overflow-hidden">
+          <div class="p-5 md:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="font-extrabold text-slate-950">Recent activity</h3>
+              <p id="activity-status" class="text-xs text-slate-500 mt-1" role="status">Activity log has not loaded yet.</p>
+            </div>
+
+            <button id="activity-refresh-button" onclick="loadActivityLogs(0)" class="border border-slate-200 hover:bg-slate-50 rounded-xl px-4 py-2.5 text-xs font-bold">Refresh log</button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left min-w-[950px]">
+              <thead class="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th class="px-5 py-3 font-bold">Time</th>
+                  <th class="px-5 py-3 font-bold">Administrator</th>
+                  <th class="px-5 py-3 font-bold">Action</th>
+                  <th class="px-5 py-3 font-bold">Target user</th>
+                  <th class="px-5 py-3 font-bold">Previous value</th>
+                  <th class="px-5 py-3 font-bold">New value</th>
+                </tr>
+              </thead>
+
+              <tbody id="activity-table" class="divide-y divide-slate-100">
+                <tr>
+                  <td colspan="6" class="px-5 py-8 text-center text-sm text-slate-400">Activity log has not loaded yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="px-5 py-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <p id="activity-pagination-info" class="text-[11px] text-slate-500">—</p>
+            <div class="flex gap-2">
+              <button id="activity-prev-button" onclick="changeActivityPage(-1)" disabled class="border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-40">Previous</button>
+              <button id="activity-next-button" onclick="changeActivityPage(1)" disabled class="border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold disabled:opacity-40">Next</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <p class="text-[10px] text-slate-400 mt-5">Role changes and professional registration decisions are validated by the backend. Keep at least one administrator account active.</p>
+    </main>
+  </div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000/api/v1";
+  const PAGE_SIZE = 50;
+  const ACTIVITY_PAGE_SIZE = 20;
+
+  let activityOffset = 0;
+  let token = localStorage.getItem("access_token");
+  let currentOffset = 0;
+  let lastReturnedCount = 0;
+  let totalUsers = 0;
+  let latestStats = null;
+
+  if (window.lucide) lucide.createIcons();
+
+  function authHeaders() {
+    return {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/json"
+    };
+  }
+
+  function showMessage(message, kind = "error") {
+    const box = document.getElementById("page-message");
+    box.textContent = message;
+    box.className = "mb-5 rounded-xl border px-4 py-3 text-sm " +
+      (kind === "success"
+        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+        : "border-rose-200 bg-rose-50 text-rose-800");
+  }
+
+  async function apiFetch(path, options = {}) {
+    const response = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        ...authHeaders(),
+        ...(options.headers || {})
+      }
+    });
+
+    if (response.status === 401) {
+      logout();
+      throw new Error("Your session has expired. Please sign in again.");
+    }
+
+    if (response.status === 403) {
+      document.body.innerHTML = `
+        <main class="min-h-screen flex items-center justify-center p-6">
+          <section class="max-w-md bg-white border border-slate-200 rounded-2xl p-8 text-center">
+            <div class="mx-auto mb-4 w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center">
+              <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+            <h1 class="text-xl font-extrabold text-slate-900">Administrator access required</h1>
+            <p class="text-sm text-slate-500 mt-2">Your account does not have permission to view this page.</p>
+            <a href="dashboard.html" class="inline-block mt-5 brand-bg text-white rounded-xl px-4 py-2.5 text-sm font-bold">Return to dashboard</a>
+          </section>
+        </main>`;
+
+      if (window.lucide) lucide.createIcons();
+      throw new Error("Administrator access required.");
+    }
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`API request failed (${response.status}): ${body.slice(0, 180)}`);
+    }
+
+    if (response.status === 204) return null;
+
+    return response.json();
+  }
+
+  async function verifyAdmin() {
+    if (!token) {
+      window.location.href = "index.html";
+      return false;
+    }
+
+    const me = await apiFetch("/users/me");
+    const role = me?.role || me?.user?.role || me?.profile?.role;
+    const email = me?.email || me?.user?.email || "";
+
+    if (email) {
+      document.getElementById("admin-email").textContent = email;
+    }
+
+    if (role && role !== "Administrator") {
+      document.body.innerHTML = `
+        <main class="min-h-screen flex items-center justify-center p-6">
+          <section class="max-w-md bg-white border border-slate-200 rounded-2xl p-8 text-center">
+            <h1 class="text-xl font-extrabold text-slate-900">Administrator access required</h1>
+            <p class="text-sm text-slate-500 mt-2">Your account role is ${escapeHtml(role)}.</p>
+            <a href="dashboard.html" class="inline-block mt-5 brand-bg text-white rounded-xl px-4 py-2.5 text-sm font-bold">Return to dashboard</a>
+          </section>
+        </main>`;
+      return false;
+    }
+
+    return true;
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[ch]));
+  }
+
+  function formatNumber(value) {
+    return Number(value || 0).toLocaleString();
+  }
+
+  function renderBars(containerId, data, emptyText) {
+    const container = document.getElementById(containerId);
+    const entries = Object.entries(data || {});
+
+    if (!entries.length) {
+      container.innerHTML = `<p class="text-sm text-slate-400">${escapeHtml(emptyText)}</p>`;
+      return;
+    }
+
+    const max = Math.max(1, ...entries.map(([, value]) => Number(value) || 0));
+
+    container.innerHTML = entries.map(([name, value]) => {
+      const count = Number(value) || 0;
+      const width = Math.max(0, Math.min(100, count / max * 100));
+
+      return `
+        <div>
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <span class="text-xs font-semibold text-slate-700">${escapeHtml(name)}</span>
+            <span class="text-xs font-extrabold text-slate-900">${formatNumber(count)}</span>
+          </div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full brand-bg rounded-full" style="width:${width}%"></div>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // -------------------------------------------------------
+  // Dashboard statistics
+  // -------------------------------------------------------
+  async function loadStats() {
+    const stats = await apiFetch("/admin/stats");
+    latestStats = stats;
+
+    document.getElementById("report-status").textContent =
+      `Statistics refreshed at ${new Date().toLocaleString()}.`;
+
+    document.getElementById("total-users").textContent =
+      formatNumber(stats.total_users);
+
+    document.getElementById("total-readings").textContent =
+      formatNumber(stats.total_readings);
+
+    const readingTypes = stats.readings_by_type || {};
+
+    const palm = Object.entries(readingTypes)
+      .filter(([key]) => key.toUpperCase() === "PALMISTRY")
+      .reduce((sum, [, value]) => sum + Number(value || 0), 0);
+
+    const tarotComposite = Object.entries(readingTypes)
+      .filter(([key]) => ["TAROT", "SYNTHESIZED"].includes(key.toUpperCase()))
+      .reduce((sum, [, value]) => sum + Number(value || 0), 0);
+
+    document.getElementById("palm-readings").textContent = formatNumber(palm);
+    document.getElementById("tarot-readings").textContent = formatNumber(tarotComposite);
+
+    renderBars("reading-breakdown", readingTypes, "No reading records found.");
+    renderBars("reading-statistics-breakdown", readingTypes, "No reading records found.");
+    renderBars("analytics-reading-breakdown", readingTypes, "No reading records found.");
+    renderBars("role-breakdown", stats.users_by_role || {}, "No user records found.");
+    renderBars("analytics-role-breakdown", stats.users_by_role || {}, "No user records found.");
+  }
+
+  // -------------------------------------------------------
+  // User management
+  // -------------------------------------------------------
+  async function loadUsers(offset = currentOffset) {
+    currentOffset = Math.max(0, offset);
+
+    const body = document.getElementById("users-table");
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="px-5 py-8 text-center text-sm text-slate-400">Loading users…</td>
+      </tr>`;
+
+    const params = new URLSearchParams({
+      limit: String(PAGE_SIZE),
+      offset: String(currentOffset)
+    });
+
+    const search = document.getElementById("search-input").value.trim();
+    const role = document.getElementById("role-filter").value;
+
+    if (search) params.set("search", search);
+    if (role) params.set("role", role);
+
+    try {
+      const result = await apiFetch(`/admin/users?${params.toString()}`);
+      const users = result.users || [];
+
+      lastReturnedCount = users.length;
+      totalUsers = Number(result.total ?? result.total_users ?? result.count ?? users.length);
+
+      if (!users.length) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="5" class="px-5 py-8 text-center text-sm text-slate-400">No users found for these filters.</td>
+          </tr>`;
+      } else {
+        body.innerHTML = users.map(user => `
+          <tr class="hover:bg-slate-50/70">
+            <td class="px-5 py-4 text-xs font-semibold text-slate-800">${escapeHtml(user.email)}</td>
+
+            <td class="px-5 py-4">
+              <span class="inline-flex rounded-full bg-violet-50 text-violet-700 px-2.5 py-1 text-[10px] font-bold">
+                ${escapeHtml(user.role)}
+              </span>
+              ${user.approval_status ? `
+                <span class="ml-1 inline-flex rounded-full ${user.approval_status === "APPROVED" ? "bg-emerald-50 text-emerald-700" : user.approval_status === "REJECTED" ? "bg-rose-50 text-rose-700" : "bg-amber-50 text-amber-700"} px-2 py-1 text-[10px] font-bold">
+                  ${escapeHtml(user.approval_status)}
+                </span>` : ""}
+            </td>
+
+            <td class="px-5 py-4 text-xs text-slate-500">
+              ${user.created_at ? escapeHtml(new Date(user.created_at).toLocaleString()) : "—"}
+            </td>
+
+            <td class="px-5 py-4 text-[10px] font-mono text-slate-500" title="${escapeHtml(user.id)}">
+              ${escapeHtml(String(user.id || "").slice(0, 8))}…
+            </td>
+
+            <td class="px-5 py-4">
+              <div class="flex items-center gap-2">
+                <select id="role-${escapeHtml(user.id)}" class="border border-slate-200 rounded-lg px-2 py-2 text-xs bg-white" aria-label="Role for ${escapeHtml(user.email)}">
+                  <option value="User" ${user.role === "User" ? "selected" : ""}>User</option>
+                  <option value="Tarot Reader" ${user.role === "Tarot Reader" ? "selected" : ""}>Tarot Reader</option>
+                  <option value="Spiritual Consultant" ${user.role === "Spiritual Consultant" ? "selected" : ""}>Spiritual Consultant</option>
+                  <option value="Administrator" ${user.role === "Administrator" ? "selected" : ""}>Administrator</option>
+                </select>
+
+                <button onclick="saveUserRole('${escapeHtml(user.id)}')" class="brand-bg hover:bg-violet-700 text-white rounded-lg px-3 py-2 text-xs font-bold">
+                  Save Role
+                </button>
+              </div>
+            </td>
+          </tr>`).join("");
+      }
+
+      const start = users.length ? currentOffset + 1 : 0;
+      const end = currentOffset + users.length;
+
+      document.getElementById("pagination-info").textContent =
+        `Showing ${start}–${end}${users.length === PAGE_SIZE ? "+" : ""} users`;
+
+      document.getElementById("prev-button").disabled = currentOffset === 0;
+      document.getElementById("next-button").disabled = users.length < PAGE_SIZE;
+
+    } catch (error) {
+      body.innerHTML = `
+        <tr>
+          <td colspan="5" class="px-5 py-8 text-center text-sm text-rose-600">${escapeHtml(error.message)}</td>
+        </tr>`;
+
+      document.getElementById("pagination-info").textContent = "Could not load users.";
+      document.getElementById("prev-button").disabled = currentOffset === 0;
+      document.getElementById("next-button").disabled = true;
+    }
+  }
+
+  // -------------------------------------------------------
+  // Professional registration approval
+  // -------------------------------------------------------
+  async function loadPendingRegistrations() {
+    const body = document.getElementById("pending-registrations-table");
+    const status = document.getElementById("pending-status");
+    const refreshButton = document.getElementById("pending-refresh-button");
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="px-4 py-8 text-center text-sm text-slate-400">Loading applications…</td>
+      </tr>`;
+
+    status.textContent = "Loading pending registrations…";
+    refreshButton.disabled = true;
+
+    try {
+      const result = await apiFetch("/admin/pending-registrations");
+      const registrations = Array.isArray(result.registrations)
+        ? result.registrations
+        : [];
+
+      if (registrations.length === 0) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="5" class="px-4 py-8 text-center text-sm text-slate-400">
+              No pending professional registrations.
+            </td>
+          </tr>`;
+
+        status.textContent = "There are no applications awaiting approval.";
+        return;
+      }
+
+      body.innerHTML = registrations.map(user => `
+        <tr class="hover:bg-slate-50/70">
+          <td class="px-4 py-4 text-xs font-semibold text-slate-800">
+            ${escapeHtml(user.email)}
+          </td>
+
+          <td class="px-4 py-4 text-xs text-slate-700">
+            ${escapeHtml(user.role)}
+          </td>
+
+          <td class="px-4 py-4 text-xs text-slate-500">
+            ${user.created_at
+              ? escapeHtml(new Date(user.created_at).toLocaleString())
+              : "—"}
+          </td>
+
+          <td class="px-4 py-4">
+            <span class="inline-flex rounded-full bg-amber-50 text-amber-700 px-2.5 py-1 text-[10px] font-bold">
+              ${escapeHtml(user.approval_status)}
+            </span>
+          </td>
+
+          <td class="px-4 py-4">
+            <div class="flex items-center gap-2">
+              <button
+                onclick="updateRegistrationApproval('${escapeHtml(user.id)}', 'APPROVED')"
+                class="rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 text-xs font-bold">
+                Approve
+              </button>
+
+              <button
+                onclick="updateRegistrationApproval('${escapeHtml(user.id)}', 'REJECTED')"
+                class="rounded-lg bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 text-xs font-bold">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>`).join("");
+
+      status.textContent =
+        `${registrations.length} pending registration(s) awaiting review.`;
+
+    } catch (error) {
+      body.innerHTML = `
+        <tr>
+          <td colspan="5" class="px-4 py-8 text-center text-sm text-rose-600">
+            ${escapeHtml(error.message || "Could not load applications.")}
+          </td>
+        </tr>`;
+
+      status.textContent = "Failed to load registrations.";
+
+    } finally {
+      refreshButton.disabled = false;
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+
+  async function updateRegistrationApproval(userId, approvalStatus) {
+    const action = approvalStatus === "APPROVED" ? "approve" : "reject";
+
+    if (!window.confirm(`Are you sure you want to ${action} this registration?`)) {
+      return;
+    }
+
+    try {
+      const result = await apiFetch(
+        `/admin/users/${encodeURIComponent(userId)}/approval`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            approval_status: approvalStatus
+          })
+        }
+      );
+
+      showMessage(
+        result.message || `Registration ${action}d successfully.`,
+        "success"
+      );
+
+      await Promise.all([
+        loadPendingRegistrations(),
+        loadStats(),
+        loadUsers(currentOffset),
+        loadActivityLogs(0)
+      ]);
+
+    } catch (error) {
+      showMessage(error.message || `Could not ${action} the registration.`);
+    }
+  }
+
+  // -------------------------------------------------------
+  // Update user role
+  // -------------------------------------------------------
+  async function saveUserRole(userId) {
+    const select = document.getElementById(`role-${userId}`);
+    if (!select) return;
+
+    const role = select.value;
+    const button = select.parentElement.querySelector("button");
+    const originalText = button.textContent;
+
+    button.disabled = true;
+    button.textContent = "Saving…";
+    button.classList.add("opacity-60");
+
+    try {
+      const result = await apiFetch(
+        `/admin/users/${encodeURIComponent(userId)}/role`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ role })
+        }
+      );
+
+      showMessage(result.message || "User role updated successfully.", "success");
+
+      await Promise.all([
+        loadStats(),
+        loadUsers(currentOffset),
+        loadActivityLogs(0)
+      ]);
+
+    } catch (error) {
+      showMessage(error.message || "Could not update the user role.");
+
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+      button.classList.remove("opacity-60");
+    }
+  }
+
+  // -------------------------------------------------------
+  // Activity logs
+  // -------------------------------------------------------
+  function displayActivityValue(value) {
+    if (value === null || value === undefined || value === "") return "—";
+    if (typeof value === "object") return JSON.stringify(value);
+    return String(value);
+  }
+
+  async function loadActivityLogs(offset = activityOffset) {
+    activityOffset = Math.max(0, offset);
+
+    const body = document.getElementById("activity-table");
+    const status = document.getElementById("activity-status");
+    const refreshButton = document.getElementById("activity-refresh-button");
+    const prevButton = document.getElementById("activity-prev-button");
+    const nextButton = document.getElementById("activity-next-button");
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="6" class="px-5 py-8 text-center text-sm text-slate-400">Loading activity log…</td>
+      </tr>`;
+
+    status.textContent = "Loading activity log…";
+    refreshButton.disabled = true;
+    refreshButton.classList.add("opacity-60");
+
+    try {
+      const params = new URLSearchParams({
+        limit: String(ACTIVITY_PAGE_SIZE),
+        offset: String(activityOffset)
+      });
+
+      const result = await apiFetch(`/admin/activity-logs?${params.toString()}`);
+
+      const logs = Array.isArray(result.activity_logs)
+        ? result.activity_logs
+        : (Array.isArray(result.logs) ? result.logs : []);
+
+      if (logs.length === 0) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="6" class="px-5 py-8 text-center text-sm text-slate-400">No activity records found.</td>
+          </tr>`;
+      } else {
+        body.innerHTML = logs.map(log => {
+          const timestamp = log.created_at
+            ? new Date(log.created_at).toLocaleString()
+            : "—";
+
+          const admin = log.admin_email || log.admin_id || "Unknown administrator";
+          const target = (log.details && log.details.target_email) || log.target_user_id || "—";
+
+          return `
+            <tr class="hover:bg-slate-50/70">
+              <td class="px-5 py-4 text-xs text-slate-500 whitespace-nowrap">${escapeHtml(timestamp)}</td>
+              <td class="px-5 py-4 text-xs font-semibold text-slate-800">${escapeHtml(admin)}</td>
+              <td class="px-5 py-4">
+                <span class="inline-flex rounded-full bg-violet-50 text-violet-700 px-2.5 py-1 text-[10px] font-bold">
+                  ${escapeHtml(log.action || "—")}
+                </span>
+              </td>
+              <td class="px-5 py-4 text-xs text-slate-700">${escapeHtml(target)}</td>
+              <td class="px-5 py-4 text-xs text-slate-500">${escapeHtml(displayActivityValue(log.old_value))}</td>
+              <td class="px-5 py-4 text-xs text-slate-500">${escapeHtml(displayActivityValue(log.new_value))}</td>
+            </tr>`;
+        }).join("");
+      }
+
+      const start = logs.length ? activityOffset + 1 : 0;
+      const end = activityOffset + logs.length;
+
+      document.getElementById("activity-pagination-info").textContent =
+        `Showing ${start}–${end} activity records`;
+
+      status.textContent = logs.length
+        ? `Loaded ${logs.length} activity record${logs.length === 1 ? "" : "s"}.`
+        : "No activity records returned.";
+
+      prevButton.disabled = activityOffset === 0;
+      nextButton.disabled = logs.length < ACTIVITY_PAGE_SIZE;
+
+    } catch (error) {
+      body.innerHTML = `
+        <tr>
+          <td colspan="6" class="px-5 py-8 text-center text-sm text-rose-600">${escapeHtml(error.message || "Could not load activity log.")}</td>
+        </tr>`;
+
+      status.textContent = "Could not load activity log.";
+      document.getElementById("activity-pagination-info").textContent = "Activity log unavailable.";
+
+      prevButton.disabled = activityOffset === 0;
+      nextButton.disabled = true;
+
+    } finally {
+      refreshButton.disabled = false;
+      refreshButton.classList.remove("opacity-60");
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+
+  function changeActivityPage(direction) {
+    loadActivityLogs(Math.max(0, activityOffset + direction * ACTIVITY_PAGE_SIZE));
+  }
+
+  // -------------------------------------------------------
+  // Download system reports
+  // -------------------------------------------------------
+  function downloadReport(format) {
+    if (!latestStats) {
+      showMessage("Load the platform statistics before generating a report.");
+      return;
+    }
+
+    const report = {
+      report_name: "Mystic Insights Platform Summary",
+      generated_at: new Date().toISOString(),
+      total_users: Number(latestStats.total_users || 0),
+      total_readings: Number(latestStats.total_readings || 0),
+      users_by_role: latestStats.users_by_role || {},
+      readings_by_type: latestStats.readings_by_type || {}
+    };
+
+    let contents;
+    let mime;
+    let filename;
+
+    if (format === "csv") {
+      const rows = [
+        ["section", "category", "count"],
+        ["summary", "total_users", report.total_users],
+        ["summary", "total_readings", report.total_readings]
+      ];
+
+      Object.entries(report.users_by_role).forEach(([name, count]) => {
+        rows.push(["users_by_role", name, count]);
+      });
+
+      Object.entries(report.readings_by_type).forEach(([name, count]) => {
+        rows.push(["readings_by_type", name, count]);
+      });
+
+      contents = rows
+        .map(row => row.map(value => `"${String(value ?? "").replace(/"/g, '""')}"`).join(","))
+        .join("\r\n");
+
+      mime = "text/csv;charset=utf-8";
+      filename = "mystic-insights-system-report.csv";
+
+    } else {
+      contents = JSON.stringify(report, null, 2);
+      mime = "application/json;charset=utf-8";
+      filename = "mystic-insights-system-report.json";
+    }
+
+    const blob = new Blob([contents], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    showMessage(`${format.toUpperCase()} system report generated.`, "success");
+  }
+
+  function changePage(direction) {
+    loadUsers(Math.max(0, currentOffset + direction * PAGE_SIZE));
+  }
+
+  // -------------------------------------------------------
+  // Refresh all dashboard data
+  // -------------------------------------------------------
+  async function loadAdminData() {
+    const button = document.getElementById("refresh-button");
+
+    button.disabled = true;
+    button.classList.add("opacity-60");
+
+    try {
+      await Promise.all([
+        loadStats(),
+        loadUsers(0),
+        loadActivityLogs(0),
+        loadPendingRegistrations()
+      ]);
+
+      showMessage("Admin data refreshed successfully.", "success");
+
+      window.setTimeout(() => {
+        const box = document.getElementById("page-message");
+        if (box.textContent.includes("refreshed successfully")) {
+          box.className = "hidden";
+        }
+      }, 2500);
+
+    } catch (error) {
+      if (!document.body.innerHTML.includes("Administrator access required")) {
+        showMessage(error.message || "Unable to load admin data.");
+      }
+
+    } finally {
+      button.disabled = false;
+      button.classList.remove("opacity-60");
+    }
+  }
+
+  // -------------------------------------------------------
+  // Logout
+  // -------------------------------------------------------
+  function logout() {
+    localStorage.removeItem("access_token");
+    window.location.href = "index.html";
+  }
+
+  // -------------------------------------------------------
+  // Initial page load
+  // -------------------------------------------------------
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const allowed = await verifyAdmin();
+      if (allowed) {
+        await loadAdminData();
+      }
+    } catch (error) {
+      if (error.message && !error.message.includes("Administrator access required")) {
+        showMessage(error.message);
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

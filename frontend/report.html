@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Mystic Insights - Final Divination Synthesis Report</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAFAFC;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+      }
+
+      header {
+        position: static !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      main {
+        max-width: none !important;
+        padding: 0 !important;
+      }
+
+      .report-card {
+        box-shadow: none !important;
+        border: 1px solid #e5e7eb !important;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-700 flex flex-col antialiased">
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+  <header
+    class="bg-white border-b border-slate-100 px-4 md:px-8 py-3.5
+           flex items-center justify-between sticky top-0 z-40"
+  >
+
+    <!-- Brand -->
+    <div class="flex items-center space-x-2.5">
+      <div class="w-8 h-8 text-[#5538EE] flex items-center justify-center">
+        <i data-lucide="sparkles" class="w-6 h-6"></i>
+      </div>
+
+      <span class="text-base font-extrabold text-slate-900 tracking-tight">
+        Mystic Insights
+      </span>
+    </div>
+
+    <!-- Stepper -->
+    <nav class="hidden md:flex items-center space-x-3 text-xs font-semibold">
+
+      <div class="flex items-center text-slate-600 space-x-1.5">
+        <div
+          class="w-5 h-5 rounded-full border border-slate-200
+                 flex items-center justify-center text-[10px]
+                 text-[#5538EE] font-bold"
+        >
+          ✓
+        </div>
+
+        <span>Palm Analysis</span>
+      </div>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <div class="flex items-center text-slate-600 space-x-1.5">
+        <div
+          class="w-5 h-5 rounded-full border border-slate-200
+                 flex items-center justify-center text-[10px]
+                 text-[#5538EE] font-bold"
+        >
+          ✓
+        </div>
+
+        <span>Tarot</span>
+      </div>
+
+      <div class="w-8 h-[1px] bg-slate-200"></div>
+
+      <div class="flex items-center space-x-1.5">
+        <div
+          class="w-5 h-5 rounded-full bg-[#5538EE] text-white
+                 flex items-center justify-center text-[10px] font-bold"
+        >
+          5
+        </div>
+
+        <span class="font-bold text-[#5538EE]">
+          Report
+        </span>
+      </div>
+
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center space-x-2 md:space-x-3">
+
+      <button
+        onclick="window.print()"
+        class="px-3 md:px-4 py-2 border border-slate-200
+               hover:border-purple-300 rounded-xl text-xs
+               font-semibold flex items-center gap-1.5"
+      >
+        <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+
+        <span class="hidden sm:inline">
+          Print / Export PDF
+        </span>
+
+        <span class="sm:hidden">
+          Print
+        </span>
+      </button>
+
+      <button
+        onclick="window.location.href='dashboard.html'"
+        class="px-3 md:px-4 py-2 bg-[#5538EE]
+               hover:bg-[#482ed4] text-white text-xs
+               font-bold rounded-xl shadow-xs"
+      >
+        New Reading
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================================
+       REPORT WORKSPACE
+  ========================================================== -->
+  <div class="flex-1 flex w-full">
+
+    <!-- =======================================================
+         SIDEBAR
+    ======================================================== -->
+    <aside
+      class="no-print w-64 bg-white border-r border-slate-100 flex flex-col justify-between p-4 shrink-0 min-h-[calc(100vh-61px)]"
+    >
+
+      <nav class="space-y-1">
+
+        <!-- Dashboard -->
+        <a
+          href="dashboard.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="home" class="w-4 h-4 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- Palm Analysis -->
+        <a
+          href="dashboard.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="hand" class="w-4 h-4 text-slate-400"></i>
+          <span>Palm Analysis</span>
+        </a>
+
+        <!-- Tarot Reading -->
+        <a
+          href="tarot.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+          <span>Tarot Reading</span>
+        </a>
+
+        <!-- Reports -->
+        <a
+          href="report.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-bold text-[#5538EE] bg-[#F1EEFE] transition"
+        >
+          <i data-lucide="file-text" class="w-4 h-4 text-[#5538EE]"></i>
+          <span>Reports</span>
+        </a>
+
+        <!-- History -->
+        <a
+          href="history.html"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="clock" class="w-4 h-4 text-slate-400"></i>
+          <span>History</span>
+        </a>
+
+        <!-- Settings -->
+        <a
+          href="#"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+          <span>Settings</span>
+        </a>
+
+        <!-- Support -->
+        <a
+          href="#"
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 transition"
+        >
+          <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+          <span>Support</span>
+        </a>
+
+      </nav>
+
+      <!-- PREMIUM CARD -->
+      <div
+        class="bg-[#F8F7FF] border border-purple-100 rounded-2xl p-4 text-center mt-6"
+      >
+        <div
+          class="w-8 h-8 rounded-full bg-white text-[#5538EE] flex items-center justify-center mx-auto mb-2 shadow-xs"
+        >
+          <i data-lucide="crown" class="w-4 h-4"></i>
+        </div>
+
+        <p class="text-xs font-bold text-slate-900">
+          Unlock Premium Insights
+        </p>
+
+        <p class="text-[10px] text-slate-500 mt-1 leading-relaxed">
+          Get deeper analysis and personalized guidance.
+        </p>
+
+        <button
+          type="button"
+          class="w-full mt-3 bg-[#5538EE] hover:bg-[#482ed4] text-white text-[10px] font-bold py-2.5 rounded-xl transition"
+        >
+          Upgrade Now
+        </button>
+      </div>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN REPORT
+    ========================================================== -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-8 space-y-6">
+
+    <!-- =======================================================
+         REPORT HEADER
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div class="flex flex-col md:flex-row md:items-start
+                  md:justify-between gap-5">
+
+        <div>
+
+          <span
+            class="text-[10px] font-extrabold uppercase
+                   tracking-wider text-[#5538EE]
+                   bg-purple-50 px-2.5 py-1 rounded-md"
+          >
+            Milestone 3 Intelligence Report
+          </span>
+
+          <h1
+            id="report-title"
+            class="text-2xl md:text-3xl font-extrabold
+                   text-slate-900 mt-3"
+          >
+            Composite Divination Report
+          </h1>
+
+          <p
+            id="report-subtitle"
+            class="text-xs text-slate-400 mt-1"
+          >
+            Palmistry, Tarot & personalized intelligence synthesis
+          </p>
+
+        </div>
+
+        <!-- Reading ID -->
+        <div
+          class="bg-slate-50 border border-slate-100
+                 rounded-xl px-4 py-3 min-w-[220px]"
+        >
+
+          <p
+            class="text-[9px] uppercase tracking-wider
+                   font-bold text-slate-400"
+          >
+            Reading ID
+          </p>
+
+          <p
+            id="reading-id"
+            class="text-[10px] font-mono
+                   text-slate-600 mt-1 break-all"
+          >
+            —
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         INSIGHT SCORE
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div class="flex items-center justify-between mb-5">
+
+        <div>
+          <h2
+            class="text-sm font-extrabold text-slate-900
+                   uppercase tracking-wide"
+          >
+            Overall Insight Score
+          </h2>
+
+          <p class="text-[11px] text-slate-400 mt-1">
+            Composite score generated from the Palm + Tarot synthesis
+          </p>
+        </div>
+
+        <i
+          data-lucide="gauge"
+          class="w-5 h-5 text-[#5538EE]"
+        ></i>
+
+      </div>
+
+
+      <!-- Main Score -->
+      <div class="flex items-end gap-2">
+
+        <span
+          id="insight-score"
+          class="text-5xl font-extrabold text-[#5538EE]"
+        >
+          —
+        </span>
+
+        <span class="text-sm text-slate-400 mb-2">
+          / 100
+        </span>
+
+      </div>
+
+
+      <!-- Score Bar -->
+      <div class="mt-4">
+
+        <div
+          class="h-3 bg-slate-100 rounded-full overflow-hidden"
+        >
+          <div
+            id="insight-score-bar"
+            class="h-full bg-[#5538EE] rounded-full transition-all duration-700"
+            style="width: 0%"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <!-- Score Components -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2
+               lg:grid-cols-5 gap-3 mt-6"
+      >
+
+        <!-- Palm -->
+        <div
+          class="bg-purple-50 border border-purple-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-500">
+            Palm Confidence
+          </p>
+
+          <p
+            id="score-palm"
+            class="text-xl font-extrabold text-[#5538EE] mt-1"
+          >
+            —
+          </p>
+
+          <p class="text-[9px] text-slate-400 mt-1">
+            Weight: 30%
+          </p>
+        </div>
+
+
+        <!-- Tarot -->
+        <div
+          class="bg-indigo-50 border border-indigo-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-500">
+            Tarot Relevance
+          </p>
+
+          <p
+            id="score-tarot"
+            class="text-xl font-extrabold text-indigo-600 mt-1"
+          >
+            —
+          </p>
+
+          <p class="text-[9px] text-slate-400 mt-1">
+            Weight: 25%
+          </p>
+        </div>
+
+
+        <!-- Personality -->
+        <div
+          class="bg-fuchsia-50 border border-fuchsia-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-500">
+            Personality
+          </p>
+
+          <p
+            id="score-personality"
+            class="text-xl font-extrabold text-fuchsia-600 mt-1"
+          >
+            —
+          </p>
+
+          <p class="text-[9px] text-slate-400 mt-1">
+            Weight: 20%
+          </p>
+        </div>
+
+
+        <!-- Context -->
+        <div
+          class="bg-amber-50 border border-amber-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-500">
+            User Context
+          </p>
+
+          <p
+            id="score-context"
+            class="text-xl font-extrabold text-amber-600 mt-1"
+          >
+            —
+          </p>
+
+          <p class="text-[9px] text-slate-400 mt-1">
+            Weight: 15%
+          </p>
+        </div>
+
+
+        <!-- Consistency -->
+        <div
+          class="bg-emerald-50 border border-emerald-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-500">
+            Consistency
+          </p>
+
+          <p
+            id="score-consistency"
+            class="text-xl font-extrabold text-emerald-600 mt-1"
+          >
+            —
+          </p>
+
+          <p class="text-[9px] text-slate-400 mt-1">
+            Weight: 10%
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         PALM ANALYSIS
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div class="flex items-center justify-between mb-5">
+
+        <div>
+          <h2
+            class="text-sm font-extrabold text-slate-900
+                   uppercase tracking-wide"
+          >
+            Palm Analysis
+          </h2>
+
+          <p class="text-[11px] text-slate-400 mt-1">
+            Features extracted from the supplied palm image
+          </p>
+        </div>
+
+        <i
+          data-lucide="hand"
+          class="w-5 h-5 text-[#5538EE]"
+        ></i>
+
+      </div>
+
+
+      <!-- Palm overview -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2
+               lg:grid-cols-3 gap-4 mb-6"
+      >
+
+        <div
+          class="bg-slate-50 border border-slate-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-400">
+            Hand Type
+          </p>
+
+          <p
+            id="palm-hand-type"
+            class="text-sm font-extrabold text-slate-900 mt-1"
+          >
+            —
+          </p>
+        </div>
+
+
+        <div
+          class="bg-slate-50 border border-slate-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-400">
+            Element
+          </p>
+
+          <p
+            id="palm-element"
+            class="text-sm font-extrabold text-slate-900 mt-1"
+          >
+            —
+          </p>
+        </div>
+
+
+        <div
+          class="bg-slate-50 border border-slate-100
+                 rounded-2xl p-4"
+        >
+          <p class="text-[9px] uppercase tracking-wide
+                    font-bold text-slate-400">
+            Palm Structure
+          </p>
+
+          <p
+            id="palm-structure"
+            class="text-sm font-extrabold text-slate-900 mt-1"
+          >
+            —
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- Major lines -->
+      <div>
+
+        <h3
+          class="text-xs font-bold text-slate-900
+                 uppercase tracking-wide mb-3"
+        >
+          Major Palm Lines
+        </h3>
+
+        <div
+          id="palm-lines-grid"
+          class="grid grid-cols-1 md:grid-cols-2
+                 gap-4"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         TAROT SPREAD
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div class="flex items-center justify-between mb-5">
+
+        <div>
+          <h2
+            class="text-sm font-extrabold text-slate-900
+                   uppercase tracking-wide"
+          >
+            Tarot Reading
+          </h2>
+
+          <p
+            id="tarot-spread-info"
+            class="text-[11px] text-slate-400 mt-1"
+          >
+            —
+          </p>
+        </div>
+
+        <i
+          data-lucide="layers"
+          class="w-5 h-5 text-[#5538EE]"
+        ></i>
+
+      </div>
+
+
+      <!-- Cards -->
+      <div
+        id="report-cards-grid"
+        class="grid grid-cols-1 sm:grid-cols-2
+               lg:grid-cols-3 gap-5"
+      ></div>
+
+    </section>
+
+
+    <!-- =======================================================
+         SYNTHESIZED READING
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div
+        class="p-6 bg-[#FAF9FF] border border-purple-100
+               rounded-2xl space-y-3"
+      >
+
+        <h2
+          class="text-xs font-bold text-slate-900
+                 uppercase tracking-wide flex items-center gap-2"
+        >
+          <i
+            data-lucide="sparkles"
+            class="w-4 h-4 text-[#5538EE]"
+          ></i>
+
+          Synthesized Reading
+        </h2>
+
+        <p
+          class="text-sm text-slate-700 leading-7 whitespace-pre-line"
+          id="report-narrative"
+        >
+          Loading report data...
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         M3 PERSONALIZED INTELLIGENCE
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2
+            class="text-sm font-extrabold text-slate-900
+                   uppercase tracking-wide"
+          >
+            Personalized Intelligence
+          </h2>
+
+          <p class="text-[11px] text-slate-400 mt-1">
+            Personality themes, personalized recommendations and reflective life trends
+          </p>
+        </div>
+
+        <i
+          data-lucide="sparkles"
+          class="w-5 h-5 text-[#5538EE]"
+        ></i>
+      </div>
+
+      <!-- Personality Intelligence -->
+      <div
+        class="border border-fuchsia-100 bg-fuchsia-50/40
+               rounded-2xl p-5 mb-5"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">
+              Personality Intelligence
+            </h3>
+            <p
+              id="personality-disclaimer"
+              class="text-[10px] text-slate-400 mt-1"
+            >
+              Symbolic, reflective interpretation
+            </p>
+          </div>
+
+          <div class="text-right">
+            <p class="text-[8px] uppercase tracking-wide font-bold text-slate-400">
+              Alignment
+            </p>
+            <p
+              id="personality-alignment"
+              class="text-xl font-extrabold text-fuchsia-600"
+            >
+              —
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+
+          <div class="bg-white border border-fuchsia-100 rounded-xl p-4">
+            <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+              Profile
+            </p>
+            <div id="personality-profile" class="mt-2 space-y-2"></div>
+          </div>
+
+          <div class="bg-white border border-fuchsia-100 rounded-xl p-4">
+            <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+              Strengths
+            </p>
+            <div id="personality-strengths" class="mt-2 space-y-2"></div>
+          </div>
+
+          <div class="bg-white border border-fuchsia-100 rounded-xl p-4">
+            <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+              Development Areas
+            </p>
+            <div id="personality-development" class="mt-2 space-y-2"></div>
+          </div>
+
+        </div>
+
+        <div class="mt-4">
+          <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+            Behavioral Insights
+          </p>
+          <div id="personality-behavioral" class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div
+        class="border border-indigo-100 bg-indigo-50/40
+               rounded-2xl p-5 mb-5"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">
+              Personalized Recommendations
+            </h3>
+            <p class="text-[10px] text-slate-400 mt-1">
+              Practical suggestions derived from the current reading
+            </p>
+          </div>
+
+          <span
+            id="recommendation-count"
+            class="px-2.5 py-1 rounded-lg bg-white border border-indigo-100
+                   text-[9px] font-bold text-indigo-600"
+          >
+            —
+          </span>
+        </div>
+
+        <div
+          id="recommendation-themes"
+          class="flex flex-wrap gap-2 mt-4"
+        ></div>
+
+        <div
+          id="recommendation-list"
+          class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4"
+        ></div>
+      </div>
+
+      <!-- Life Trends -->
+      <div
+        class="border border-amber-100 bg-amber-50/40
+               rounded-2xl p-5"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">
+              Life Trends & Opportunities
+            </h3>
+            <p
+              id="life-trends-disclaimer"
+              class="text-[10px] text-slate-400 mt-1"
+            >
+              Reflective themes, not predictions
+            </p>
+          </div>
+
+          <span
+            id="life-trends-confidence"
+            class="px-2.5 py-1 rounded-lg bg-white border border-amber-100
+                   text-[9px] font-bold text-amber-600"
+          >
+            Confidence —
+          </span>
+        </div>
+
+        <div
+          id="life-trends-list"
+          class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4"
+        ></div>
+
+        <div class="mt-5">
+          <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+            Opportunities
+          </p>
+          <div
+            id="life-opportunities"
+            class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2"
+          ></div>
+        </div>
+
+        <div class="mt-5">
+          <p class="text-[9px] uppercase tracking-wide font-bold text-slate-400">
+            Reflection Areas
+          </p>
+          <div
+            id="life-reflection-areas"
+            class="space-y-2 mt-2"
+          ></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         ACTIONABLE ADVICE
+    ======================================================== -->
+    <section
+      class="report-card bg-white border border-slate-100
+             rounded-3xl p-6 md:p-8 shadow-xs"
+    >
+
+      <h2
+        class="text-xs font-bold text-slate-900
+               uppercase tracking-wide flex items-center gap-2"
+      >
+
+        <i
+          data-lucide="list-checks"
+          class="w-4 h-4 text-[#5538EE]"
+        ></i>
+
+        Actionable Guidance
+
+      </h2>
+
+
+      <ul
+        id="report-actions"
+        class="mt-4 space-y-3"
+      ></ul>
+
+    </section>
+
+
+    <!-- =======================================================
+         DISCLAIMER
+    ======================================================== -->
+    <section
+      class="bg-slate-50 border border-slate-200
+             rounded-2xl p-5"
+    >
+
+      <div class="flex gap-3">
+
+        <i
+          data-lucide="info"
+          class="w-4 h-4 text-slate-500 mt-0.5 flex-shrink-0"
+        ></i>
+
+        <p
+          class="text-[10px] leading-relaxed text-slate-500"
+        >
+          This report presents a reflective interpretation based
+          on the supplied palm image and Tarot cards. Palmistry
+          and Tarot interpretations are symbolic and should not
+          be treated as factual predictions or as a substitute
+          for professional, medical, financial, legal, or other
+          evidence-based advice.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         FOOTER ACTIONS
+    ======================================================== -->
+    <div
+      class="flex flex-col sm:flex-row
+             justify-between gap-3 pb-8 no-print"
+    >
+
+      <button
+        onclick="window.history.back()"
+        class="px-5 py-3 border border-slate-200
+               hover:border-purple-300 rounded-xl
+               text-xs font-bold text-slate-700"
+      >
+        ← Back
+      </button>
+
+
+      <button
+        onclick="window.print()"
+        class="px-5 py-3 bg-[#5538EE]
+               hover:bg-[#482ed4] text-white
+               rounded-xl text-xs font-bold
+               flex items-center justify-center gap-2"
+      >
+
+        <i
+          data-lucide="download"
+          class="w-4 h-4"
+        ></i>
+
+        Print / Export Report
+
+      </button>
+
+    </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+  <script>
+
+    /* =========================================================
+       HELPERS
+    ========================================================== */
+
+    function safeText(value, fallback = "—") {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+        return fallback;
+      }
+
+      if (typeof value === "object") {
+        return formatDisplayValue(value, fallback);
+      }
+
+      return String(value);
+    }
+
+    function formatDisplayValue(value, fallback = "—") {
+      if (
+        value === null ||
+        value === undefined ||
+        value === ""
+      ) {
+        return fallback;
+      }
+
+      if (Array.isArray(value)) {
+        const parts = value
+          .map(item => formatDisplayValue(item, ""))
+          .filter(Boolean);
+
+        return parts.length ? parts.join(", ") : fallback;
+      }
+
+      if (typeof value === "object") {
+        const parts = Object.entries(value)
+          .map(([key, item]) => {
+            const label = key
+              .replaceAll("_", " ")
+              .replace(/\b\w/g, c => c.toUpperCase());
+
+            const formatted = formatDisplayValue(item, "");
+            return formatted ? `${label}: ${formatted}` : "";
+          })
+          .filter(Boolean);
+
+        return parts.length ? parts.join(" • ") : fallback;
+      }
+
+      return String(value);
+    }
+
+
+    function formatScore(value) {
+
+      if (
+        value === null ||
+        value === undefined ||
+        !Number.isFinite(Number(value))
+      ) {
+        return "—";
+      }
+
+      return Number(value).toFixed(2);
+    }
+
+
+    function clampScore(value) {
+
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return 0;
+      }
+
+      return Math.min(
+        100,
+        Math.max(0, number)
+      );
+    }
+
+
+    function getCardName(card) {
+
+      return safeText(
+        card?.card_name ||
+        card?.name,
+        "Unknown Card"
+      );
+    }
+
+
+    function getCardOrientation(card) {
+
+      return safeText(
+        card?.orientation,
+        "Upright"
+      );
+    }
+
+
+    function getCardPosition(card) {
+
+      return safeText(
+        card?.position ||
+        card?.position_name,
+        "Tarot Position"
+      );
+    }
+
+
+    /* =========================================================
+       ERROR STATE
+    ========================================================== */
+
+    function showError(message) {
+
+      const narrative =
+        document.getElementById(
+          "report-narrative"
+        );
+
+      if (narrative) {
+        narrative.innerText = message;
+      }
+
+      const cards =
+        document.getElementById(
+          "report-cards-grid"
+        );
+
+      if (cards) {
+        cards.innerHTML = `
+          <div class="col-span-full p-6
+                      bg-rose-50 border border-rose-100
+                      rounded-2xl text-sm text-rose-700">
+            ${message}
+          </div>
+        `;
+      }
+
+    }
+
+
+    /* =========================================================
+       INSIGHT SCORE
+    ========================================================== */
+
+    function renderInsightScore(report) {
+
+      const scoreBreakdown =
+        report?.score_breakdown || {};
+
+      const score =
+        report?.insight_score;
+
+      const scoreElement =
+        document.getElementById(
+          "insight-score"
+        );
+
+      const scoreBar =
+        document.getElementById(
+          "insight-score-bar"
+        );
+
+
+      if (score !== null && score !== undefined) {
+
+        const numericScore =
+          clampScore(score);
+
+        if (scoreElement) {
+          scoreElement.innerText =
+            formatScore(numericScore);
+        }
+
+        if (scoreBar) {
+          scoreBar.style.width =
+            `${numericScore}%`;
+        }
+
+      }
+
+
+      const values = {
+
+        "score-palm":
+          scoreBreakdown.palm_analysis_confidence,
+
+        "score-tarot":
+          scoreBreakdown.tarot_interpretation_relevance,
+
+        "score-personality":
+          scoreBreakdown.personality_alignment,
+
+        "score-context":
+          scoreBreakdown.user_context_relevance,
+
+        "score-consistency":
+          scoreBreakdown.reading_consistency
+
+      };
+
+
+      Object.entries(values).forEach(
+        ([id, value]) => {
+
+          const element =
+            document.getElementById(id);
+
+          if (element) {
+            element.innerText =
+              formatScore(value);
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       PALM STRUCTURE
+    ========================================================== */
+
+    function renderPalmStructure(
+      palmStructure
+    ) {
+
+      const element =
+        document.getElementById(
+          "palm-structure"
+        );
+
+      if (!element) {
+        return;
+      }
+
+      if (
+        !palmStructure ||
+        typeof palmStructure !== "object"
+      ) {
+
+        element.innerText =
+          "Not available";
+
+        return;
+      }
+
+
+      const parts = [];
+
+
+      if (
+        palmStructure.is_finger_long !==
+        undefined
+      ) {
+
+        parts.push(
+          palmStructure.is_finger_long
+            ? "Long fingers"
+            : "Short fingers"
+        );
+
+      }
+
+
+      if (
+        palmStructure.is_palm_square !==
+        undefined
+      ) {
+
+        parts.push(
+          palmStructure.is_palm_square
+            ? "Square palm"
+            : "Non-square palm"
+        );
+
+      }
+
+
+      if (
+        Number.isFinite(
+          Number(
+            palmStructure.middle_finger_length_px
+          )
+        )
+      ) {
+
+        parts.push(
+          `Middle finger: ${
+            Number(
+              palmStructure.middle_finger_length_px
+            ).toFixed(1)
+          } px`
+        );
+
+      }
+
+
+      element.innerText =
+        parts.length
+          ? parts.join(" • ")
+          : "Not available";
+
+    }
+
+
+    /* =========================================================
+       PALM LINES
+    ========================================================== */
+
+    function renderPalmLines(
+      palmFeatures
+    ) {
+
+      const container =
+        document.getElementById(
+          "palm-lines-grid"
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+
+      const majorLines =
+        palmFeatures?.major_lines || {};
+
+
+      const lineOrder = [
+        "life_line",
+        "head_line",
+        "heart_line",
+        "fate_line",
+        "sun_line"
+      ];
+
+
+      const lineLabels = {
+
+        life_line: "Life Line",
+        head_line: "Head Line",
+        heart_line: "Heart Line",
+        fate_line: "Fate Line",
+        sun_line: "Sun Line"
+
+      };
+
+
+      lineOrder.forEach(
+        (lineKey) => {
+
+          const line =
+            majorLines[lineKey];
+
+
+          if (
+            !line ||
+            typeof line !== "object"
+          ) {
+            return;
+          }
+
+
+          const evidence =
+            line.image_evidence || {};
+
+          const characteristics =
+            line.characteristics || {};
+
+
+          const clarity =
+            Number.isFinite(
+              Number(
+                evidence.clarity_score
+              )
+            )
+              ? (
+                  Number(
+                    evidence.clarity_score
+                  ) * 100
+                ).toFixed(1)
+              : null;
+
+
+          const support =
+            Number.isFinite(
+              Number(
+                evidence.support_ratio
+              )
+            )
+              ? (
+                  Number(
+                    evidence.support_ratio
+                  ) * 100
+                ).toFixed(1)
+              : null;
+
+
+          const continuity =
+            Number.isFinite(
+              Number(
+                characteristics.continuity_proxy
+              )
+            )
+              ? (
+                  Number(
+                    characteristics.continuity_proxy
+                  ) * 100
+                ).toFixed(1)
+              : null;
+
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+
+          card.className =
+            "border border-slate-100 " +
+            "rounded-2xl p-5 bg-white";
+
+
+          const title =
+            document.createElement(
+              "h4"
+            );
+
+          title.className =
+            "text-sm font-extrabold " +
+            "text-slate-900";
+
+          title.innerText =
+            lineLabels[lineKey] ||
+            lineKey;
+
+
+          const status =
+            document.createElement(
+              "span"
+            );
+
+          status.className =
+            "inline-block mt-2 px-2 py-1 " +
+            "rounded-md bg-purple-50 " +
+            "text-[9px] font-bold " +
+            "text-[#5538EE] uppercase";
+
+          status.innerText =
+            safeText(
+              line.status,
+              "Detected"
+            );
+
+
+          const insight =
+            document.createElement(
+              "p"
+            );
+
+          insight.className =
+            "text-[11px] text-slate-600 " +
+            "leading-relaxed mt-3";
+
+          insight.innerText =
+            safeText(
+              line.insight ||
+              line.characteristic_interpretation,
+              "No interpretation available."
+            );
+
+
+          const evidenceContainer =
+            document.createElement(
+              "div"
+            );
+
+          evidenceContainer.className =
+            "grid grid-cols-3 gap-2 mt-4";
+
+
+          const evidenceItems = [
+
+            ["Clarity", clarity],
+            ["Support", support],
+            ["Continuity", continuity]
+
+          ];
+
+
+          evidenceItems.forEach(
+            ([label, value]) => {
+
+              const item =
+                document.createElement(
+                  "div"
+                );
+
+              item.className =
+                "bg-slate-50 rounded-xl p-2.5";
+
+
+              const labelElement =
+                document.createElement(
+                  "p"
+                );
+
+              labelElement.className =
+                "text-[8px] uppercase " +
+                "tracking-wide font-bold " +
+                "text-slate-400";
+
+              labelElement.innerText =
+                label;
+
+
+              const valueElement =
+                document.createElement(
+                  "p"
+                );
+
+              valueElement.className =
+                "text-xs font-extrabold " +
+                "text-slate-800 mt-1";
+
+              valueElement.innerText =
+                value !== null
+                  ? `${value}%`
+                  : "—";
+
+
+              item.appendChild(
+                labelElement
+              );
+
+              item.appendChild(
+                valueElement
+              );
+
+              evidenceContainer.appendChild(
+                item
+              );
+
+            }
+          );
+
+
+          card.appendChild(title);
+          card.appendChild(status);
+          card.appendChild(insight);
+          card.appendChild(evidenceContainer);
+
+          container.appendChild(card);
+
+        }
+      );
+
+
+      if (!container.children.length) {
+
+        container.innerHTML = `
+          <div class="col-span-full p-5
+                      bg-slate-50 rounded-2xl
+                      text-xs text-slate-500">
+            Palm line data was not available in this report.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       PALM REPORT
+    ========================================================== */
+
+    function renderPalmReport(
+      palmSummary
+    ) {
+
+      if (
+        !palmSummary ||
+        typeof palmSummary !== "object"
+      ) {
+        return;
+      }
+
+
+      const handType =
+        document.getElementById(
+          "palm-hand-type"
+        );
+
+      const element =
+        document.getElementById(
+          "palm-element"
+        );
+
+
+      if (handType) {
+
+        handType.innerText =
+          safeText(
+            palmSummary.hand_type
+          );
+
+      }
+
+
+      if (element) {
+
+        element.innerText =
+          safeText(
+            palmSummary.element
+          );
+
+      }
+
+
+      renderPalmStructure(
+        palmSummary.palm_structure
+      );
+
+
+      renderPalmLines(
+        palmSummary
+      );
+
+    }
+
+
+    /* =========================================================
+       TAROT CARDS
+    ========================================================== */
+
+    function renderTarotCards(
+      tarotSummary
+    ) {
+
+      const container =
+        document.getElementById(
+          "report-cards-grid"
+        );
+
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = "";
+
+
+      const cards =
+        Array.isArray(
+          tarotSummary?.cards
+        )
+          ? tarotSummary.cards.filter(
+              card =>
+                card &&
+                typeof card === "object"
+            )
+          : [];
+
+
+      if (!cards.length) {
+
+        container.innerHTML = `
+          <div class="col-span-full p-6
+                      bg-slate-50 rounded-2xl
+                      text-sm text-slate-500">
+            No Tarot cards were returned in this report.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      cards.forEach(
+        (card, index) => {
+
+          const name =
+            getCardName(card);
+
+          const orientation =
+            getCardOrientation(card);
+
+          const position =
+            getCardPosition(card);
+
+          const interpretation =
+            safeText(
+              card.interpretation ||
+              card.meaning ||
+              card.meaning_upright ||
+              card.meaning_reversed,
+              "No interpretation available."
+            );
+
+
+          const imageFile =
+            card.image_file;
+
+
+          const wrapper =
+            document.createElement(
+              "article"
+            );
+
+          wrapper.className =
+            "border border-slate-100 " +
+            "rounded-2xl p-4 bg-white " +
+            "shadow-sm";
+
+
+          // Card image
+          const imageWrapper =
+            document.createElement(
+              "div"
+            );
+
+          imageWrapper.className =
+            "relative mx-auto w-36 " +
+            "h-52 rounded-xl overflow-hidden " +
+            "border border-purple-100 " +
+            "bg-slate-50";
+
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+          image.className =
+            "w-full h-full object-cover";
+
+
+          image.alt =
+            `${name} - ${orientation}`;
+
+
+          if (orientation === "Reversed") {
+
+            image.style.transform =
+              "rotate(180deg)";
+
+          }
+
+
+          if (imageFile) {
+
+            image.src =
+              `public/images/active_deck/${encodeURIComponent(
+                imageFile
+              )}`;
+
+          } else {
+
+            image.src =
+              "assets/hand_diagram.png";
+
+          }
+
+
+          image.onerror =
+            function () {
+
+              const fallbackStage =
+                this.dataset.fallbackStage || "0";
+
+              if (fallbackStage === "0") {
+                this.dataset.fallbackStage = "1";
+                this.src =
+                  `images/active_deck/${encodeURIComponent(
+                    imageFile
+                  )}`;
+                return;
+              }
+
+              if (fallbackStage === "1") {
+                this.dataset.fallbackStage = "2";
+                this.src =
+                  "assets/hand_diagram.png";
+                return;
+              }
+
+              this.onerror = null;
+
+            };
+
+
+          imageWrapper.appendChild(
+            image
+          );
+
+
+          // Position badge
+          const positionBadge =
+            document.createElement(
+              "div"
+            );
+
+          positionBadge.className =
+            "mt-4";
+
+
+          const positionElement =
+            document.createElement(
+              "p"
+            );
+
+          positionElement.className =
+            "text-[9px] uppercase " +
+            "tracking-wide font-bold " +
+            "text-[#5538EE]";
+
+          positionElement.innerText =
+            position;
+
+
+          const title =
+            document.createElement(
+              "h3"
+            );
+
+          title.className =
+            "text-sm font-extrabold " +
+            "text-slate-900 mt-1";
+
+          title.innerText =
+            name;
+
+
+          const orientationElement =
+            document.createElement(
+              "span"
+            );
+
+          orientationElement.className =
+            orientation === "Upright"
+              ? "inline-block mt-2 px-2 py-1 " +
+                "rounded-md bg-emerald-50 " +
+                "text-[9px] font-bold " +
+                "text-emerald-600"
+              : "inline-block mt-2 px-2 py-1 " +
+                "rounded-md bg-rose-50 " +
+                "text-[9px] font-bold " +
+                "text-rose-600";
+
+
+          orientationElement.innerText =
+            orientation;
+
+
+          const interpretationElement =
+            document.createElement(
+              "p"
+            );
+
+          interpretationElement.className =
+            "text-[11px] text-slate-600 " +
+            "leading-relaxed mt-3";
+
+
+          interpretationElement.innerText =
+            interpretation;
+
+
+          positionBadge.appendChild(
+            positionElement
+          );
+
+          positionBadge.appendChild(
+            title
+          );
+
+          positionBadge.appendChild(
+            orientationElement
+          );
+
+
+          wrapper.appendChild(
+            imageWrapper
+          );
+
+          wrapper.appendChild(
+            positionBadge
+          );
+
+          wrapper.appendChild(
+            interpretationElement
+          );
+
+
+          container.appendChild(
+            wrapper
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       TAROT REPORT META
+    ========================================================== */
+
+    function renderTarotMeta(
+      tarotSummary
+    ) {
+
+      const element =
+        document.getElementById(
+          "tarot-spread-info"
+        );
+
+
+      if (!element) {
+        return;
+      }
+
+
+      const spreadType =
+        safeText(
+          tarotSummary?.spread_type,
+          "Tarot"
+        );
+
+
+      const totalCards =
+        Number(
+          tarotSummary?.total_cards
+        );
+
+
+      const cardCount =
+        Number.isFinite(totalCards)
+          ? totalCards
+          : (
+              Array.isArray(
+                tarotSummary?.cards
+              )
+                ? tarotSummary.cards.length
+                : 0
+            );
+
+
+      element.innerText =
+        `${spreadType
+          .replaceAll("_", " ")
+          .replace(/\b\w/g, c => c.toUpperCase())} • ` +
+        `${cardCount} card${
+          cardCount === 1
+            ? ""
+            : "s"
+        }`;
+
+    }
+
+
+
+    /* =========================================================
+       M3 PERSONALIZED INTELLIGENCE
+    ========================================================== */
+
+    function normalizeArray(value) {
+      return Array.isArray(value) ? value : [];
+    }
+
+    function renderSimpleItems(containerId, items, emptyText = "No data available.") {
+      const container = document.getElementById(containerId);
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      const normalized = normalizeArray(items);
+
+      if (!normalized.length) {
+        const empty = document.createElement("p");
+        empty.className = "text-[10px] text-slate-400";
+        empty.innerText = emptyText;
+        container.appendChild(empty);
+        return;
+      }
+
+      normalized.forEach((item) => {
+        const wrapper = document.createElement("div");
+        wrapper.className =
+          "p-3 bg-slate-50 rounded-xl border border-slate-100";
+
+        const title =
+          typeof item === "string"
+            ? item
+            : safeText(
+                item?.title ||
+                item?.name ||
+                item?.area ||
+                item?.description,
+                "Insight"
+              );
+
+        const description =
+          typeof item === "string"
+            ? ""
+            : safeText(
+                item?.description ||
+                item?.prompt ||
+                item?.action,
+                ""
+              );
+
+        const titleElement = document.createElement("p");
+        titleElement.className =
+          "text-[11px] font-bold text-slate-800 leading-relaxed";
+        titleElement.innerText = title;
+
+        wrapper.appendChild(titleElement);
+
+        if (description) {
+          const descriptionElement = document.createElement("p");
+          descriptionElement.className =
+            "text-[10px] text-slate-500 leading-relaxed mt-1";
+          descriptionElement.innerText = description;
+          wrapper.appendChild(descriptionElement);
+        }
+
+        container.appendChild(wrapper);
+      });
+    }
+
+    function renderPersonalityIntelligence(data) {
+      const intelligence =
+        data && typeof data === "object"
+          ? data
+          : {};
+
+      const alignment =
+        intelligence.alignment_score;
+
+      const alignmentElement =
+        document.getElementById("personality-alignment");
+
+      if (alignmentElement) {
+        alignmentElement.innerText =
+          alignment !== null &&
+          alignment !== undefined
+            ? `${formatScore(alignment)}%`
+            : "—";
+      }
+
+      const disclaimerElement =
+        document.getElementById("personality-disclaimer");
+
+      if (disclaimerElement && intelligence.disclaimer) {
+        disclaimerElement.innerText =
+          intelligence.disclaimer;
+      }
+
+      const profile =
+        intelligence.personality_profile || {};
+
+      const profileItems = [];
+
+      if (typeof profile === "string") {
+        profileItems.push(profile);
+      } else if (profile && typeof profile === "object") {
+        Object.entries(profile).forEach(
+          ([key, value]) => {
+            if (
+              value === null ||
+              value === undefined ||
+              value === ""
+            ) {
+              return;
+            }
+
+            const label = key
+              .replaceAll("_", " ")
+              .replace(/\b\w/g, c => c.toUpperCase());
+
+            profileItems.push({
+              title: label,
+              description: formatDisplayValue(
+                value,
+                "No value available."
+              ),
+            });
+          }
+        );
+      }
+
+      renderSimpleItems(
+        "personality-profile",
+        profileItems,
+        "No personality profile was returned."
+      );
+
+      renderSimpleItems(
+        "personality-strengths",
+        intelligence.strengths,
+        "No strengths were returned."
+      );
+
+      renderSimpleItems(
+        "personality-development",
+        intelligence.development_areas,
+        "No development areas were returned."
+      );
+
+      renderSimpleItems(
+        "personality-behavioral",
+        intelligence.behavioral_insights,
+        "No behavioral insights were returned."
+      );
+    }
+
+    function renderRecommendationIntelligence(data) {
+      const intelligence =
+        data && typeof data === "object"
+          ? data
+          : {};
+
+      const countElement =
+        document.getElementById("recommendation-count");
+
+      if (countElement) {
+        const count =
+          Number.isFinite(Number(intelligence.recommendation_count))
+            ? Number(intelligence.recommendation_count)
+            : normalizeArray(intelligence.recommendations).length;
+
+        countElement.innerText =
+          `${count} recommendation${count === 1 ? "" : "s"}`;
+      }
+
+      const themesContainer =
+        document.getElementById("recommendation-themes");
+
+      if (themesContainer) {
+        themesContainer.innerHTML = "";
+
+        const themes =
+          normalizeArray(intelligence.top_themes);
+
+        themes.forEach((theme) => {
+          const name =
+            typeof theme === "string"
+              ? theme
+              : safeText(
+                  theme?.theme ||
+                  theme?.name ||
+                  theme?.title,
+                  "Theme"
+                );
+
+          const score =
+            typeof theme === "object"
+              ? theme?.score ??
+                theme?.theme_score
+              : null;
+
+          const badge = document.createElement("span");
+          badge.className =
+            "px-2.5 py-1 rounded-lg bg-white border " +
+            "border-indigo-100 text-[9px] font-bold text-indigo-600";
+
+          badge.innerText =
+            score !== null &&
+            score !== undefined
+              ? `${name} • ${formatScore(score)}`
+              : name;
+
+          themesContainer.appendChild(badge);
+        });
+      }
+
+      const recommendations =
+        normalizeArray(
+          intelligence.priority_recommendations
+        ).length
+          ? normalizeArray(
+              intelligence.priority_recommendations
+            )
+          : normalizeArray(
+              intelligence.recommendations
+            );
+
+      const list =
+        document.getElementById(
+          "recommendation-list"
+        );
+
+      if (list) {
+        list.innerHTML = "";
+
+        if (!recommendations.length) {
+          const empty = document.createElement("p");
+          empty.className =
+            "col-span-full text-[10px] text-slate-400";
+          empty.innerText =
+            "No personalized recommendations were returned.";
+          list.appendChild(empty);
+        } else {
+          recommendations.slice(0, 8).forEach(
+            (recommendation) => {
+              const card =
+                document.createElement("article");
+
+              card.className =
+                "bg-white border border-indigo-100 " +
+                "rounded-xl p-4";
+
+              const title =
+                document.createElement("h4");
+
+              title.className =
+                "text-[11px] font-extrabold text-slate-800";
+
+              title.innerText =
+                safeText(
+                  recommendation?.title ||
+                  recommendation?.name ||
+                  recommendation?.category,
+                  "Personalized Recommendation"
+                );
+
+              const action =
+                document.createElement("p");
+
+              action.className =
+                "text-[10px] text-slate-500 leading-relaxed mt-2";
+
+              action.innerText =
+                safeText(
+                  recommendation?.action ||
+                  recommendation?.description ||
+                  recommendation?.recommendation,
+                  "Review this recommendation in the context of your current goals."
+                );
+
+              card.appendChild(title);
+              card.appendChild(action);
+
+              if (
+                recommendation?.category
+              ) {
+                const category =
+                  document.createElement("span");
+
+                category.className =
+                  "inline-block mt-3 px-2 py-1 rounded-md " +
+                  "bg-indigo-50 text-[8px] font-bold " +
+                  "uppercase tracking-wide text-indigo-600";
+
+                category.innerText =
+                  recommendation.category;
+
+                card.appendChild(category);
+              }
+
+              list.appendChild(card);
+            }
+          );
+        }
+      }
+    }
+
+    function renderLifeTrendsIntelligence(data) {
+      const intelligence =
+        data && typeof data === "object"
+          ? data
+          : {};
+
+      const confidenceElement =
+        document.getElementById(
+          "life-trends-confidence"
+        );
+
+      if (confidenceElement) {
+        const confidence =
+          intelligence.analysis_confidence;
+
+        confidenceElement.innerText =
+          confidence !== null &&
+          confidence !== undefined
+            ? `Confidence ${formatScore(confidence)}%`
+            : "Confidence —";
+      }
+
+      const disclaimerElement =
+        document.getElementById(
+          "life-trends-disclaimer"
+        );
+
+      if (
+        disclaimerElement &&
+        intelligence.disclaimer
+      ) {
+        disclaimerElement.innerText =
+          intelligence.disclaimer;
+      }
+
+      const trendList =
+        document.getElementById(
+          "life-trends-list"
+        );
+
+      if (trendList) {
+        trendList.innerHTML = "";
+
+        const trends =
+          normalizeArray(
+            intelligence.life_trends
+          );
+
+        if (!trends.length) {
+          const empty = document.createElement("p");
+          empty.className =
+            "col-span-full text-[10px] text-slate-400";
+          empty.innerText =
+            "No life-trend themes were returned.";
+          trendList.appendChild(empty);
+        } else {
+          trends.forEach((trend) => {
+            const card =
+              document.createElement("article");
+
+            card.className =
+              "bg-white border border-amber-100 " +
+              "rounded-xl p-4";
+
+            const title =
+              document.createElement("h4");
+
+            title.className =
+              "text-[11px] font-extrabold text-slate-800";
+
+            title.innerText =
+              safeText(
+                trend?.area ||
+                trend?.title ||
+                trend?.name,
+                "Life Trend"
+              );
+
+            const description =
+              document.createElement("p");
+
+            description.className =
+              "text-[10px] text-slate-500 leading-relaxed mt-2";
+
+            description.innerText =
+              safeText(
+                trend?.description ||
+                trend?.summary ||
+                trend?.theme,
+                "Reflective theme generated from the available reading evidence."
+              );
+
+            card.appendChild(title);
+            card.appendChild(description);
+
+            if (
+              trend?.trend_score !== undefined &&
+              trend?.trend_score !== null
+            ) {
+              const score =
+                document.createElement("p");
+
+              score.className =
+                "text-[9px] font-bold text-amber-600 mt-3";
+
+              score.innerText =
+                `Theme score: ${formatScore(
+                  trend.trend_score
+                )}`;
+
+              card.appendChild(score);
+            }
+
+            trendList.appendChild(card);
+          });
+        }
+      }
+
+      renderSimpleItems(
+        "life-opportunities",
+        intelligence.opportunities,
+        "No opportunities were returned."
+      );
+
+      renderSimpleItems(
+        "life-reflection-areas",
+        intelligence.reflection_areas,
+        "No reflection areas were returned."
+      );
+    }
+
+    /* =========================================================
+       ACTIONABLE ADVICE
+    ========================================================== */
+
+    function renderActions(
+      advice
+    ) {
+
+      const container =
+        document.getElementById(
+          "report-actions"
+        );
+
+
+      if (!container) {
+        return;
+      }
+
+
+      container.innerHTML = "";
+
+
+      const actions =
+        Array.isArray(advice)
+          ? advice
+          : [];
+
+
+      if (!actions.length) {
+
+        const li =
+          document.createElement(
+            "li"
+          );
+
+        li.className =
+          "text-xs text-slate-500";
+
+        li.innerText =
+          "No actionable guidance was returned.";
+
+        container.appendChild(li);
+
+        return;
+
+      }
+
+
+      actions.forEach(
+        (action) => {
+
+          const li =
+            document.createElement(
+              "li"
+            );
+
+          li.className =
+            "flex gap-3 items-start " +
+            "p-4 bg-slate-50 rounded-xl " +
+            "border border-slate-100";
+
+
+          const icon =
+            document.createElement(
+              "div"
+            );
+
+          icon.className =
+            "w-6 h-6 rounded-full " +
+            "bg-purple-100 text-[#5538EE] " +
+            "flex items-center justify-center " +
+            "flex-shrink-0";
+
+
+          icon.innerText =
+            "✓";
+
+
+          const text =
+            document.createElement(
+              "p"
+            );
+
+          text.className =
+            "text-xs text-slate-600 " +
+            "leading-relaxed pt-0.5";
+
+
+          text.innerText =
+            safeText(
+              action,
+              "Guidance unavailable."
+            );
+
+
+          li.appendChild(
+            icon
+          );
+
+          li.appendChild(
+            text
+          );
+
+          container.appendChild(
+            li
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       MAIN LOAD
+    ========================================================== */
+
+    function loadReport() {
+
+      const raw =
+        sessionStorage.getItem(
+          "composite_report_data"
+        );
+
+
+      const readingId =
+        sessionStorage.getItem(
+          "tarot_reading_id"
+        );
+
+
+      /*
+       * No report in session.
+       */
+      if (!raw) {
+
+        showError(
+          "No active report found. Please complete the Palm & Tarot steps first."
+        );
+
+        return;
+
+      }
+
+
+      let report;
+
+
+      try {
+
+        report =
+          JSON.parse(raw);
+
+      } catch (error) {
+
+        console.error(
+          "Invalid composite report JSON:",
+          error
+        );
+
+        showError(
+          "The saved report data is invalid. Please generate a new reading."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !report ||
+        typeof report !== "object"
+      ) {
+
+        showError(
+          "The saved report data is empty or invalid."
+        );
+
+        return;
+
+      }
+
+
+      /* -------------------------------------------------------
+         Reading ID
+      ------------------------------------------------------- */
+
+      const readingIdElement =
+        document.getElementById(
+          "reading-id"
+        );
+
+
+      if (readingIdElement) {
+
+        readingIdElement.innerText =
+          safeText(
+            readingId
+          );
+
+      }
+
+
+      /* -------------------------------------------------------
+         Title
+      ------------------------------------------------------- */
+
+      const titleElement =
+        document.getElementById(
+          "report-title"
+        );
+
+
+      if (titleElement) {
+
+        titleElement.innerText =
+          safeText(
+            report.title,
+            "Composite Divination Report"
+          );
+
+      }
+
+
+      /* -------------------------------------------------------
+         Narrative
+      ------------------------------------------------------- */
+
+      const narrativeElement =
+        document.getElementById(
+          "report-narrative"
+        );
+
+
+      if (narrativeElement) {
+
+        narrativeElement.innerText =
+          safeText(
+            report.synthesized_reading ||
+            report.narrative,
+            "The reading was generated successfully."
+          );
+
+      }
+
+
+      /* -------------------------------------------------------
+         Insight score
+      ------------------------------------------------------- */
+
+      renderInsightScore(
+        report
+      );
+
+
+      /* -------------------------------------------------------
+         Palm
+      ------------------------------------------------------- */
+
+      renderPalmReport(
+        report.palm_summary
+      );
+
+
+      /* -------------------------------------------------------
+         Tarot
+      ------------------------------------------------------- */
+
+      renderTarotMeta(
+        report.tarot_spread_summary
+      );
+
+
+      renderTarotCards(
+        report.tarot_spread_summary
+      );
+
+
+      /* -------------------------------------------------------
+         M3.2 Personality Intelligence
+      ------------------------------------------------------- */
+
+      renderPersonalityIntelligence(
+        report.personality_intelligence
+      );
+
+      /* -------------------------------------------------------
+         M3.3 Recommendation Intelligence
+      ------------------------------------------------------- */
+
+      renderRecommendationIntelligence(
+        report.recommendation_intelligence
+      );
+
+      /* -------------------------------------------------------
+         M3.4 Life Trends Intelligence
+      ------------------------------------------------------- */
+
+      renderLifeTrendsIntelligence(
+        report.life_trends_intelligence
+      );
+
+      /* -------------------------------------------------------
+         Advice
+      ------------------------------------------------------- */
+
+      renderActions(
+        report.actionable_advice
+      );
+
+
+      /*
+       * Re-render Lucide icons.
+       */
+      lucide.createIcons();
+
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        lucide.createIcons();
+
+        loadReport();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Palmistry & Tarot Intelligence Platform</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+
+
+        body {
+
+            font-family: 'Plus Jakarta Sans', sans-serif;
+
+        }
+
+
+
+        .spiritual-bg {
+
+            background: radial-gradient(circle at 10% 20%, rgba(224, 238, 255, 0.7) 0%, rgba(240, 246, 255, 0.4) 90%),
+
+                radial-gradient(circle at 90% 80%, rgba(218, 232, 255, 0.6) 0%, rgba(245, 249, 255, 0.2) 90%),
+
+                #f6f9fe;
+
+        }
+
+
+
+        .card-shadow {
+
+            box-shadow: 0 20px 50px -12px rgba(16, 61, 142, 0.12), 0 0 1px 1px rgba(226, 232, 240, 0.8);
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body class="spiritual-bg min-h-screen text-slate-700 flex items-center justify-center p-4 sm:p-6 lg:p-10">
+
+
+
+    <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+
+
+        <div class="lg:col-span-5 flex flex-col justify-between h-full py-4 px-2 sm:px-6">
+
+
+
+            <div>
+
+                <div class="flex items-center space-x-3 mb-6">
+
+                    <div
+
+                        class="w-12 h-12 rounded-2xl border border-blue-200 bg-white flex items-center justify-center p-1.5 shadow-sm overflow-hidden">
+
+                        <img src="assets/hand_diagram.png" alt="Platform Logo"
+
+                            onerror="this.onerror=null; this.src='assets/hand_diagram.png';"
+
+                            class="w-full h-full object-cover object-top select-none" />
+
+                    </div>
+
+                    <div>
+
+                        <h1 class="text-xl font-bold tracking-tight text-blue-950">AI Palmistry & Tarot </h1>
+
+                        <p class="text-xs font-semibold uppercase tracking-widest text-blue-600">Intelligence Platform
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="text-center my-2 text-blue-500 font-serif text-lg tracking-widest">✧</div>
+
+
+
+                <div class="text-left space-y-1">
+
+                    <h2 class="text-base font-semibold text-blue-900">Discover. Understand. Transform.</h2>
+
+                    <p class="text-xs text-slate-500 max-w-sm">Your journey to self-awareness, clarity and guidance
+
+                        begins here.</p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="relative flex items-center justify-center my-3 py-1">
+
+                <div class="absolute -top-3 -left-2 text-blue-400/40"><i data-lucide="sun" class="w-8 h-8"></i></div>
+
+                <div class="absolute -top-1 right-2 text-blue-400/40"><i data-lucide="moon" class="w-7 h-7"></i></div>
+
+
+
+                <div
+
+                    class="relative w-58 h-[290px] rounded-4xl bg-white p-2 border border-blue-100 shadow-lg flex items-center justify-center overflow-hidden">
+
+                    <img src="assets/hand_diagram.png" alt="Palmistry Hand Analysis Lines & Mounts"
+
+                        onerror="this.onerror=null; this.src='assets/hand_diagram.png.png';"
+
+                        class="w-full h-full object-contain rounded-2xl select-none transition-transform duration-300 hover:scale-105" />
+
+                </div>
+
+            </div>
+
+
+
+            <div class="grid grid-cols-3 gap-2 text-center pt-2">
+
+                <div class="flex flex-col items-center">
+
+                    <div
+
+                        class="w-8 h-8 rounded-full bg-blue-100/60 text-blue-700 flex items-center justify-center mb-1">
+
+                        <i data-lucide="compass" class="w-4 h-4"></i>
+
+                    </div>
+
+                    <span class="text-[11px] font-bold text-blue-950">Ancient Wisdom</span>
+
+                    <span class="text-[9px] text-slate-500">Timeless knowledge</span>
+
+                </div>
+
+
+
+                <div class="flex flex-col items-center">
+
+                    <div
+
+                        class="w-8 h-8 rounded-full bg-blue-100/60 text-blue-700 flex items-center justify-center mb-1">
+
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+
+                    </div>
+
+                    <span class="text-[11px] font-bold text-blue-950">Accurate Readings</span>
+
+                    <span class="text-[9px] text-slate-500">AI-powered insights</span>
+
+                </div>
+
+
+
+                <div class="flex flex-col items-center">
+
+                    <div
+
+                        class="w-8 h-8 rounded-full bg-blue-100/60 text-blue-700 flex items-center justify-center mb-1">
+
+                        <i data-lucide="flower-2" class="w-4 h-4"></i>
+
+                    </div>
+
+                    <span class="text-[11px] font-bold text-blue-950">Personal Guidance</span>
+
+                    <span class="text-[9px] text-slate-500">Clarity for your path</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-10 card-shadow border border-slate-100">
+
+
+
+            <div class="flex justify-center space-x-12 border-b border-slate-100 mb-8 pb-3">
+
+                <button id="tab-login" onclick="switchMode('login')"
+
+                    class="text-sm font-semibold text-slate-400 hover:text-slate-700 pb-2 relative transition">
+
+                    Login
+
+                </button>
+
+                <button id="tab-signup" onclick="switchMode('signup')"
+
+                    class="text-sm font-bold text-blue-700 pb-2 relative border-b-2 border-blue-600 transition">
+
+                    Sign Up
+
+                </button>
+
+            </div>
+
+
+
+            <div class="text-center mb-6">
+
+                <h3 id="form-heading" class="text-2xl font-bold text-blue-950 tracking-tight">Create Your Account</h3>
+
+                <p id="form-subheading" class="text-xs text-slate-500 mt-1">Join our community and begin your journey</p>
+
+            </div>
+
+
+
+            <div id="alert-banner" class="hidden mb-4 p-3 rounded-xl text-xs font-medium transition-all"></div>
+
+
+
+            <form id="auth-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+
+
+
+                <div id="role-section">
+
+                    <div class="flex items-center justify-center my-4">
+
+                        <div class="h-[1px] bg-slate-200 flex-1"></div>
+
+                        <span
+
+                            class="text-[11px] font-semibold text-blue-900 px-3 uppercase tracking-wider flex items-center gap-1.5">
+
+                            ✧ Select Your Role ✧
+
+                        </span>
+
+                        <div class="h-[1px] bg-slate-200 flex-1"></div>
+
+                    </div>
+
+
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-5">
+
+                        <div onclick="selectRole('User')" id="role-User"
+
+                            class="role-card cursor-pointer border-2 border-blue-600 bg-blue-50/40 rounded-2xl p-3 flex flex-col items-center text-center transition relative shadow-sm">
+
+                            <div
+
+                                class="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center text-white text-[9px] check-icon">
+
+                                ✓</div>
+
+                            <div
+
+                                class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 mb-1.5">
+
+                                <i data-lucide="user" class="w-5 h-5"></i>
+
+                            </div>
+
+                            <div class="text-xs font-bold text-blue-950">User</div>
+
+                            <div class="text-[9px] text-slate-500 mt-0.5 leading-tight">Explore readings & guidance</div>
+
+                        </div>
+
+
+
+                        <div onclick="selectRole('Tarot Reader')" id="role-Tarot Reader"
+
+                            class="role-card cursor-pointer border border-slate-200 hover:border-blue-300 bg-white rounded-2xl p-3 flex flex-col items-center text-center transition relative">
+
+                            <div
+
+                                class="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 rounded-full items-center justify-center text-white text-[9px] check-icon hidden">
+
+                                ✓</div>
+
+                            <div
+
+                                class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 mb-1.5">
+
+                                <i data-lucide="cards" class="w-5 h-5"></i>
+
+                            </div>
+
+                            <div class="text-xs font-bold text-slate-800">Tarot Reader</div>
+
+                            <div class="text-[9px] text-slate-500 mt-0.5 leading-tight">Provide tarot readings</div>
+
+                        </div>
+
+
+
+                        <div onclick="selectRole('Spiritual Consultant')" id="role-Spiritual Consultant"
+
+                            class="role-card cursor-pointer border border-slate-200 hover:border-blue-300 bg-white rounded-2xl p-3 flex flex-col items-center text-center transition relative">
+
+                            <div
+
+                                class="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 rounded-full items-center justify-center text-white text-[9px] check-icon hidden">
+
+                                ✓</div>
+
+                            <div
+
+                                class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 mb-1.5">
+
+                                <i data-lucide="sparkle" class="w-5 h-5"></i>
+
+                            </div>
+
+                            <div class="text-xs font-bold text-slate-800">Spiritual Consultant</div>
+
+                            <div class="text-[9px] text-slate-500 mt-0.5 leading-tight">Offer spiritual guidance</div>
+
+                        </div>
+
+
+
+                        <div onclick="selectRole('Administrator')" id="role-Administrator"
+
+                            class="role-card cursor-pointer border border-slate-200 hover:border-blue-300 bg-white rounded-2xl p-3 flex flex-col items-center text-center transition relative">
+
+                            <div
+
+                                class="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 rounded-full items-center justify-center text-white text-[9px] check-icon hidden">
+
+                                ✓</div>
+
+                            <div
+
+                                class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 mb-1.5">
+
+                                <i data-lucide="shield" class="w-5 h-5"></i>
+
+                            </div>
+
+                            <div class="text-xs font-bold text-slate-800">Admin</div>
+
+                            <div class="text-[9px] text-slate-500 mt-0.5 leading-tight">Manage platform & users</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="name-email-row">
+
+                    <div class="relative" id="field-fullname">
+
+                        <div
+
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+
+                            <i data-lucide="user" class="w-4 h-4"></i>
+
+                        </div>
+
+                        <input type="text" id="input-fullname" placeholder="Full Name"
+
+                            class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition" />
+
+                    </div>
+
+
+
+                    <div class="relative w-full">
+
+                        <div
+
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+
+                        </div>
+
+                        <input type="email" id="input-email" required placeholder="Email Address"
+
+                            class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition" />
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="relative">
+
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+
+                    </div>
+
+                    <input type="password" id="input-password" required placeholder="Password"
+
+                        class="w-full pl-10 pr-10 py-2.5 text-xs bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition" />
+
+                    <button type="button" onclick="togglePasswordVisibility('input-password')"
+
+                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="relative" id="field-confirm-password">
+
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+
+                    </div>
+
+                    <input type="password" id="input-confirm-password" placeholder="Confirm Password"
+
+                        class="w-full pl-10 pr-10 py-2.5 text-xs bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition" />
+
+                    <button type="button" onclick="togglePasswordVisibility('input-confirm-password')"
+
+                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="flex items-center space-x-2 pt-1" id="field-terms">
+
+                    <input type="checkbox" id="input-terms" required checked
+
+                        class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+
+                    <label for="input-terms" class="text-[11px] text-slate-600 cursor-pointer select-none">
+
+                        I agree to the <a href="#" class="text-blue-600 font-semibold hover:underline">Terms of
+
+                            Service</a> and <a href="#" class="text-blue-600 font-semibold hover:underline">Privacy
+
+                            Policy</a>
+
+                    </label>
+
+                </div>
+
+
+
+                <button type="submit" id="btn-submit"
+
+                    class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-600/25 flex items-center justify-center space-x-2 transition duration-150">
+
+                    <span id="btn-text">Create Account</span>
+
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+
+                </button>
+
+
+
+            </form>
+
+
+
+            <div class="my-4 flex items-center justify-center">
+
+                <div class="h-[1px] bg-slate-200 flex-1"></div>
+
+                <span class="text-[10px] text-slate-400 px-3 uppercase tracking-wider font-semibold">or</span>
+
+                <div class="h-[1px] bg-slate-200 flex-1"></div>
+
+            </div>
+
+
+
+            <button type="button" onclick="handleGoogleAuth()"
+
+                class="w-full py-2.5 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl flex items-center justify-center space-x-2 shadow-sm transition">
+
+                <svg class="w-4 h-4" viewBox="0 0 24 24">
+
+                    <path fill="#4285F4"
+
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+
+                    <path fill="#34A853"
+
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+
+                    <path fill="#FBBC05"
+
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+
+                    <path fill="#EA4335"
+
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+
+                </svg>
+
+                <span>Continue with Google</span>
+
+            </button>
+
+
+
+            <div class="text-center mt-5">
+
+                <span id="footer-text" class="text-xs text-slate-500">Already have an account?</span>
+
+                <button id="footer-link" onclick="toggleAuthMode()"
+
+                    class="text-xs text-blue-600 font-bold hover:underline ml-1">
+
+                    Login
+
+                </button>
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <script>
+
+       const API_BASE = "http://127.0.0.1:8000/api/v1";
+
+        let currentMode = "signup";
+
+        let selectedRole = "User";
+
+
+
+        // Initialize Lucide icons
+
+        lucide.createIcons();
+
+
+
+        function selectRole(role) {
+
+            selectedRole = role;
+
+            document.querySelectorAll('.role-card').forEach(card => {
+
+                card.classList.remove('border-2', 'border-blue-600', 'bg-blue-50/40', 'shadow-sm');
+
+                card.classList.add('border', 'border-slate-200', 'bg-white');
+
+                card.querySelector('.check-icon').classList.add('hidden');
+
+                card.querySelector('div.text-xs').className = "text-xs font-bold text-slate-800";
+
+            });
+
+
+
+            const activeCard = document.getElementById(`role-${role}`);
+
+            if (activeCard) {
+
+                activeCard.classList.remove('border', 'border-slate-200', 'bg-white');
+
+                activeCard.classList.add('border-2', 'border-blue-600', 'bg-blue-50/40', 'shadow-sm');
+
+                activeCard.querySelector('.check-icon').classList.remove('hidden');
+
+                activeCard.querySelector('div.text-xs').className = "text-xs font-bold text-blue-950";
+
+            }
+
+        }
+
+
+
+        function switchMode(mode) {
+
+            currentMode = mode;
+
+            const isSignup = mode === 'signup';
+
+
+
+            // Update Top Tabs
+
+            document.getElementById('tab-signup').className = isSignup
+
+                ? "text-sm font-bold text-blue-700 pb-2 relative border-b-2 border-blue-600 transition"
+
+                : "text-sm font-semibold text-slate-400 hover:text-slate-700 pb-2 relative transition";
+
+
+
+            document.getElementById('tab-login').className = !isSignup
+
+                ? "text-sm font-bold text-blue-700 pb-2 relative border-b-2 border-blue-600 transition"
+
+                : "text-sm font-semibold text-slate-400 hover:text-slate-700 pb-2 relative transition";
+
+
+
+            // Toggle UI elements
+
+            document.getElementById('role-section').classList.toggle('hidden', !isSignup);
+
+            document.getElementById('field-fullname').classList.toggle('hidden', !isSignup);
+
+            document.getElementById('field-confirm-password').classList.toggle('hidden', !isSignup);
+
+            document.getElementById('field-terms').classList.toggle('hidden', !isSignup);
+
+
+
+            // Update Grid alignment
+
+            const nameEmailRow = document.getElementById('name-email-row');
+
+            if (isSignup) {
+
+                nameEmailRow.className = "grid grid-cols-1 sm:grid-cols-2 gap-3";
+
+            } else {
+
+                nameEmailRow.className = "grid grid-cols-1 gap-3";
+
+            }
+
+
+
+            // Update Texts
+
+            document.getElementById('form-heading').innerText = isSignup ? "Create Your Account" : "Welcome Back";
+
+            document.getElementById('form-subheading').innerText = isSignup
+
+                ? "Join our community and begin your journey"
+
+                : "Enter your credentials to access your portal";
+
+            document.getElementById('btn-text').innerText = isSignup ? "Create Account" : "Log In";
+
+            document.getElementById('footer-text').innerText = isSignup ? "Already have an account?" : "Don't have an account?";
+
+            document.getElementById('footer-link').innerText = isSignup ? "Login" : "Sign Up";
+
+
+
+            hideAlert();
+
+        }
+
+
+
+        function toggleAuthMode() {
+
+            switchMode(currentMode === 'signup' ? 'login' : 'signup');
+
+        }
+
+
+
+        function togglePasswordVisibility(fieldId) {
+
+            const field = document.getElementById(fieldId);
+
+            field.type = field.type === 'password' ? 'text' : 'password';
+
+        }
+
+
+
+        function showAlert(message, isError = false) {
+
+            const banner = document.getElementById('alert-banner');
+
+            banner.className = isError
+
+                ? "mb-4 p-3 rounded-xl text-xs font-medium bg-rose-50 border border-rose-200 text-rose-700 block"
+
+                : "mb-4 p-3 rounded-xl text-xs font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 block";
+
+            banner.innerText = message;
+
+        }
+
+
+
+        function hideAlert() {
+
+            document.getElementById('alert-banner').classList.add('hidden');
+
+        }
+
+
+
+        async function handleFormSubmit(e) {
+
+            e.preventDefault();
+
+            const email = document.getElementById('input-email').value.trim();
+
+            const password = document.getElementById('input-password').value;
+
+
+
+            if (currentMode === 'signup') {
+
+                const confirmPassword = document.getElementById('input-confirm-password').value;
+
+                const fullName = document.getElementById('input-fullname').value.trim();
+
+
+
+                if (password !== confirmPassword) {
+
+                    showAlert("Passwords do not match.", true);
+
+                    return;
+
+                }
+
+
+
+                try {
+
+                    const res = await fetch(`${API_BASE}/auth/signup`, {
+
+                        method: "POST",
+
+                        headers: { "Content-Type": "application/json" },
+
+                        body: JSON.stringify({
+
+                            email: email,
+
+                            password: password,
+
+                            role: selectedRole,
+
+                            full_name: fullName
+
+                        })
+
+                    });
+
+
+
+                    const data = await res.json();
+
+                    if (!res.ok) throw new Error(data.detail || "Signup failed");
+
+
+
+                    showAlert(`Account created as ${selectedRole}! Switching to login...`);
+
+                    setTimeout(() => {
+
+                        switchMode('login');
+
+                        document.getElementById('input-email').value = email;
+
+                        document.getElementById('input-password').value = "";
+
+                    }, 1000);
+
+
+
+                } catch (err) {
+
+                    showAlert(err.message, true);
+
+                }
+
+
+
+            } else {
+
+                // Handle Login
+
+                const formData = new URLSearchParams();
+
+                formData.append("username", email);
+
+                formData.append("password", password);
+
+
+
+                try {
+
+                    const res = await fetch(`${API_BASE}/auth/login`, {
+
+                        method: "POST",
+
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+
+                        body: formData
+
+                    });
+
+
+
+                    const data = await res.json();
+
+                    if (!res.ok) throw new Error(data.detail || "Invalid email or password");
+
+
+
+                    // Save token to localStorage for authenticated API requests
+
+                    localStorage.setItem("access_token", data.access_token);
+
+                    showAlert("Authentication successful! Redirecting to studio...", false);
+
+
+
+                    // Verify the authenticated user's actual role with the backend.
+                    // The signup role selector is not used for post-login authorization.
+                    try {
+                        const meResponse = await fetch(`${API_BASE}/users/me`, {
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${data.access_token}`,
+                                "Accept": "application/json"
+                            }
+                        });
+
+                        const meData = await meResponse.json().catch(() => ({}));
+
+                        if (!meResponse.ok) {
+                            throw new Error(
+                                meData.detail || "Login succeeded, but your account role could not be verified."
+                            );
+                        }
+
+                        const actualRole = String(meData.role || "")
+                            .trim()
+                            .toLowerCase()
+                            .replace(/[_-]+/g, " ")
+                            .replace(/\s+/g, " ");
+
+                        const roleDestinations = {
+                            "user": "dashboard.html",
+                            "end user": "dashboard.html",
+                            "tarot reader": "tarot_reader.html",
+                            "spiritual consultant": "consultant.html",
+                            "administrator": "admin.html",
+                            "admin": "admin.html",
+                            "system administrator": "admin.html"
+                        };
+
+                        const destination = roleDestinations[actualRole];
+
+                        if (!destination) {
+                            throw new Error(
+                                `Your account role ("${meData.role || "unknown"}") is not mapped to a portal. Please contact the administrator.`
+                            );
+                        }
+
+                        showAlert(`Welcome! Opening your ${meData.role} portal...`, false);
+                        setTimeout(() => {
+                            window.location.href = destination;
+                        }, 600);
+                    } catch (roleError) {
+                        // Keep the token so the user can retry after resolving the backend issue.
+                        showAlert(roleError.message, true);
+                    }
+
+                } catch (err) {
+
+                    showAlert(err.message, true);
+
+                }
+
+            }
+
+        }
+
+
+
+        function handleGoogleAuth() {
+
+            showAlert("Google OAuth single sign-on flow initialized.", false);
+
+        }
+
+    </script>
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarot Reader Workspace | Arcana Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: #f8f7fc;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(12px);
+    }
+
+    .metric-card {
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(49, 46, 129, .08);
+    }
+
+    .card-art {
+      width: 100%;
+      height: 280px;
+      object-fit: contain;
+    }
+
+    .card-art.reversed {
+      transform: rotate(180deg);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .session-table th,
+    .session-table td {
+      white-space: nowrap;
+    }
+
+    .detail-block {
+      overflow-wrap: anywhere;
+    }
+
+    @media print {
+
+      header,
+      footer,
+      #reader-dashboard,
+      #user-engagement,
+      #reading-workspace,
+      #access-status,
+      #close-details,
+      #print-report,
+      #detail-raw-container {
+        display: none !important;
+      }
+
+      #reading-details-section {
+        display: block !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .detail-block {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-800">
+
+  <header class="sticky top-0 z-40 border-b border-violet-100 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-violet-700 text-white flex items-center justify-center">
+          <i data-lucide="sparkles"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-slate-900">Arcana Studio</h1>
+          <p class="text-xs text-slate-500">Tarot Reader Workspace</p>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <span id="role-pill" class="px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-800">
+          Checking access...
+        </span>
+        <button id="logout-btn"
+          class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium">
+          <i data-lucide="log-out" class="inline w-4 h-4 mr-1"></i>Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+
+    <!-- Workspace introduction -->
+    <section
+      class="rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-violet-900 to-purple-800 text-white p-7 sm:p-10">
+      <p class="text-violet-200 text-sm font-semibold uppercase tracking-widest">
+        Tarot Reading Workspace
+      </p>
+      <h2 class="text-3xl sm:text-5xl font-bold mt-3 leading-tight">
+        Read the cards. Find the story.
+      </h2>
+      <p class="mt-4 text-violet-100 leading-relaxed max-w-3xl">
+        Manage reading sessions, explore tarot spreads, monitor client engagement,
+        and review saved interpretations and reports.
+      </p>
+      <div class="flex flex-wrap gap-3 mt-7">
+        <a href="#reading-workspace"
+          class="px-5 py-3 rounded-xl bg-white text-violet-900 font-semibold hover:bg-violet-50">
+          <i data-lucide="layers" class="inline w-4 h-4 mr-1"></i>Start a reading
+        </a>
+        <a href="tarot_reader_reports.html"
+          class="px-5 py-3 rounded-xl border border-white/30 hover:bg-white/10 font-semibold">
+          <i data-lucide="file-text" class="inline w-4 h-4 mr-1"></i>View reports
+        </a>
+      </div>
+    </section>
+
+    <div id="access-status" role="status" aria-live="polite"
+      class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+      Checking workspace access...
+    </div>
+
+    <!-- MODULE 1: READING ANALYTICS -->
+    <section id="reader-dashboard" class="space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+        <div>
+          <p class="text-sm font-semibold text-violet-700">OVERVIEW</p>
+          <h2 class="text-2xl font-bold mt-1">Reading analytics</h2>
+          <p class="text-sm text-slate-500 mt-1">
+            Reading activity, reports, and insight scores for assigned clients.
+          </p>
+        </div>
+        <button id="refresh-dashboard"
+          class="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold">
+          <i data-lucide="refresh-cw" class="inline w-4 h-4 mr-1"></i>Refresh data
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Active clients</p>
+          <p id="metric-clients" class="text-3xl font-bold mt-4">—</p>
+        </article>
+        <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Total readings</p>
+          <p id="metric-readings" class="text-3xl font-bold mt-4">—</p>
+        </article>
+        <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Last 30 days</p>
+          <p id="metric-period" class="text-3xl font-bold mt-4">—</p>
+        </article>
+        <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Reports available</p>
+          <p id="metric-reports" class="text-3xl font-bold mt-4">—</p>
+        </article>
+        <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+          <p class="text-sm text-slate-500">Average insight score</p>
+          <p id="metric-score" class="text-3xl font-bold mt-4">—</p>
+        </article>
+      </div>
+
+
+      <!-- MODULE 3: SESSION TRACKING -->
+      <section class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-100">
+          <div class="flex flex-col gap-4">
+            <div>
+              <h3 class="font-bold text-lg">Reading sessions</h3>
+              <p class="text-sm text-slate-500 mt-1">
+                Search sessions, filter by reading type or date, open saved readings, or export matching sessions.
+              </p>
+            </div>
+
+            <!-- Session search and filters -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <input id="session-search" type="search" placeholder="Search reading or client ID..."
+                aria-label="Search sessions"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-300">
+
+              <select id="session-type-filter" aria-label="Filter by reading type"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-300">
+                <option value="">All reading types</option>
+              </select>
+
+              <input id="session-date-from" type="date" aria-label="Start date" title="Start date"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-300">
+
+              <input id="session-date-to" type="date" aria-label="End date" title="End date"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-300">
+
+              <button id="clear-session-filters" type="button"
+                class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold">
+                <i data-lucide="x-circle" class="inline w-4 h-4 mr-1"></i>
+                Clear filters
+              </button>
+
+              <button id="export-sessions" type="button"
+                class="px-4 py-2 rounded-xl bg-violet-700 hover:bg-violet-800 text-white text-sm font-semibold">
+                <i data-lucide="download" class="inline w-4 h-4 mr-1"></i>
+                Export filtered CSV
+              </button>
+            </div>
+
+            <!-- Filter and API status messages -->
+            <p id="session-filter-summary" class="text-sm text-slate-500" aria-live="polite"></p>
+
+            <p id="dashboard-status" role="status" aria-live="polite" class="text-sm text-slate-500"></p>
+          </div>
+        </div>
+
+        <!-- Session table -->
+        <div class="overflow-x-auto">
+          <table class="session-table w-full text-sm text-left">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+              <tr>
+                <th class="px-4 py-3">Reading ID</th>
+                <th class="px-4 py-3">Client ID</th>
+                <th class="px-4 py-3">Type</th>
+                <th class="px-4 py-3">Created at</th>
+                <th class="px-4 py-3">Insight score</th>
+                <th class="px-4 py-3">Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="sessions-table">
+              <tr>
+                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                  Loading sessions...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <!-- MODULE 2: USER ENGAGEMENT INSIGHTS -->
+      <section id="user-engagement" class="space-y-5">
+        <div>
+          <p class="text-sm font-semibold text-violet-700">CLIENT ACTIVITY</p>
+          <h2 class="text-2xl font-bold mt-1">User engagement insights</h2>
+          <p class="text-sm text-slate-500 mt-1">
+            Understand client activity and reading frequency.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">Readings in 7 days</p>
+            <p id="engagement-readings-7d" class="text-3xl font-bold mt-4">—</p>
+          </article>
+          <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">Active clients in 7 days</p>
+            <p id="engagement-active-7d" class="text-3xl font-bold mt-4">—</p>
+          </article>
+          <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">Clients to reconnect</p>
+            <p id="engagement-reconnect" class="text-3xl font-bold mt-4">—</p>
+          </article>
+          <article class="metric-card rounded-2xl bg-white border border-slate-100 p-5">
+            <p class="text-sm text-slate-500">Reading types</p>
+            <p id="engagement-types" class="text-3xl font-bold mt-4">—</p>
+          </article>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <section class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+            <div class="p-5 border-b border-slate-100">
+              <h3 class="font-bold text-lg">Client engagement</h3>
+              <p class="text-sm text-slate-500 mt-1">
+                Based on each client's latest saved reading.
+              </p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+                  <tr>
+                    <th class="px-4 py-3">Client</th>
+                    <th class="px-4 py-3">Readings</th>
+                    <th class="px-4 py-3">Last activity</th>
+                    <th class="px-4 py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="engagement-clients-table">
+                  <tr>
+                    <td colspan="4" class="px-4 py-8 text-center text-slate-500">
+                      Loading engagement data...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="rounded-2xl bg-white border border-slate-100 p-5">
+            <h3 class="font-bold text-lg">Reading frequency by type</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              Distribution of saved readings across assigned clients.
+            </p>
+            <div id="engagement-type-breakdown" class="mt-5 space-y-4">
+              <p class="text-sm text-slate-500">Loading reading types...</p>
+            </div>
+            <p id="engagement-status" role="status" aria-live="polite" class="text-sm text-slate-500 mt-5"></p>
+          </section>
+        </div>
+      </section>
+
+
+      <!-- Consultation booking management -->
+      <section id="consultation-bookings" class="space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <p class="text-sm font-semibold text-violet-700">CONSULTATIONS</p>
+            <h2 class="text-2xl font-bold mt-1">Booking management</h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Review client requests and manage your consultation bookings.
+            </p>
+          </div>
+          <button id="refresh-bookings" type="button"
+            class="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-sm font-semibold">
+            Refresh bookings
+          </button>
+        </div>
+
+        <div class="rounded-2xl bg-white border border-slate-100 p-5 sm:p-6">
+          <p id="bookings-status" role="status" aria-live="polite" class="text-sm text-slate-500 mb-4">Loading
+            bookings...</p>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+                <tr>
+                  <th class="px-4 py-3">Booking ID</th>
+                  <th class="px-4 py-3">Client ID</th>
+                  <th class="px-4 py-3">Scheduled at</th>
+                  <th class="px-4 py-3">Mode</th>
+                  <th class="px-4 py-3">Duration</th>
+                  <th class="px-4 py-3">Status</th>
+                  <th class="px-4 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-table">
+                <tr>
+                  <td colspan="7" class="px-4 py-8 text-center text-slate-500">
+                    Loading bookings...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Saved reading details / MODULE 4: REPORT MANAGEMENT -->
+      <section id="reading-details-section" class="hidden space-y-5">
+        <div class="rounded-2xl bg-white border border-violet-100 p-5 sm:p-7">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-sm font-semibold text-violet-700">SAVED READING</p>
+              <h2 class="text-2xl font-bold mt-1">Reading and report details</h2>
+              <p id="detail-reading-meta" class="text-sm text-slate-500 mt-2"></p>
+            </div>
+            <div class="flex gap-2">
+              <button id="print-report"
+                class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-sm font-semibold">
+                <i data-lucide="printer" class="inline w-4 h-4 mr-1"></i>Print
+              </button>
+              <button id="close-details"
+                class="px-4 py-2 rounded-xl bg-violet-700 hover:bg-violet-800 text-white text-sm font-semibold">
+                Close details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="detail-report" class="space-y-5"></div>
+
+        <details id="detail-raw-container" class="rounded-2xl bg-white border border-slate-100 p-5">
+          <summary class="cursor-pointer font-semibold text-violet-700">
+            View raw saved API response
+          </summary>
+          <pre id="detail-raw"
+            class="mt-4 p-4 rounded-xl bg-slate-950 text-green-200 text-xs overflow-x-auto whitespace-pre-wrap"></pre>
+        </details>
+      </section>
+
+      <!-- Tarot reading workspace -->
+      <section id="reading-workspace" class="space-y-5">
+        <div>
+          <p class="text-sm font-semibold text-violet-700">YOUR NEXT READING</p>
+          <h2 class="text-2xl font-bold mt-1">Tarot reading workspace</h2>
+          <p class="text-sm text-slate-500 mt-1">
+            Choose a spread and draw your cards.
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-white border border-slate-100 p-5 sm:p-7">
+          <label for="spread-type" class="block text-sm font-semibold mb-2">
+            Choose a tarot spread
+          </label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <select id="spread-type"
+              class="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-violet-300">
+              <option value="single">Single Card</option>
+              <option value="three_card" selected>Three Card Spread</option>
+              <option value="cross">Cross Spread</option>
+              <option value="horseshoe">Horseshoe Spread</option>
+              <option value="relationship">Relationship Spread</option>
+              <option value="career">Career Spread</option>
+              <option value="life_path">Life Path Spread</option>
+              <option value="celtic_cross">Celtic Cross</option>
+            </select>
+            <button id="draw-btn"
+              class="px-6 py-3 rounded-xl bg-violet-700 hover:bg-violet-800 text-white font-semibold">
+              <i data-lucide="sparkles" class="inline w-4 h-4 mr-1"></i>Draw cards
+            </button>
+            <button id="clear-btn" class="px-6 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 font-semibold">
+              Clear
+            </button>
+          </div>
+          <p id="reading-status" role="status" aria-live="polite" class="text-sm text-slate-500 mt-4"></p>
+        </div>
+
+        <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+        <section id="interpretation-section" class="hidden rounded-2xl bg-white border border-slate-100 p-5 sm:p-7">
+          <h3 class="text-xl font-bold">Reading interpretation</h3>
+          <div id="interpretation" class="mt-4 whitespace-pre-wrap leading-7 text-slate-700"></div>
+          <details class="mt-6">
+            <summary class="cursor-pointer font-semibold text-sm text-violet-700">
+              View raw API response
+            </summary>
+            <pre id="raw-response"
+              class="mt-3 p-4 rounded-xl bg-slate-950 text-green-200 text-xs overflow-x-auto whitespace-pre-wrap"></pre>
+          </details>
+        </section>
+      </section>
+  </main>
+
+
+  <!-- Tarot Reader Consultation Chat -->
+  <div id="tarot-chat-modal" class="hidden fixed inset-0 z-50 bg-slate-950/50 p-3 sm:p-6" role="dialog"
+    aria-modal="true" aria-labelledby="tarot-chat-title">
+
+    <div class="mx-auto flex h-full max-w-2xl flex-col overflow-hidden
+                rounded-2xl bg-white shadow-xl">
+
+      <div class="flex items-center justify-between gap-3
+                  border-b border-slate-200 p-4">
+        <div>
+          <h2 id="tarot-chat-title" class="font-bold text-lg text-slate-900">
+            Consultation chat
+          </h2>
+          <p id="tarot-chat-status" class="text-sm text-slate-500">
+            Connecting...
+          </p>
+        </div>
+
+        <button id="tarot-chat-close" type="button" class="rounded-lg border border-slate-200 px-3 py-2
+                       text-sm hover:bg-slate-50">
+          Close
+        </button>
+      </div>
+
+      <div id="tarot-chat-messages" class="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4" aria-live="polite"
+        aria-label="Chat messages">
+        <p class="text-center text-sm text-slate-500">
+          Loading messages...
+        </p>
+      </div>
+
+      <form id="tarot-chat-form" class="flex gap-2 border-t border-slate-200 bg-white p-3">
+        <input id="tarot-chat-input" type="text" maxlength="2000" required autocomplete="off"
+          placeholder="Type your message..." aria-label="Message" class="min-w-0 flex-1 rounded-xl border border-slate-300
+                      px-3 py-3 focus:outline-none focus:ring-2
+                      focus:ring-violet-300">
+
+        <button id="tarot-chat-send" type="submit" class="rounded-xl bg-violet-700 px-4 py-3
+                       font-semibold text-white hover:bg-violet-800">
+          Send
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+
+  <footer class="border-t border-slate-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-center text-sm text-slate-500">
+      Arcana Studio · Palmistry & Tarot Intelligence Platform
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    /* Keep these paths aligned with your current Live Server setup. */
+    const API_BASE = "http://127.0.0.1:8000/api/v1";
+    const TAROT_CATALOG_URL = "/backend/datasets/metadata/tarot_catalog.json";
+    const DECK_IMAGE_BASE = "/frontend/public/images/active_deck/";
+
+    const $ = id => document.getElementById(id);
+    const token = localStorage.getItem("access_token");
+    const el = (id) => document.getElementById(id);
+
+    let dashboardSessions = [];
+    let tarotCatalogById = new Map();
+    let workspaceAllowed = false;
+    let lastSavedReading = null;
+
+    /* ------------------------- General helpers ------------------------- */
+
+    async function readJsonSafely(response) {
+      const text = await response.text();
+      if (!text) return {};
+      try {
+        return JSON.parse(text);
+      } catch {
+        return { detail: text };
+      }
+    }
+
+    function authHeaders() {
+      const headers = { Accept: "application/json" };
+      if (token) headers.Authorization = `Bearer ${token}`;
+      return headers;
+    }
+
+    function getErrorMessage(data, fallback) {
+      if (typeof data?.detail === "string") return data.detail;
+      if (typeof data?.message === "string") return data.message;
+
+      if (Array.isArray(data?.detail)) {
+        return data.detail
+          .map(item => item.msg || JSON.stringify(item))
+          .join("; ");
+      }
+
+      return fallback;
+    }
+
+    function setStatus(element, message, type = "normal") {
+      element.textContent = message;
+
+      const styles = {
+        normal: "text-sm text-slate-500",
+        success: "text-sm text-emerald-700",
+        error: "text-sm text-rose-600",
+        warning: "text-sm text-amber-700"
+      };
+
+      element.className = styles[type] || styles.normal;
+    }
+
+    function displayDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime())
+        ? String(value)
+        : date.toLocaleString();
+    }
+
+    function createCell(row, value, className = "px-4 py-3 text-slate-700") {
+      const cell = document.createElement("td");
+      cell.className = className;
+      cell.textContent = String(value ?? "—");
+      row.appendChild(cell);
+      return cell;
+    }
+
+    /* ------------------------- Tarot catalog ------------------------- */
+
+    async function loadTarotCatalog() {
+      try {
+        const response = await fetch(TAROT_CATALOG_URL);
+        if (!response.ok) {
+          throw new Error(`Catalog request failed (${response.status})`);
+        }
+
+        const source = await response.json();
+        const cards = Array.isArray(source)
+          ? source
+          : (Array.isArray(source.cards) ? source.cards : []);
+
+        tarotCatalogById = new Map(
+          cards
+            .filter(card => card && (card.id || card.card_id))
+            .map(card => [String(card.id || card.card_id), card])
+        );
+
+        setStatus(
+          $("reading-status"),
+          `Tarot catalog loaded: ${tarotCatalogById.size} cards.`,
+          "success"
+        );
+      } catch (error) {
+        console.warn("Catalog loading failed:", error);
+        setStatus(
+          $("reading-status"),
+          `Catalog unavailable: ${error.message}`,
+          "warning"
+        );
+      }
+    }
+
+    function getCatalogCard(card) {
+      const id = card?.card_id || card?.id;
+      return id ? tarotCatalogById.get(String(id)) || null : null;
+    }
+
+    function cardName(card, index) {
+      if (typeof card === "string") return card;
+
+      return card?.card_name ||
+        card?.name ||
+        getCatalogCard(card)?.name ||
+        `Card ${index + 1}`;
+    }
+
+    function cardOrientation(card) {
+      return String(card?.orientation || "Upright")
+        .toLowerCase()
+        .includes("revers")
+        ? "Reversed"
+        : "Upright";
+    }
+
+    function cardImage(card) {
+      const catalogCard = getCatalogCard(card);
+      const supplied = card?.image_url || card?.image;
+
+      if (
+        typeof supplied === "string" &&
+        /^https?:\/\//i.test(supplied)
+      ) {
+        return supplied;
+      }
+
+      const filename =
+        card?.image_file ||
+        card?.image_filename ||
+        catalogCard?.image_file ||
+        catalogCard?.image_filename ||
+        "";
+
+      if (!filename) return "";
+
+      return DECK_IMAGE_BASE +
+        encodeURIComponent(String(filename).split(/[\\/]/).pop());
+    }
+
+    function cardMeaning(card) {
+      const catalogCard = getCatalogCard(card);
+
+      const meaning = cardOrientation(card) === "Reversed"
+        ? catalogCard?.meaning_reversed
+        : catalogCard?.meaning_upright;
+
+      return meaning ||
+        card?.interpretation ||
+        card?.meaning ||
+        "No interpretation is available for this card.";
+    }
+
+    function extractCards(data) {
+      const candidates = [
+        data?.tarot?.cards,
+        data?.cards,
+        data?.drawn_cards,
+        data?.selected_cards,
+        data?.reading?.cards,
+        data?.data?.cards,
+        data?.result?.cards,
+        data?.analysis_data?.tarot?.cards,
+        data?.analysis_data?.tarot_data?.cards,
+        data?.analysis_data?.synthesis?.tarot?.cards,
+        data?.analysis_data?.life_trends?.evidence?.tarot?.cards
+      ];
+
+      return candidates.find(Array.isArray) || [];
+    }
+
+    function extractInterpretation(data) {
+      const cards = extractCards(data);
+
+      if (cards.length) {
+        return cards.map((card, index) =>
+          `${card?.position || `Position ${index + 1}`} — ` +
+          `${cardName(card, index)} (${cardOrientation(card)})\n` +
+          `${cardMeaning(card)}`
+        ).join("\n\n");
+      }
+
+      return data?.tarot?.interpretation ||
+        data?.interpretation ||
+        data?.narrative ||
+        data?.message ||
+        "No interpretation was returned.";
+    }
+
+    function renderCardsInto(cards, target) {
+      target.replaceChildren();
+
+      if (!cards.length) {
+        const message = document.createElement("p");
+        message.className = "text-slate-500 py-4";
+        message.textContent = "No tarot cards were found in this reading.";
+        target.appendChild(message);
+        return;
+      }
+
+      cards.forEach((card, index) => {
+        const name = cardName(card, index);
+        const orientation = cardOrientation(card);
+
+        const article = document.createElement("article");
+        article.className =
+          "overflow-hidden rounded-2xl bg-white border border-violet-100 shadow-sm";
+
+        const imageContainer = document.createElement("div");
+        imageContainer.className =
+          "bg-gradient-to-b from-indigo-950 to-violet-900 p-4 flex justify-center items-center";
+
+        const imageUrl = cardImage(card);
+
+        if (imageUrl) {
+          const image = document.createElement("img");
+          image.src = imageUrl;
+          image.alt = `${name} tarot card`;
+          image.loading = "lazy";
+          image.className =
+            `card-art${orientation === "Reversed" ? " reversed" : ""}`;
+
+          image.onerror = () => {
+            const url = image.src.toLowerCase();
+
+            if (url.endsWith(".jpg") && !image.dataset.triedPng) {
+              image.dataset.triedPng = "true";
+              image.src = image.src.slice(0, -4) + ".png";
+              return;
+            }
+
+            if (url.endsWith(".png") && !image.dataset.triedJpg) {
+              image.dataset.triedJpg = "true";
+              image.src = image.src.slice(0, -4) + ".jpg";
+              return;
+            }
+
+            image.onerror = null;
+            image.remove();
+
+            const fallback = document.createElement("div");
+            fallback.className =
+              "h-64 flex flex-col items-center justify-center text-white text-center";
+
+            const symbol = document.createElement("div");
+            symbol.className = "text-5xl mb-3";
+            symbol.textContent = "✧";
+
+            const label = document.createElement("p");
+            label.textContent = name;
+            label.className = "font-semibold";
+
+            fallback.append(symbol, label);
+            imageContainer.appendChild(fallback);
+          };
+
+          imageContainer.appendChild(image);
+        } else {
+          const fallback = document.createElement("div");
+          fallback.className =
+            "h-64 flex items-center justify-center text-white text-xl";
+          fallback.textContent = name;
+          imageContainer.appendChild(fallback);
+        }
+
+        const content = document.createElement("div");
+        content.className = "p-5";
+
+        const position = document.createElement("p");
+        position.className =
+          "text-xs uppercase tracking-wider font-semibold text-violet-700";
+        position.textContent = card?.position || `Position ${index + 1}`;
+
+        const heading = document.createElement("h3");
+        heading.className = "text-xl font-bold mt-2";
+        heading.textContent = name;
+
+        const badge = document.createElement("span");
+        badge.className =
+          `inline-block mt-3 px-3 py-1 rounded-full text-xs font-semibold ${orientation === "Reversed"
+            ? "bg-amber-100 text-amber-800"
+            : "bg-emerald-100 text-emerald-800"
+          }`;
+        badge.textContent = orientation;
+
+        const meaningTitle = document.createElement("h4");
+        meaningTitle.className = "mt-4 mb-2 font-semibold";
+        meaningTitle.textContent = "Card interpretation";
+
+        const meaning = document.createElement("p");
+        meaning.className = "text-sm leading-6 text-slate-600";
+        meaning.textContent = cardMeaning(card);
+
+        content.append(position, heading, badge, meaningTitle, meaning);
+        article.append(imageContainer, content);
+        target.appendChild(article);
+      });
+    }
+
+    /* ------------------------- Workspace access ------------------------- */
+
+    async function checkWorkspaceAccess() {
+      const status = $("access-status");
+      const pill = $("role-pill");
+
+      if (!token) {
+        workspaceAllowed = false;
+        status.textContent =
+          "You are not logged in. Please log in to access the workspace.";
+        status.className =
+          "rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800";
+        pill.textContent = "Not authenticated";
+        $("draw-btn").disabled = true;
+        $("refresh-dashboard").disabled = true;
+        return false;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/roles/tarot-reader-workspace`,
+          { headers: authHeaders() }
+        );
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(data, `Access check failed (${response.status})`)
+          );
+        }
+
+        workspaceAllowed = true;
+        pill.textContent = data.role || "Tarot Reader";
+        status.textContent = data.message || "Workspace access verified.";
+        status.className =
+          "rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800";
+
+        $("draw-btn").disabled = false;
+        $("refresh-dashboard").disabled = false;
+        return true;
+      } catch (error) {
+        workspaceAllowed = false;
+        pill.textContent = "Access unavailable";
+        status.textContent =
+          `Unable to verify workspace access: ${error.message}`;
+        status.className =
+          "rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700";
+
+        $("draw-btn").disabled = true;
+        $("refresh-dashboard").disabled = true;
+        return false;
+      }
+    }
+
+    /* ------------------------- Reading analytics ------------------------- */
+
+    async function loadReaderDashboard() {
+      if (!workspaceAllowed) return;
+
+      setStatus($("dashboard-status"), "Loading dashboard data...");
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/roles/tarot-reader-workspace`,
+          { headers: authHeaders() }
+        );
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(data, `Dashboard failed (${response.status})`)
+          );
+        }
+
+        const analytics = data.analytics || {};
+
+        $("metric-clients").textContent = analytics.active_clients ?? 0;
+        $("metric-readings").textContent = analytics.total_readings ?? 0;
+        $("metric-period").textContent =
+          analytics.readings_last_30_days ?? 0;
+        $("metric-reports").textContent =
+          analytics.reports_available ?? 0;
+        $("metric-score").textContent =
+          analytics.average_insight_score == null
+            ? "N/A"
+            : Number(analytics.average_insight_score).toFixed(1);
+
+        dashboardSessions = Array.isArray(data.recent_sessions)
+          ? data.recent_sessions
+          : [];
+
+        populateSessionTypeFilter();
+        filterAndRenderSessions();
+
+        setStatus(
+          $("dashboard-status"),
+          `${dashboardSessions.length} recent sessions loaded.`,
+          "success"
+        );
+
+        // Refresh user engagement whenever dashboard data refreshes.
+        await loadUserEngagement();
+
+      } catch (error) {
+        console.error(error);
+        setStatus(
+          $("dashboard-status"),
+          `Could not load dashboard: ${error.message}`,
+          "error"
+        );
+      }
+    }
+
+
+    /* ------------------------- Session tracking ------------------------- */
+
+    function renderDashboardSessions(sessions) {
+      const tbody = $("sessions-table");
+      tbody.replaceChildren();
+
+      if (!sessions.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 6;
+        cell.className = "px-4 py-8 text-center text-slate-500";
+        cell.textContent = "No matching sessions found.";
+
+        row.appendChild(cell);
+        tbody.appendChild(row);
+        return;
+      }
+
+      sessions.forEach(session => {
+        const row = document.createElement("tr");
+        row.className =
+          "border-b border-slate-100 last:border-0 hover:bg-slate-50";
+
+        const score =
+          session.insight_score ?? session.overall_insight_score;
+
+        [
+          session.reading_id || "—",
+          session.client_id || "—",
+          session.reading_type || "—",
+          displayDate(session.created_at),
+          score == null || !Number.isFinite(Number(score))
+            ? "N/A"
+            : Number(score).toFixed(1)
+        ].forEach(value => createCell(row, value));
+
+        const actionCell = document.createElement("td");
+        actionCell.className = "px-4 py-3";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "View Details";
+        button.className =
+          "px-3 py-2 rounded-lg bg-violet-700 text-white hover:bg-violet-800 text-xs font-semibold";
+        button.disabled = !session.client_id || !session.reading_id;
+
+        button.addEventListener("click", () =>
+          openReadingDetails(session.client_id, session.reading_id)
+        );
+
+        actionCell.appendChild(button);
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+      });
+    }
+
+    /* Return sessions matching every active filter. */
+    function getFilteredDashboardSessions() {
+      const query = $("session-search").value.trim().toLowerCase();
+      const selectedType = $("session-type-filter").value;
+      const fromValue = $("session-date-from").value;
+      const toValue = $("session-date-to").value;
+
+      const fromDate = fromValue
+        ? new Date(`${fromValue}T00:00:00`)
+        : null;
+
+      const toDate = toValue
+        ? new Date(`${toValue}T23:59:59.999`)
+        : null;
+
+      if (fromDate && toDate && fromDate > toDate) {
+        return null;
+      }
+
+      return dashboardSessions.filter(session => {
+        const searchableValues = [
+          session.reading_id,
+          session.client_id,
+          session.reading_type,
+          session.created_at,
+          session.insight_score,
+          session.overall_insight_score
+        ];
+
+        const matchesSearch = searchableValues.some(value =>
+          String(value ?? "").toLowerCase().includes(query)
+        );
+
+        const matchesType =
+          !selectedType ||
+          String(session.reading_type ?? "") === selectedType;
+
+        const parsedDate = session.created_at
+          ? new Date(session.created_at)
+          : null;
+
+        const validDate =
+          parsedDate && !Number.isNaN(parsedDate.getTime());
+
+        const matchesFrom =
+          !fromDate || (validDate && parsedDate >= fromDate);
+
+        const matchesTo =
+          !toDate || (validDate && parsedDate <= toDate);
+
+        return (
+          matchesSearch &&
+          matchesType &&
+          matchesFrom &&
+          matchesTo
+        );
+      });
+    }
+
+    /* Render filtered results and report the current state. */
+    function filterAndRenderSessions() {
+      const filtered = getFilteredDashboardSessions();
+
+      if (filtered === null) {
+        renderDashboardSessions([]);
+
+        $("session-filter-summary").textContent =
+          "Invalid date range. Please correct the start and end dates.";
+
+        setStatus(
+          $("dashboard-status"),
+          "The start date must be before or equal to the end date.",
+          "error"
+        );
+
+        return;
+      }
+
+      renderDashboardSessions(filtered);
+
+      $("session-filter-summary").textContent =
+        `Showing ${filtered.length} of ${dashboardSessions.length} recent sessions.`;
+
+      setStatus(
+        $("dashboard-status"),
+        `${filtered.length} session(s) match your filters.`,
+        "normal"
+      );
+    }
+
+    /* Populate the reading-type dropdown from available sessions. */
+    function populateSessionTypeFilter() {
+      const select = $("session-type-filter");
+      const previousValue = select.value;
+
+      const types = [
+        ...new Set(
+          dashboardSessions
+            .map(session =>
+              String(session.reading_type ?? "").trim()
+            )
+            .filter(Boolean)
+        )
+      ].sort((a, b) => a.localeCompare(b));
+
+      select.replaceChildren();
+
+      const allOption = document.createElement("option");
+      allOption.value = "";
+      allOption.textContent = "All reading types";
+      select.appendChild(allOption);
+
+      types.forEach(type => {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = type;
+        select.appendChild(option);
+      });
+
+      if (types.includes(previousValue)) {
+        select.value = previousValue;
+      }
+    }
+
+    /* Filter event listeners. */
+    $("session-search").addEventListener(
+      "input",
+      filterAndRenderSessions
+    );
+
+    $("session-type-filter").addEventListener(
+      "change",
+      filterAndRenderSessions
+    );
+
+    $("session-date-from").addEventListener(
+      "change",
+      filterAndRenderSessions
+    );
+
+    $("session-date-to").addEventListener(
+      "change",
+      filterAndRenderSessions
+    );
+
+    /* Clear all filters. */
+    $("clear-session-filters").addEventListener("click", () => {
+      $("session-search").value = "";
+      $("session-type-filter").value = "";
+      $("session-date-from").value = "";
+      $("session-date-to").value = "";
+
+      filterAndRenderSessions();
+    });
+
+    /* Refresh dashboard data. Keep only one refresh listener. */
+    $("refresh-dashboard").addEventListener(
+      "click",
+      loadReaderDashboard
+    );
+
+    /* Export only the currently matching sessions to CSV. */
+    $("export-sessions").addEventListener("click", () => {
+      const sessions = getFilteredDashboardSessions();
+
+      if (sessions === null) {
+        setStatus(
+          $("dashboard-status"),
+          "Cannot export: please correct the date range.",
+          "error"
+        );
+        return;
+      }
+
+      if (sessions.length === 0) {
+        setStatus(
+          $("dashboard-status"),
+          "There are no matching sessions to export.",
+          "warning"
+        );
+        return;
+      }
+
+      const columns = [
+        "reading_id",
+        "client_id",
+        "reading_type",
+        "created_at",
+        "insight_score"
+      ];
+
+      const escapeCsv = value =>
+        `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+      const rows = [
+        columns.join(","),
+
+        ...sessions.map(session =>
+          columns.map(key => {
+            const value = key === "insight_score"
+              ? (
+                session.insight_score ??
+                session.overall_insight_score
+              )
+              : session[key];
+
+            return escapeCsv(value);
+          }).join(",")
+        )
+      ];
+
+      const blob = new Blob(
+        ["\uFEFF" + rows.join("\r\n")],
+        { type: "text/csv;charset=utf-8;" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "tarot-reader-sessions.csv";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      setStatus(
+        $("dashboard-status"),
+        `Exported ${sessions.length} filtered session(s) to CSV.`,
+        "success"
+      );
+    });
+
+    /* ------------------------- User engagement insights ------------------------- */
+
+    function getReadingDate(reading) {
+      const value =
+        reading?.created_at ||
+        reading?.timestamp ||
+        reading?.date;
+
+      if (!value) return null;
+
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function getEngagementStatus(lastActivity, now = new Date()) {
+      if (!lastActivity) {
+        return {
+          label: "No activity",
+          style: "bg-slate-100 text-slate-700"
+        };
+      }
+
+      const daysInactive = Math.floor(
+        (now.getTime() - lastActivity.getTime()) / 86400000
+      );
+
+      if (daysInactive <= 7) {
+        return {
+          label: "Active",
+          style: "bg-emerald-100 text-emerald-800"
+        };
+      }
+
+      if (daysInactive <= 30) {
+        return {
+          label: "At risk",
+          style: "bg-amber-100 text-amber-800"
+        };
+      }
+
+      return {
+        label: "Inactive",
+        style: "bg-rose-100 text-rose-800"
+      };
+    }
+
+    function extractClientReadings(payload) {
+      if (Array.isArray(payload)) return payload;
+      if (Array.isArray(payload?.readings)) return payload.readings;
+      if (Array.isArray(payload?.sessions)) return payload.sessions;
+      if (Array.isArray(payload?.data)) return payload.data;
+      return [];
+    }
+
+    async function loadUserEngagement() {
+      const table = $("engagement-clients-table");
+      const breakdown = $("engagement-type-breakdown");
+      const statusElement = $("engagement-status");
+
+      if (!workspaceAllowed) return;
+
+      table.replaceChildren();
+      breakdown.replaceChildren();
+      statusElement.textContent = "Loading client engagement...";
+
+      try {
+        const clientsResponse = await fetch(
+          `${API_BASE}/tarot-reader/clients`,
+          { headers: authHeaders() }
+        );
+
+        const clientsData = await readJsonSafely(clientsResponse);
+
+        if (!clientsResponse.ok) {
+          throw new Error(
+            getErrorMessage(
+              clientsData,
+              `Could not load clients (${clientsResponse.status})`
+            )
+          );
+        }
+
+        const clients = Array.isArray(clientsData.clients)
+          ? clientsData.clients
+          : [];
+
+        const now = new Date();
+        const sevenDaysAgo = new Date(
+          now.getTime() - 7 * 86400000
+        );
+
+        let readingsLast7Days = 0;
+        let activeClientsLast7Days = 0;
+        let clientsToReconnect = 0;
+
+        const readingTypes = new Map();
+        const summaries = [];
+
+        for (const client of clients) {
+          const clientId = client.client_id || client.id;
+          if (!clientId) continue;
+
+          let readings;
+
+          try {
+            const response = await fetch(
+              `${API_BASE}/tarot-reader/clients/` +
+              `${encodeURIComponent(clientId)}/readings`,
+              { headers: authHeaders() }
+            );
+
+            const payload = await readJsonSafely(response);
+
+            if (!response.ok) {
+              throw new Error(
+                getErrorMessage(
+                  payload,
+                  `Reading history failed (${response.status})`
+                )
+              );
+            }
+
+            readings = extractClientReadings(payload);
+          } catch (error) {
+            console.error(
+              `Could not load readings for client ${clientId}:`,
+              error
+            );
+
+            summaries.push({
+              clientId,
+              label: client.client_email || client.email || clientId,
+              readings: null,
+              lastActivity: null,
+              engagement: {
+                label: "Unavailable",
+                style: "bg-slate-100 text-slate-700"
+              },
+              unavailable: true
+            });
+
+            continue;
+          }
+
+          const datedReadings = readings
+            .map(reading => ({
+              reading,
+              date: getReadingDate(reading)
+            }))
+            .filter(item => item.date !== null)
+            .sort((a, b) => b.date - a.date);
+
+          const lastActivity = datedReadings[0]?.date || null;
+          const engagement = getEngagementStatus(lastActivity, now);
+
+          if (lastActivity && lastActivity >= sevenDaysAgo) {
+            activeClientsLast7Days++;
+          }
+
+          if (
+            engagement.label === "At risk" ||
+            engagement.label === "Inactive" ||
+            engagement.label === "No activity"
+          ) {
+            clientsToReconnect++;
+          }
+
+          for (const item of datedReadings) {
+            if (item.date >= sevenDaysAgo && item.date <= now) {
+              readingsLast7Days++;
+            }
+
+            const type = String(
+              item.reading.reading_type ||
+              item.reading.type ||
+              "Unknown"
+            ).replaceAll("_", " ");
+
+            readingTypes.set(
+              type,
+              (readingTypes.get(type) || 0) + 1
+            );
+          }
+
+          summaries.push({
+            clientId,
+            label: client.client_email || client.email || clientId,
+            readings: readings.length,
+            lastActivity,
+            engagement,
+            unavailable: false
+          });
+        }
+
+        $("engagement-readings-7d").textContent =
+          readingsLast7Days;
+        $("engagement-active-7d").textContent =
+          activeClientsLast7Days;
+        $("engagement-reconnect").textContent =
+          clientsToReconnect;
+        $("engagement-types").textContent =
+          readingTypes.size;
+
+        summaries.sort((a, b) =>
+          (b.lastActivity?.getTime() || 0) -
+          (a.lastActivity?.getTime() || 0)
+        );
+
+        if (!summaries.length) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+
+          cell.colSpan = 4;
+          cell.className = "px-4 py-8 text-center text-slate-500";
+          cell.textContent = "No assigned clients found.";
+
+          row.appendChild(cell);
+          table.appendChild(row);
+        }
+
+        for (const summary of summaries) {
+          const row = document.createElement("tr");
+          row.className =
+            "border-b border-slate-100 last:border-0";
+
+          createCell(row, summary.label);
+
+          createCell(
+            row,
+            summary.readings === null
+              ? "Unavailable"
+              : summary.readings
+          );
+
+          createCell(
+            row,
+            summary.unavailable
+              ? "Could not load"
+              : summary.lastActivity
+                ? displayDate(summary.lastActivity.toISOString())
+                : "No saved readings"
+          );
+
+          const statusCell = document.createElement("td");
+          statusCell.className = "px-4 py-3";
+
+          const badge = document.createElement("span");
+          badge.className =
+            `inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${summary.engagement.style}`;
+          badge.textContent = summary.engagement.label;
+
+          statusCell.appendChild(badge);
+          row.appendChild(statusCell);
+          table.appendChild(row);
+        }
+
+        const sortedTypes = [...readingTypes.entries()]
+          .sort((a, b) => b[1] - a[1]);
+
+        if (!sortedTypes.length) {
+          const empty = document.createElement("p");
+          empty.className = "text-sm text-slate-500";
+          empty.textContent = "No dated saved readings were found.";
+          breakdown.appendChild(empty);
+        } else {
+          const maxCount = Math.max(
+            ...sortedTypes.map(([, count]) => count),
+            1
+          );
+
+          for (const [type, count] of sortedTypes) {
+            const wrapper = document.createElement("div");
+
+            const line = document.createElement("div");
+            line.className =
+              "flex justify-between gap-3 text-sm mb-2";
+
+            const label = document.createElement("span");
+            label.className =
+              "font-medium text-slate-700 capitalize";
+            label.textContent = type;
+
+            const number = document.createElement("span");
+            number.className = "text-slate-500";
+            number.textContent = String(count);
+
+            line.append(label, number);
+
+            const track = document.createElement("div");
+            track.className =
+              "h-2.5 rounded-full bg-violet-100 overflow-hidden";
+
+            const fill = document.createElement("div");
+            fill.className =
+              "h-full rounded-full bg-violet-600";
+            fill.style.width =
+              `${(count / maxCount) * 100}%`;
+
+            track.appendChild(fill);
+            wrapper.append(line, track);
+            breakdown.appendChild(wrapper);
+          }
+        }
+
+        statusElement.textContent =
+          `Loaded engagement data for ${summaries.length} assigned client(s). ` +
+          "Active: within 7 days; At risk: 8–30 days; Inactive: over 30 days.";
+
+        statusElement.className = "text-sm text-slate-500 mt-5";
+
+      } catch (error) {
+        console.error("Engagement insights error:", error);
+
+        statusElement.textContent =
+          `Could not load engagement insights: ${error.message}`;
+        statusElement.className = "text-sm text-rose-600 mt-5";
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 4;
+        cell.className =
+          "px-4 py-8 text-center text-rose-600";
+        cell.textContent =
+          "Engagement data could not be loaded.";
+
+        row.appendChild(cell);
+        table.appendChild(row);
+      }
+    }
+
+    /* ------------------------- Report management ------------------------- */
+
+    function appendDetailBlock(container, title, value) {
+      if (value === undefined || value === null || value === "") return;
+
+      const section = document.createElement("section");
+      section.className =
+        "detail-block rounded-2xl bg-white border border-slate-100 p-5 sm:p-7";
+
+      const heading = document.createElement("h3");
+      heading.className = "text-lg font-bold text-slate-900";
+      heading.textContent = title;
+
+      const content = document.createElement("div");
+      content.className =
+        "mt-3 text-sm leading-7 text-slate-700 whitespace-pre-wrap";
+
+      if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+      ) {
+        content.textContent = String(value);
+      } else {
+        content.textContent = JSON.stringify(value, null, 2);
+        content.classList.add("font-mono", "text-xs", "overflow-x-auto");
+      }
+
+      section.append(heading, content);
+      container.appendChild(section);
+    }
+
+    function renderTextList(container, title, items) {
+      if (!Array.isArray(items) || !items.length) return;
+
+      const section = document.createElement("section");
+      section.className =
+        "rounded-2xl bg-white border border-slate-100 p-5 sm:p-7";
+
+      const heading = document.createElement("h3");
+      heading.className = "text-lg font-bold text-slate-900 mb-4";
+      heading.textContent = title;
+
+      const list = document.createElement("ol");
+      list.className = "space-y-3 list-decimal list-inside";
+
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.className =
+          "rounded-xl bg-violet-50 p-4 text-sm leading-6 text-slate-700";
+
+        li.textContent = typeof item === "string"
+          ? item
+          : item.title || item.action || item.text || JSON.stringify(item);
+
+        list.appendChild(li);
+      });
+
+      section.append(heading, list);
+      container.appendChild(section);
+    }
+
+    function renderTrendCards(container, trends) {
+      if (!Array.isArray(trends) || !trends.length) return;
+
+      const section = document.createElement("section");
+      section.className =
+        "rounded-2xl bg-white border border-slate-100 p-5 sm:p-7";
+
+      const heading = document.createElement("h3");
+      heading.className = "text-xl font-bold mb-4";
+      heading.textContent = "Life trends";
+
+      const grid = document.createElement("div");
+      grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+
+      trends.forEach(trend => {
+        const card = document.createElement("article");
+        card.className = "rounded-xl border border-violet-100 p-4";
+
+        const title = document.createElement("h4");
+        title.className = "font-bold text-violet-900";
+        title.textContent = trend.area || "Life trend";
+
+        const score = document.createElement("p");
+        score.className = "text-sm font-semibold text-violet-700 mt-2";
+        score.textContent = trend.trend_score == null
+          ? "Trend score unavailable"
+          : `Trend score: ${Number(trend.trend_score).toFixed(1)} / 100`;
+
+        card.append(title, score);
+
+        if (trend.description) {
+          const description = document.createElement("p");
+          description.className = "text-sm text-slate-600 mt-3 leading-6";
+          description.textContent = trend.description;
+          card.appendChild(description);
+        }
+
+        if (trend.interpretation) {
+          const interpretation = document.createElement("p");
+          interpretation.className = "text-sm text-slate-700 mt-3 leading-6";
+          interpretation.textContent = trend.interpretation;
+          card.appendChild(interpretation);
+        }
+
+        grid.appendChild(card);
+      });
+
+      section.append(heading, grid);
+      container.appendChild(section);
+    }
+
+    function renderOpportunityCards(container, opportunities) {
+      if (!Array.isArray(opportunities) || !opportunities.length) return;
+
+      const section = document.createElement("section");
+      section.className =
+        "rounded-2xl bg-white border border-slate-100 p-5 sm:p-7";
+
+      const heading = document.createElement("h3");
+      heading.className = "text-xl font-bold mb-4";
+      heading.textContent = "Recommended opportunities";
+
+      const list = document.createElement("div");
+      list.className = "space-y-3";
+
+      opportunities.forEach(item => {
+        const card = document.createElement("article");
+        card.className =
+          "rounded-xl bg-slate-50 border border-slate-100 p-4";
+
+        const title = document.createElement("h4");
+        title.className = "font-semibold text-slate-900";
+        title.textContent = item.title || "Opportunity";
+
+        const category = document.createElement("p");
+        category.className = "text-xs text-violet-700 font-semibold mt-1";
+        category.textContent = item.category || "";
+
+        const action = document.createElement("p");
+        action.className = "text-sm leading-6 text-slate-600 mt-2";
+        action.textContent = item.action || "";
+
+        card.append(title, category, action);
+        list.appendChild(card);
+      });
+
+      section.append(heading, list);
+      container.appendChild(section);
+    }
+
+    function renderReflectionCards(container, areas) {
+      if (!Array.isArray(areas) || !areas.length) return;
+
+      const section = document.createElement("section");
+      section.className =
+        "rounded-2xl bg-white border border-slate-100 p-5 sm:p-7";
+
+      const heading = document.createElement("h3");
+      heading.className = "text-lg font-bold mb-4";
+      heading.textContent = "Reflection prompts";
+      section.appendChild(heading);
+
+      areas.forEach(area => {
+        const card = document.createElement("div");
+        card.className = "rounded-xl bg-amber-50 p-4 mb-3";
+
+        const title = document.createElement("h4");
+        title.className = "font-semibold text-amber-900";
+        title.textContent = area.area || "Reflection";
+
+        const prompt = document.createElement("p");
+        prompt.className = "text-sm text-slate-700 mt-2 leading-6";
+        prompt.textContent = area.prompt || "";
+
+        card.append(title, prompt);
+        section.appendChild(card);
+      });
+
+      container.appendChild(section);
+    }
+
+
+    function renderSavedReading(data) {
+      const reading = data?.reading || data || {};
+      const analysis = reading.analysis_data || reading.analysis || {};
+      const report = data?.report || reading?.report || null;
+      const container = $("detail-report");
+
+      container.replaceChildren();
+
+      $("detail-reading-meta").textContent =
+        `ID: ${reading.reading_id || reading.id || "—"} · ` +
+        `Type: ${reading.reading_type || "—"} · ` +
+        `Created: ${displayDate(reading.created_at)}`;
+
+      // 1. Saved report details.
+      if (report) {
+        appendDetailBlock(
+          container,
+          "Report",
+          report.report_title || report.title || "Saved report"
+        );
+
+        const reportSummary =
+          report.report_summary ||
+          report.summary ||
+          report.content ||
+          "";
+
+        if (reportSummary) {
+          appendDetailBlock(
+            container,
+            "Report summary",
+            reportSummary
+          );
+        }
+
+        if (report.actionable_steps) {
+          let steps = report.actionable_steps;
+
+          if (typeof steps === "string") {
+            try {
+              const parsed = JSON.parse(steps);
+              steps = Array.isArray(parsed) ? parsed : [steps];
+            } catch {
+              steps = [steps];
+            }
+          }
+
+          if (!Array.isArray(steps)) steps = [steps];
+
+          renderTextList(container, "Actionable steps", steps);
+        }
+      }
+
+      const synthesis = analysis.synthesis || {};
+      const lifeData = analysis.life_trends || {};
+      const evidence = lifeData.evidence || {};
+
+      const narrative =
+        synthesis.synthesized_reading ||
+        synthesis.narrative ||
+        synthesis.ai_interpretation ||
+        synthesis.interpretation ||
+        "";
+
+      if (narrative && narrative !== report?.report_summary) {
+        appendDetailBlock(
+          container,
+          "Synthesized interpretation",
+          narrative
+        );
+      }
+
+      // 2. Palmistry analysis.
+      // Supports both the existing composite-reading structure and
+      // the actual saved PALMISTRY response structure.
+      const palm =
+        analysis.palmistry ||
+        analysis.palm_data ||
+        analysis.palm ||
+        evidence.palm ||
+        null;
+
+      const palmInterpretation =
+        palm?.interpretation ||
+        analysis.interpretation ||
+        {};
+
+      const palmText = typeof palm === "string"
+        ? palm
+        : palm?.interpretation_text ||
+        palm?.text ||
+        "";
+
+      if (palmText) {
+        appendDetailBlock(container, "Palm analysis", palmText);
+      }
+
+      // Hand type interpretation.
+      const handType = palmInterpretation.hand_type;
+
+      if (handType) {
+        const handTypeText =
+          typeof handType === "string"
+            ? handType
+            : handType.interpretation ||
+            handType.element ||
+            "";
+
+        if (handTypeText) {
+          appendDetailBlock(
+            container,
+            "Hand type interpretation",
+            handTypeText
+          );
+        }
+      }
+
+      // Major palm lines: heart, head, life, fate, and sun.
+      const majorLines = palmInterpretation.major_lines || {};
+
+      const lineLabels = {
+        heart: "Heart line",
+        head: "Head line",
+        life: "Life line",
+        fate: "Fate line",
+        sun: "Sun line",
+        apollo: "Sun line (Apollo)"
+      };
+
+      for (const [key, line] of Object.entries(majorLines)) {
+        if (!line || typeof line !== "object") continue;
+
+        const label =
+          lineLabels[key] ||
+          key.replace(/_/g, " ").replace(/\b\w/g, char =>
+            char.toUpperCase()
+          );
+
+        if (line.interpretation) {
+          appendDetailBlock(
+            container,
+            label,
+            line.interpretation
+          );
+        }
+
+        if (line.theme) {
+          appendDetailBlock(
+            container,
+            `${label} theme`,
+            line.theme
+          );
+        }
+
+        if (line.evidence_level) {
+          appendDetailBlock(
+            container,
+            `${label} evidence`,
+            line.evidence_level
+          );
+        }
+      }
+
+      // Mount interpretations.
+      const mounts = palmInterpretation.mounts || {};
+
+      for (const [key, mount] of Object.entries(mounts)) {
+        if (!mount || typeof mount !== "object") continue;
+
+        const label =
+          mount.name ||
+          `${key.charAt(0).toUpperCase()}${key.slice(1)} mount`;
+
+        if (mount.interpretation) {
+          appendDetailBlock(
+            container,
+            label,
+            mount.interpretation
+          );
+        } else if (mount.significance) {
+          appendDetailBlock(
+            container,
+            label,
+            mount.significance
+          );
+        }
+      }
+
+      // Use the saved Palmistry disclaimer if present.
+      if (palmInterpretation.disclaimer) {
+        appendDetailBlock(
+          container,
+          "Palmistry disclaimer",
+          palmInterpretation.disclaimer
+        );
+      }
+
+      // 3. Tarot analysis and saved cards.
+      const tarot =
+        analysis.tarot ||
+        analysis.tarot_data ||
+        evidence.tarot ||
+        {};
+
+      const cards = extractCards({
+        tarot,
+        cards: analysis.cards,
+        analysis_data: analysis
+      });
+
+      if (cards.length) {
+        const heading = document.createElement("h3");
+        heading.className = "text-xl font-bold";
+        heading.textContent = "Saved tarot cards";
+        container.appendChild(heading);
+
+        const cardGrid = document.createElement("div");
+        cardGrid.className =
+          "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5";
+
+        container.appendChild(cardGrid);
+        renderCardsInto(cards, cardGrid);
+      }
+
+      // 4. Recommendations and actionable advice.
+      const recommendationSource =
+        synthesis.actionable_advice ??
+        synthesis.recommendations ??
+        analysis.actionable_advice ??
+        analysis.recommendations ??
+        lifeData.recommendations?.text ??
+        null;
+
+      if (Array.isArray(recommendationSource)) {
+        renderTextList(
+          container,
+          "Recommendations and next steps",
+          recommendationSource
+        );
+      } else if (
+        typeof recommendationSource === "string" &&
+        recommendationSource.trim()
+      ) {
+        appendDetailBlock(
+          container,
+          "Recommendations and next steps",
+          recommendationSource
+        );
+      }
+
+      // 5. Life trends, opportunities, and reflection areas.
+      renderTrendCards(container, lifeData.life_trends || []);
+      renderOpportunityCards(container, lifeData.opportunities || []);
+      renderReflectionCards(container, lifeData.reflection_areas || []);
+
+      if (lifeData.trend_summary) {
+        appendDetailBlock(
+          container,
+          "Life trend summary",
+          lifeData.trend_summary
+        );
+      }
+
+      if (lifeData.disclaimer) {
+        appendDetailBlock(
+          container,
+          "Important note",
+          lifeData.disclaimer
+        );
+      }
+
+      // 6. Personality insights.
+      const personality =
+        evidence.personality || analysis.personality;
+
+      const personalityText = typeof personality === "string"
+        ? personality
+        : personality?.interpretation ||
+        personality?.summary ||
+        "";
+
+      if (personalityText) {
+        appendDetailBlock(
+          container,
+          "Personality insights",
+          personalityText
+        );
+      }
+
+      // 7. Fallback only when no readable section was rendered.
+      if (!container.children.length) {
+        appendDetailBlock(
+          container,
+          "Saved analysis",
+          "No readable interpretation text was found in this reading."
+        );
+      }
+
+      $("detail-raw").textContent = JSON.stringify(data, null, 2);
+      $("reading-details-section").classList.remove("hidden");
+
+      $("reading-details-section").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+
+    async function openReadingDetails(clientId, readingId) {
+      if (!workspaceAllowed) {
+        setStatus(
+          $("dashboard-status"),
+          "Workspace access is required.",
+          "error"
+        );
+        return;
+      }
+
+      setStatus($("dashboard-status"), "Loading saved reading details...");
+
+      try {
+        const url =
+          `${API_BASE}/tarot-reader/clients/${encodeURIComponent(clientId)}` +
+          `/readings/${encodeURIComponent(readingId)}`;
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: authHeaders()
+        });
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(
+              data,
+              `Could not load reading (${response.status})`
+            )
+          );
+        }
+
+        lastSavedReading = data;
+        renderSavedReading(data);
+
+        setStatus(
+          $("dashboard-status"),
+          "Saved reading loaded successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Reading details failed:", error);
+        setStatus(
+          $("dashboard-status"),
+          `Could not load reading details: ${error.message}`,
+          "error"
+        );
+      }
+    }
+
+    /* ------------------------- Consultation bookings ------------------------- */
+
+    function renderConsultationBookings(bookings) {
+      const tbody = $("bookings-table");
+      tbody.replaceChildren();
+
+      if (!bookings.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 7;
+        cell.className = "px-4 py-8 text-center text-slate-500";
+        cell.textContent = "You have no consultation bookings yet.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+        return;
+      }
+
+      bookings.forEach(booking => {
+        const row = document.createElement("tr");
+        row.className = "border-b border-slate-100 last:border-0";
+
+        createCell(row, booking.id);
+        createCell(row, booking.client_id);
+        createCell(row, displayDate(booking.scheduled_at));
+        createCell(row, booking.consultation_mode);
+        createCell(row, `${booking.duration_minutes ?? "—"} minutes`);
+        createCell(row, booking.status);
+
+        const actions = document.createElement("td");
+        actions.className = "px-4 py-3";
+
+        if (String(booking.status || "").toUpperCase() === "PENDING") {
+          const confirmButton = document.createElement("button");
+          confirmButton.type = "button";
+          confirmButton.textContent = "Confirm";
+          confirmButton.className =
+            "px-3 py-2 mr-2 mb-1 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700";
+
+          confirmButton.addEventListener("click", () =>
+            respondToConsultationBooking(booking.id, "CONFIRMED", confirmButton)
+          );
+
+          const rejectButton = document.createElement("button");
+          rejectButton.type = "button";
+          rejectButton.textContent = "Reject";
+          rejectButton.className =
+            "px-3 py-2 mb-1 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700";
+
+          rejectButton.addEventListener("click", () =>
+            respondToConsultationBooking(booking.id, "REJECTED", rejectButton)
+          );
+
+          actions.append(confirmButton, rejectButton);
+
+        } else if (
+          String(booking.status || "").toUpperCase() === "CONFIRMED" &&
+          String(booking.consultation_mode || "").toUpperCase() === "CHAT"
+        ) {
+          const chatButton = document.createElement("button");
+          chatButton.type = "button";
+          chatButton.textContent = "Open chat";
+          chatButton.className =
+            "px-3 py-2 rounded-lg bg-violet-700 text-white text-xs font-semibold hover:bg-violet-800";
+
+          chatButton.addEventListener("click", () => {
+            openTarotReaderChat(booking.id);
+          });
+
+          actions.appendChild(chatButton);
+        } else {
+          const label = document.createElement("span");
+          label.className = "text-xs text-slate-500";
+          label.textContent = "No action available";
+          actions.appendChild(label);
+        }
+
+
+        row.appendChild(actions);
+        tbody.appendChild(row);
+      });
+    }
+
+    async function loadConsultationBookings() {
+      const status = $("bookings-status");
+      const tbody = $("bookings-table");
+
+      if (!workspaceAllowed) {
+        setStatus(status, "Workspace access is required.", "error");
+        return;
+      }
+
+      setStatus(status, "Loading consultation bookings...");
+      const refreshButton = $("refresh-bookings");
+      refreshButton.disabled = true;
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/consultation-hub/bookings/me`,
+          {
+            method: "GET",
+            headers: authHeaders()
+          }
+        );
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(data, `Could not load bookings (${response.status})`)
+          );
+        }
+
+        const bookings = Array.isArray(data)
+          ? data
+          : data.bookings || data.items || data.results || [];
+
+        renderConsultationBookings(bookings);
+
+        setStatus(
+          status,
+          `${bookings.length} booking(s) loaded.`,
+          "success"
+        );
+      } catch (error) {
+        console.error("Loading consultation bookings failed:", error);
+
+        tbody.replaceChildren();
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 7;
+        cell.className = "px-4 py-8 text-center text-rose-600";
+        cell.textContent = "Unable to load bookings. Please try again.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+
+        setStatus(
+          status,
+          `Could not load bookings: ${error.message}`,
+          "error"
+        );
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    async function respondToConsultationBooking(bookingId, action, button) {
+      if (!workspaceAllowed) {
+        setStatus($("bookings-status"), "Workspace access is required.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      setStatus(
+        $("bookings-status"),
+        `${action === "CONFIRMED" ? "Confirming" : "Rejecting"} booking...`
+      );
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/consultation-hub/bookings/${encodeURIComponent(bookingId)}/respond`,
+          {
+            method: "PATCH",
+            headers: {
+              ...authHeaders(),
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ action })
+          }
+        );
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(data, `Booking update failed (${response.status})`)
+          );
+        }
+
+        setStatus(
+          $("bookings-status"),
+          action === "CONFIRMED"
+            ? "Booking confirmed successfully."
+            : "Booking rejected successfully.",
+          "success"
+        );
+
+        await loadConsultationBookings();
+      } catch (error) {
+        console.error("Booking response failed:", error);
+        setStatus(
+          $("bookings-status"),
+          `Could not update booking: ${error.message}`,
+          "error"
+        );
+        button.disabled = false;
+      }
+    }
+
+    $("refresh-bookings").addEventListener(
+      "click",
+      loadConsultationBookings
+    );
+
+
+    $("close-details").addEventListener("click", () => {
+      $("reading-details-section").classList.add("hidden");
+      lastSavedReading = null;
+    });
+
+    $("print-report").addEventListener("click", () => window.print());
+
+    /* ------------------------- Draw a new tarot reading ------------------------- */
+
+    $("draw-btn").addEventListener("click", async () => {
+      if (!workspaceAllowed) {
+        setStatus(
+          $("reading-status"),
+          "Workspace access is required.",
+          "error"
+        );
+        return;
+      }
+
+      const button = $("draw-btn");
+      const spread = $("spread-type").value;
+
+      button.disabled = true;
+      button.textContent = "Drawing cards...";
+
+      setStatus($("reading-status"), "Requesting your tarot reading...");
+      $("cards-grid").replaceChildren();
+      $("interpretation-section").classList.add("hidden");
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/tarot/draw?spread_type=${encodeURIComponent(spread)}`,
+          {
+            method: "POST",
+            headers: authHeaders()
+          }
+        );
+
+        const data = await readJsonSafely(response);
+
+        if (!response.ok) {
+          throw new Error(
+            getErrorMessage(data, `Tarot request failed (${response.status})`)
+          );
+        }
+
+        const cards = extractCards(data);
+
+        renderCardsInto(cards, $("cards-grid"));
+        $("interpretation").textContent = extractInterpretation(data);
+        $("raw-response").textContent = JSON.stringify(data, null, 2);
+        $("interpretation-section").classList.remove("hidden");
+
+        setStatus(
+          $("reading-status"),
+          `Reading completed. ${cards.length} card(s) returned.`,
+          "success"
+        );
+
+        await loadReaderDashboard();
+
+      } catch (error) {
+        console.error("Tarot draw failed:", error);
+        setStatus(
+          $("reading-status"),
+          `Could not draw cards: ${error.message}`,
+          "error"
+        );
+      } finally {
+        button.disabled = !workspaceAllowed;
+        button.innerHTML =
+          '<i data-lucide="sparkles" class="inline w-4 h-4 mr-1"></i>Draw cards';
+
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+
+    $("clear-btn").addEventListener("click", () => {
+      $("cards-grid").replaceChildren();
+      $("interpretation").textContent = "";
+      $("raw-response").textContent = "";
+      $("interpretation-section").classList.add("hidden");
+
+      setStatus($("reading-status"), "Reading results cleared.");
+    });
+
+    $("logout-btn").addEventListener("click", () => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      window.location.href = "login.html";
+    });
+
+    /* ------------------------- Initialize workspace ------------------------- */
+
+    async function initializeWorkspace() {
+      const allowed = await checkWorkspaceAccess();
+
+      await loadTarotCatalog();
+
+      if (allowed) {
+        await loadReaderDashboard();
+        await loadConsultationBookings();
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+
+    /* ------------------------- Tarot Reader Chat ------------------------- */
+
+    let tarotChatSocket = null;
+    let activeTarotChatBookingId = null;
+
+    // Decode the logged-in user's ID from the JWT.
+    function getTarotChatUserId() {
+      try {
+        const payloadPart = token.split(".")[1];
+        const base64 = payloadPart
+          .replace(/-/g, "+")
+          .replace(/_/g, "/");
+
+        const payload = JSON.parse(
+          decodeURIComponent(
+            atob(base64)
+              .split("")
+              .map(char =>
+                "%" + char.charCodeAt(0).toString(16).padStart(2, "0")
+              )
+              .join("")
+          )
+        );
+
+        return String(payload.sub || payload.user_id || "");
+      } catch (error) {
+        console.error("Could not read user ID from token:", error);
+        return "";
+      }
+    }
+
+    function setTarotChatStatus(message) {
+      el("tarot-chat-status").textContent = message;
+    }
+
+    function renderTarotChatMessage(item) {
+      if (!item || typeof item !== "object") return;
+
+      const container = el("tarot-chat-messages");
+
+      // Remove the empty/loading placeholder when the first message arrives.
+      const placeholder = container.querySelector("[data-chat-placeholder]");
+      if (placeholder) placeholder.remove();
+
+      const currentUserId = getTarotChatUserId();
+      const senderId = String(item.sender_id || "");
+      const isMine = currentUserId && senderId === currentUserId;
+
+      const row = document.createElement("div");
+      row.className = `flex ${isMine ? "justify-end" : "justify-start"}`;
+
+      const bubble = document.createElement("div");
+      bubble.className =
+        "max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm " +
+        (isMine
+          ? "bg-violet-700 text-white"
+          : "border border-slate-200 bg-white text-slate-800");
+
+      const content = document.createElement("p");
+      content.className = "whitespace-pre-wrap break-words";
+      content.textContent = String(item.message || "");
+
+      const timestamp = document.createElement("p");
+      timestamp.className = "mt-1 text-[10px] opacity-70";
+      timestamp.textContent = item.created_at
+        ? new Date(item.created_at).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+        : "";
+
+      bubble.append(content, timestamp);
+      row.appendChild(bubble);
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function loadTarotChatHistory(bookingId) {
+      const response = await fetch(
+        `${API_BASE}/consultation-hub/bookings/${encodeURIComponent(bookingId)}/chat/messages?limit=50`,
+        {
+          headers: {
+            ...authHeaders(),
+            Accept: "application/json"
+          }
+        }
+      );
+
+      const data = await readJsonSafely(response);
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || `Could not load chat history (${response.status}).`
+        );
+      }
+
+      const container = el("tarot-chat-messages");
+      container.replaceChildren();
+
+      const messages = Array.isArray(data)
+        ? data
+        : (data.messages || []);
+
+      if (!messages.length) {
+        const empty = document.createElement("p");
+        empty.dataset.chatPlaceholder = "true";
+        empty.className = "py-8 text-center text-sm text-slate-500";
+        empty.textContent = "No messages yet. Start the conversation.";
+        container.appendChild(empty);
+        return;
+      }
+
+      messages.forEach(renderTarotChatMessage);
+    }
+
+    function closeTarotReaderChat() {
+      if (tarotChatSocket) {
+        const socket = tarotChatSocket;
+        tarotChatSocket = null;
+        socket.close();
+      }
+
+      activeTarotChatBookingId = null;
+      el("tarot-chat-modal").classList.add("hidden");
+      setTarotChatStatus("Not connected");
+    }
+
+    async function openTarotReaderChat(bookingId) {
+      if (!token) {
+        showMessage("Please sign in again to use consultation chat.", true);
+        return;
+      }
+
+      closeTarotReaderChat();
+      activeTarotChatBookingId = bookingId;
+
+      el("tarot-chat-modal").classList.remove("hidden");
+      el("tarot-chat-messages").replaceChildren();
+      setTarotChatStatus("Loading messages...");
+
+      try {
+        await loadTarotChatHistory(bookingId);
+
+        // Do not connect if the user closed or switched the chat while loading.
+        if (activeTarotChatBookingId !== bookingId) return;
+
+        const wsBase = API_BASE.replace(/^http/, "ws");
+        const wsUrl =
+          `${wsBase}/consultation-hub/bookings/${encodeURIComponent(bookingId)}` +
+          `/chat/ws?token=${encodeURIComponent(token)}`;
+
+        const socket = new WebSocket(wsUrl);
+        tarotChatSocket = socket;
+
+
+        socket.addEventListener("open", () => {
+          if (tarotChatSocket === socket) {
+            setTarotChatStatus("Connected");
+          }
+        });
+
+        socket.addEventListener("message", event => {
+          if (tarotChatSocket !== socket) return;
+
+          try {
+            const data = JSON.parse(event.data);
+
+            if (data.type === "message" && data.message) {
+              renderTarotChatMessage(data);
+            }
+          } catch (error) {
+            console.error("Invalid chat response:", error);
+          }
+        });
+
+        socket.addEventListener("error", () => {
+          if (tarotChatSocket === socket) {
+            setTarotChatStatus("Connection error");
+          }
+        });
+
+        socket.addEventListener("close", () => {
+          if (tarotChatSocket === socket) {
+            tarotChatSocket = null;
+            setTarotChatStatus("Disconnected — reopen chat to reconnect");
+          }
+        });
+
+      } catch (error) {
+        console.error("Could not open tarot chat:", error);
+        setTarotChatStatus("Could not load chat");
+        showMessage(`Could not open chat: ${error.message}`, true);
+      }
+    }
+
+    // Close the chat modal.
+    el("tarot-chat-close").addEventListener("click", closeTarotReaderChat);
+
+    // Close when clicking the backdrop.
+    el("tarot-chat-modal").addEventListener("click", event => {
+      if (event.target === el("tarot-chat-modal")) {
+        closeTarotReaderChat();
+      }
+    });
+
+    // Send a message through the active WebSocket.
+    el("tarot-chat-form").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const input = el("tarot-chat-input");
+      const message = input.value.trim();
+
+      if (!message) return;
+
+      if (!tarotChatSocket || tarotChatSocket.readyState !== WebSocket.OPEN) {
+        setTarotChatStatus("Not connected — please reopen the chat");
+        return;
+      }
+
+      if (message.length > 2000) {
+        setTarotChatStatus("Message must be 2000 characters or fewer");
+        return;
+      }
+
+      try {
+        tarotChatSocket.send(message);
+        input.value = "";
+        input.focus();
+      } catch (error) {
+        console.error("Could not send chat message:", error);
+        setTarotChatStatus("Could not send message");
+      }
+    });
+
+
+    initializeWorkspace();
+  </script>
+</body>
+
+</html>

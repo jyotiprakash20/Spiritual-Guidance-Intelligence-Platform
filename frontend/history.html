@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mystic Insights - Reading History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAFAFC; }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700 antialiased">
+  <header class="bg-white border-b border-slate-100 px-5 md:px-8 py-3.5 flex items-center justify-between sticky top-0 z-40">
+    <a href="dashboard.html" class="flex items-center space-x-2.5">
+      <div class="w-8 h-8 text-[#5538EE] flex items-center justify-center"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
+      <span class="text-base font-extrabold text-slate-900 tracking-tight">Mystic Insights</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <span id="nav-username" class="text-xs font-semibold text-slate-800">Seeker</span>
+      <button onclick="logout()" class="w-8 h-8 rounded-full bg-[#5538EE] text-white flex items-center justify-center" title="Log out">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex min-h-[calc(100vh-61px)]">
+    <aside class="hidden md:flex w-64 bg-white border-r border-slate-100 flex-col justify-between p-4 shrink-0">
+      <nav class="space-y-1">
+        <a href="dashboard.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="home" class="w-4 h-4 text-slate-400"></i><span>Dashboard</span>
+        </a>
+        <a href="dashboard.html#palm" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="hand" class="w-4 h-4 text-slate-400"></i><span>Palm Analysis</span>
+        </a>
+        <a href="tarot.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i><span>Tarot Reading</span>
+        </a>
+        <a href="report.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50">
+          <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i><span>Reports</span>
+        </a>
+        <a href="history.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-[#5538EE] bg-[#F1EEFE]">
+          <i data-lucide="clock" class="w-4 h-4"></i><span>History</span>
+        </a>
+      </nav>
+      <div class="bg-[#F8F7FF] border border-purple-100 rounded-2xl p-4 text-center mt-6">
+        <div class="w-8 h-8 rounded-full bg-white text-[#5538EE] flex items-center justify-center mx-auto mb-2"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+        <h4 class="text-xs font-bold text-slate-900">Your Journey, In One Place</h4>
+        <p class="text-[10px] text-slate-500 mt-1 leading-snug">Review your past palmistry, Tarot, and combined readings.</p>
+      </div>
+    </aside>
+
+    <main class="flex-1 min-w-0 p-5 md:p-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#5538EE] mb-2">Your journey</p>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Reading History</h1>
+          <p class="text-sm text-slate-500 mt-2">Browse your saved Palmistry, Tarot, and composite readings.</p>
+        </div>
+        <button id="refresh-btn" onclick="loadHistory()" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#5538EE] hover:bg-[#482ed4] text-white text-xs font-bold rounded-xl shadow-sm">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh history
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white border border-slate-100 rounded-2xl p-5">
+          <div class="w-9 h-9 rounded-xl bg-purple-50 text-[#5538EE] flex items-center justify-center mb-3"><i data-lucide="history" class="w-4 h-4"></i></div>
+          <p class="text-xs text-slate-500">Total readings</p><p id="total-count" class="text-2xl font-extrabold text-slate-900 mt-1">—</p>
+        </div>
+        <div class="bg-white border border-slate-100 rounded-2xl p-5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3"><i data-lucide="hand" class="w-4 h-4"></i></div>
+          <p class="text-xs text-slate-500">Palmistry</p><p id="palm-count" class="text-2xl font-extrabold text-slate-900 mt-1">—</p>
+        </div>
+        <div class="bg-white border border-slate-100 rounded-2xl p-5">
+          <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3"><i data-lucide="layers" class="w-4 h-4"></i></div>
+          <p class="text-xs text-slate-500">Tarot & composite</p><p id="tarot-count" class="text-2xl font-extrabold text-slate-900 mt-1">—</p>
+        </div>
+      </div>
+
+      <section class="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-4 md:p-5 border-b border-slate-100 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-900">Past readings</h2>
+            <p id="result-count" class="text-[11px] text-slate-500 mt-1">Loading your saved readings…</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="search-input" type="search" placeholder="Search reading ID or type…" oninput="renderHistory()" class="w-full sm:w-56 px-3 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#5538EE]" />
+            <select id="type-filter" onchange="renderHistory()" class="px-3 py-2.5 border border-slate-200 rounded-xl text-xs bg-white outline-none focus:border-[#5538EE]">
+              <option value="ALL">All types</option>
+              <option value="PALMISTRY">Palmistry</option>
+              <option value="TAROT">Tarot</option>
+              <option value="SYNTHESIZED">Composite</option>
+            </select>
+          </div>
+        </div>
+        <div id="history-message" class="hidden m-4 rounded-xl px-4 py-3 text-xs"></div>
+        <div id="history-list" class="divide-y divide-slate-100">
+          <div class="p-8 text-center text-sm text-slate-400">Loading readings…</div>
+        </div>
+        <div class="p-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <p id="page-summary" class="text-[11px] text-slate-500">—</p>
+          <div class="flex gap-2">
+            <button id="prev-btn" onclick="changePage(-1)" class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-semibold disabled:opacity-40" disabled>Previous</button>
+            <button id="next-btn" onclick="changePage(1)" class="px-3 py-2 border border-slate-200 rounded-lg text-xs font-semibold disabled:opacity-40" disabled>Next</button>
+          </div>
+        </div>
+      </section>
+      <p class="text-[10px] text-slate-400 mt-4">Reading history is for personal reflection. Palmistry and Tarot interpretations are not scientific predictions.</p>
+    </main>
+  </div>
+
+<script>
+  const API_BASE = "http://127.0.0.1:8000/api/v1";
+  // If your backend uses a different route for the endpoint that returned
+  // { status: "success", count: ..., readings: [...] }, change this path.
+  const HISTORY_ENDPOINT = `${API_BASE}/readings/history`;
+  const PAGE_SIZE = 10;
+  let token = localStorage.getItem("access_token");
+  let allReadings = [];
+  let currentPage = 1;
+
+  lucide.createIcons();
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    if (!token) { location.href = "index.html"; return; }
+    await loadCurrentUser();
+    await loadHistory();
+  });
+
+  async function loadCurrentUser() {
+    try {
+      const res = await fetch(`${API_BASE}/users/me`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" }
+      });
+      if (res.status === 401) { logout(); return; }
+      if (!res.ok) return;
+      const me = await res.json();
+      document.getElementById("nav-username").textContent =
+        me?.profile?.full_name || me?.email?.split("@")[0] || "Seeker";
+    } catch (err) { console.warn("Could not load current user:", err); }
+  }
+
+  async function loadHistory() {
+    if (!token) { logout(); return; }
+    const button = document.getElementById("refresh-btn");
+    button.disabled = true;
+    showMessage("", "");
+    document.getElementById("history-list").innerHTML =
+      '<div class="p-8 text-center text-sm text-slate-400">Loading readings…</div>';
+
+    try {
+      const res = await fetch(HISTORY_ENDPOINT, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" }
+      });
+      let data;
+      try { data = await res.json(); }
+      catch { throw new Error(`Server returned HTTP ${res.status}. Check the history endpoint.`); }
+
+      if (res.status === 401 || res.status === 403) {
+        if (res.status === 401) { logout(); return; }
+        throw new Error(data?.detail || "You do not have permission to view this history.");
+      }
+      if (!res.ok) throw new Error(data?.detail || `Could not load history (HTTP ${res.status}).`);
+
+      const records = data?.readings ?? data?.items ?? data?.results;
+      if (!Array.isArray(records)) {
+        throw new Error("The API response does not contain a readings array. Check HISTORY_ENDPOINT and the response format.");
+      }
+      allReadings = records;
+      currentPage = 1;
+      updateStats();
+      renderHistory();
+    } catch (err) {
+      console.error("History load failed:", err);
+      document.getElementById("history-list").innerHTML = "";
+      showMessage(err.message || "Unable to load reading history.", "error");
+      document.getElementById("result-count").textContent = "History could not be loaded.";
+      document.getElementById("total-count").textContent = "—";
+      document.getElementById("palm-count").textContent = "—";
+      document.getElementById("tarot-count").textContent = "—";
+    } finally {
+      button.disabled = false;
+      lucide.createIcons();
+    }
+  }
+
+  function updateStats() {
+    const countType = type => allReadings.filter(r => String(r.reading_type || "").toUpperCase() === type).length;
+    document.getElementById("total-count").textContent = allReadings.length.toLocaleString();
+    document.getElementById("palm-count").textContent = countType("PALMISTRY").toLocaleString();
+    document.getElementById("tarot-count").textContent =
+      (countType("TAROT") + countType("SYNTHESIZED")).toLocaleString();
+  }
+
+  function getFilteredReadings() {
+    const type = document.getElementById("type-filter").value;
+    const query = document.getElementById("search-input").value.trim().toLowerCase();
+    return allReadings.filter(r => {
+      const readingType = String(r.reading_type || "").toUpperCase();
+      const matchesType = type === "ALL" || readingType === type;
+      const matchesSearch = !query ||
+        String(r.reading_id || "").toLowerCase().includes(query) ||
+        readingType.toLowerCase().includes(query);
+      return matchesType && matchesSearch;
+    });
+  }
+
+  function renderHistory() {
+    const filtered = getFilteredReadings();
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+    const list = document.getElementById("history-list");
+    list.innerHTML = "";
+    document.getElementById("result-count").textContent =
+      `${filtered.length.toLocaleString()} reading${filtered.length === 1 ? "" : "s"} found`;
+    document.getElementById("page-summary").textContent = filtered.length
+      ? `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, filtered.length)} of ${filtered.length}`
+      : "No readings to display";
+    document.getElementById("prev-btn").disabled = currentPage <= 1;
+    document.getElementById("next-btn").disabled = currentPage >= totalPages;
+
+    if (!pageItems.length) {
+      list.innerHTML = `<div class="p-10 text-center"><div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#5538EE] flex items-center justify-center mx-auto mb-3"><i data-lucide="search-x" class="w-5 h-5"></i></div><p class="text-sm font-bold text-slate-800">No readings found</p><p class="text-xs text-slate-500 mt-1">Try another filter or complete a new reading.</p></div>`;
+      lucide.createIcons();
+      return;
+    }
+
+    pageItems.forEach(reading => {
+      const type = String(reading.reading_type || "READING").toUpperCase();
+      const config = {
+        PALMISTRY: { label: "Palmistry", icon: "hand", color: "bg-emerald-50 text-emerald-700", desc: "Palm image analysis" },
+        TAROT: { label: "Tarot", icon: "layers", color: "bg-indigo-50 text-indigo-700", desc: "Tarot card reading" },
+        SYNTHESIZED: { label: "Composite", icon: "sparkles", color: "bg-purple-50 text-purple-700", desc: "Combined palmistry and Tarot reading" }
+      }[type] || { label: type.replaceAll("_", " "), icon: "book-open", color: "bg-slate-100 text-slate-700", desc: "Saved reading" };
+
+      const row = document.createElement("article");
+      row.className = "p-4 md:p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:bg-slate-50/70 transition";
+      const iconWrap = document.createElement("div");
+      iconWrap.className = "w-11 h-11 rounded-xl flex items-center justify-center shrink-0 " + config.color;
+      iconWrap.innerHTML = `<i data-lucide="${config.icon}" class="w-5 h-5"></i>`;
+
+      const info = document.createElement("div");
+      info.className = "flex-1 min-w-0";
+      const title = document.createElement("h3");
+      title.className = "text-sm font-bold text-slate-900";
+      title.textContent = config.label + " Reading";
+      const description = document.createElement("p");
+      description.className = "text-[11px] text-slate-500 mt-1";
+      description.textContent = config.desc;
+      const id = document.createElement("p");
+      id.className = "text-[10px] text-slate-400 mt-1 break-all";
+      id.textContent = "ID: " + (reading.reading_id || "Not provided");
+      info.append(title, description, id);
+
+      const meta = document.createElement("div");
+      meta.className = "sm:text-right shrink-0";
+      const date = document.createElement("p");
+      date.className = "text-xs font-semibold text-slate-700";
+      date.textContent = formatDate(reading.created_at);
+      const score = document.createElement("p");
+      score.className = "text-[11px] mt-1 " + (reading.insight_score == null ? "text-slate-400" : "font-bold text-[#5538EE]");
+      score.textContent = reading.insight_score == null ? "No insight score" : `Insight score: ${formatScore(reading.insight_score)}`;
+      meta.append(date, score);
+
+      row.append(iconWrap, info, meta);
+      list.appendChild(row);
+    });
+    lucide.createIcons();
+  }
+
+  function formatDate(value) {
+    if (!value) return "Date unavailable";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+
+  function formatScore(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? `${n.toFixed(2)}%` : String(value);
+  }
+
+  function changePage(direction) {
+    currentPage += direction;
+    renderHistory();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showMessage(message, type) {
+    const el = document.getElementById("history-message");
+    if (!message) { el.classList.add("hidden"); el.textContent = ""; return; }
+    el.className = "m-4 rounded-xl px-4 py-3 text-xs " +
+      (type === "error" ? "bg-rose-50 text-rose-700 border border-rose-100" : "bg-emerald-50 text-emerald-700 border border-emerald-100");
+    el.textContent = message;
+    el.classList.remove("hidden");
+  }
+
+  function logout() {
+    localStorage.removeItem("access_token");
+    location.href = "index.html";
+  }
+</script>
+</body>
+</html>

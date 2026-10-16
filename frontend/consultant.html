@@ -1,0 +1,3831 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+  <title>Spiritual Consultant Workspace</title>
+
+
+
+  <style>
+    :root {
+
+
+
+      --bg: #f7f6fb;
+      --surface: #fff;
+      --ink: #24213a;
+      --muted: #77758b;
+
+
+
+      --line: #e9e6f2;
+      --primary: #6d4aff;
+      --primary-dark: #5534df;
+
+
+
+      --soft: #f0ecff;
+      --green: #16835f;
+      --red: #c34258;
+      --amber: #9a6b13;
+
+
+
+      --shadow: 0 10px 35px rgba(45, 32, 91, .06);
+
+
+
+    }
+
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+
+
+    button {
+      cursor: pointer;
+    }
+
+
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+    }
+
+
+
+    aside {
+      background: #211b3a;
+      color: #fff;
+      padding: 28px 17px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      font-weight: 750;
+      letter-spacing: -.3px;
+    }
+
+
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #a998ff, #6d4aff);
+      font-size: 19px;
+    }
+
+
+
+    .brand small {
+      display: block;
+      color: #bcb6d5;
+      font-weight: 500;
+      letter-spacing: .4px;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+
+
+    .nav-label {
+      color: #a7a0c4;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+
+
+    .nav {
+      display: grid;
+      gap: 5px;
+    }
+
+
+
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: #d8d3e9;
+      text-align: left;
+      padding: 12px 13px;
+      border-radius: 11px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+
+
+    .nav button:hover,
+    .nav button.active {
+      background: #393052;
+      color: #fff;
+    }
+
+
+
+    .nav button.active {
+      box-shadow: inset 3px 0 #a998ff;
+    }
+
+
+
+    .nav-icon {
+      width: 20px;
+      text-align: center;
+    }
+
+
+
+    .aside-bottom {
+      margin-top: auto;
+      border-top: 1px solid #403954;
+      padding: 17px 8px 0;
+      color: #c5bfd9;
+      font-size: 12px;
+    }
+
+
+
+    main {
+      min-width: 0;
+      padding: 28px clamp(18px, 3vw, 42px) 48px;
+    }
+
+
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+
+
+    .eyebrow {
+      color: var(--primary);
+      font-weight: 750;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+
+
+    h1 {
+      font-size: clamp(25px, 3vw, 34px);
+      letter-spacing: -1px;
+      margin: 4px 0 5px;
+      line-height: 1.2;
+    }
+
+
+
+    h2 {
+      font-size: 19px;
+      letter-spacing: -.4px;
+      margin: 0;
+    }
+
+
+
+    h3 {
+      font-size: 15px;
+      margin: 0;
+    }
+
+
+
+    p {
+      margin: 5px 0 0;
+      color: var(--muted);
+    }
+
+
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+
+
+    .profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 11px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+
+
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--soft);
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+
+
+    .profile-chip strong {
+      display: block;
+      font-size: 12px;
+    }
+
+
+
+    .profile-chip small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 5px 14px #6d4aff26;
+    }
+
+
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+
+
+    .btn.secondary {
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+
+
+    .btn.danger {
+      background: #fff0f2;
+      color: var(--red);
+      box-shadow: none;
+    }
+
+
+
+    .btn.small {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+
+
+    .notice {
+      padding: 12px 15px;
+      border-radius: 12px;
+      margin: 0 0 18px;
+      display: none;
+    }
+
+
+
+    .notice.show {
+      display: block;
+    }
+
+
+
+    .notice.error {
+      background: #fff0f2;
+      color: #9c2f43;
+      border: 1px solid #f4cbd2;
+    }
+
+
+
+    .notice.success {
+      background: #eaf8f1;
+      color: #176c4d;
+      border: 1px solid #c6ebd9;
+    }
+
+
+
+    .notice.info {
+      background: #f0ecff;
+      color: #4c35aa;
+      border: 1px solid #ded5ff;
+    }
+
+
+
+    .page {
+      display: none;
+    }
+
+
+
+    .page.active {
+      display: block;
+    }
+
+
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin: 24px 0;
+    }
+
+
+
+    .stat,
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      box-shadow: var(--shadow);
+    }
+
+
+
+    .stat {
+      padding: 19px;
+    }
+
+
+
+    .stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+
+
+    .stat-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--soft);
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+
+
+    .stat-value {
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-top: 13px;
+    }
+
+
+
+    .stat-foot {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+      gap: 17px;
+    }
+
+
+
+    .panel {
+      padding: 21px;
+      min-width: 0;
+      margin-bottom: 17px;
+    }
+
+
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+
+
+    .muted {
+      color: var(--muted);
+    }
+
+
+
+    .activity-list,
+    .client-list,
+    .note-list {
+      display: grid;
+      gap: 10px;
+    }
+
+
+
+    .activity,
+    .client-row,
+    .note-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+
+
+    .activity-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border-radius: 11px;
+      background: var(--soft);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+    }
+
+
+
+    .activity strong,
+    .client-row strong,
+    .note-card strong {
+      display: block;
+      font-size: 13px;
+    }
+
+
+
+    .activity small,
+    .client-row small,
+    .note-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+
+
+    .spacer {
+      flex: 1;
+    }
+
+
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 99px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      background: #f0ecff;
+      color: #5534df;
+      white-space: nowrap;
+    }
+
+
+
+    .badge.green {
+      background: #e8f7ef;
+      color: #18754f;
+    }
+
+
+
+    .badge.amber {
+      background: #fff5db;
+      color: #8d6510;
+    }
+
+
+
+    .badge.red {
+      background: #fff0f2;
+      color: #a83247;
+    }
+
+
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 16px 0;
+    }
+
+
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+
+
+    label {
+      font-size: 12px;
+      font-weight: 750;
+      color: #514d68;
+    }
+
+
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #dedbea;
+      border-radius: 10px;
+      background: #fff;
+      padding: 11px 12px;
+      color: var(--ink);
+      outline: none;
+    }
+
+
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #9d8aff;
+      box-shadow: 0 0 0 3px #6d4aff15;
+    }
+
+
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+
+
+    .search {
+      max-width: 320px;
+    }
+
+
+
+    .empty {
+      padding: 30px 15px;
+      text-align: center;
+      border: 1px dashed #d9d4e8;
+      border-radius: 13px;
+      color: var(--muted);
+    }
+
+
+
+    .empty strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 550px;
+    }
+
+
+
+    th,
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 12px;
+    }
+
+
+
+    th {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: .8px;
+    }
+
+
+
+    td {
+      vertical-align: top;
+    }
+
+
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: #1b153a75;
+      padding: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+
+
+    .modal {
+      background: white;
+      width: min(600px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 25px 90px #17112d44;
+    }
+
+
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+
+
+    .close {
+      border: 0;
+      background: #f1eff7;
+      border-radius: 9px;
+      width: 34px;
+      height: 34px;
+      font-size: 20px;
+    }
+
+
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+
+
+    .bar-track {
+      height: 9px;
+      background: #efedf6;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 7px 0 15px;
+    }
+
+
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #9b87ff, #6d4aff);
+      border-radius: 99px;
+    }
+
+
+
+    .loading {
+      color: var(--muted);
+      padding: 20px 0;
+    }
+
+
+
+    .footnote {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+
+    @media (max-width: 720px) {
+      .app {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      aside {
+        padding: 13px;
+        gap: 12px;
+      }
+
+      .brand {
+        padding: 4px 6px;
+      }
+
+      .nav-label,
+      .aside-bottom {
+        display: none;
+      }
+
+      /* Updated for five navigation items, including Bookings */
+      .nav {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 4px;
+        width: 100%;
+      }
+
+      .nav button {
+        min-width: 0;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 9px 2px;
+        font-size: 10px;
+        flex-direction: column;
+        gap: 3px;
+        overflow-wrap: anywhere;
+      }
+
+      .nav-icon {
+        width: auto;
+        font-size: 17px;
+        flex-shrink: 0;
+      }
+
+      main {
+        min-width: 0;
+        padding: 20px 14px 35px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .profile-chip {
+        display: none;
+      }
+
+      .stats {
+        gap: 9px;
+      }
+
+      .stat {
+        padding: 14px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .panel-head {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+
+      .split {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .table-wrap {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+
+      /* Professional availability form */
+      #availability-form .field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      #availability-form .field label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+
+      #availability-form .field input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      #availability-form .field small {
+        display: block;
+        margin: 0;
+        color: #64748b;
+      }
+
+      #availability-status {
+        margin-top: 12px;
+      }
+
+    }
+  </style>
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+  <div class="app">
+
+
+
+    <aside>
+
+
+
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div>Inner Compass<small>Consultant workspace</small></div>
+      </div>
+
+
+
+      <div>
+
+
+
+        <div class="nav-label">Workspace</div>
+
+
+
+        <nav class="nav" aria-label="Workspace navigation">
+
+
+
+          <button class="active" data-page="overview"><span class="nav-icon">◈</span>Overview</button>
+
+
+
+          <button data-page="clients"><span class="nav-icon">♧</span>Clients</button>
+
+
+
+          <button data-page="notes"><span class="nav-icon">▤</span>Session notes</button>
+
+          <button data-page="bookings">
+            <span class="nav-icon">▣</span>Bookings
+          </button>
+
+          <button data-page="availability">
+            <span class="nav-icon">◉</span>Availability
+          </button>
+
+
+          <button data-page="analytics"><span class="nav-icon">⌁</span>Analytics</button>
+
+
+
+        </nav>
+
+
+
+      </div>
+
+
+
+      <div class="aside-bottom">Private consultant workspace<br>Access is controlled by your account role and client
+        assignments.</div>
+
+
+
+    </aside>
+
+
+
+    <main>
+
+
+
+      <header class="topbar">
+
+
+
+        <div>
+
+
+
+          <div class="eyebrow">Spiritual consultation</div>
+
+
+
+          <h1 id="page-title">Your overview</h1>
+
+
+
+          <p id="page-subtitle">A thoughtful view of your assigned clients and sessions.</p>
+
+
+
+        </div>
+
+
+
+        <div class="top-actions">
+
+
+
+          <div class="profile-chip">
+            <div class="avatar" id="avatar">SC</div>
+            <div><strong id="user-name">Consultant</strong><small>Spiritual Consultant</small></div>
+          </div>
+
+
+
+          <button class="btn secondary" id="logout-btn">Log out</button>
+
+
+
+        </div>
+
+
+
+      </header>
+
+
+
+      <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+
+
+      <section class="page active" id="page-overview">
+
+
+
+        <div class="stats">
+
+
+
+          <article class="stat">
+            <div class="stat-head">Active assigned clients <span class="stat-icon">♧</span></div>
+            <div class="stat-value" id="stat-clients">—</div>
+            <div class="stat-foot">Clients currently assigned to you</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Palmistry readings <span class="stat-icon">☼</span></div>
+            <div class="stat-value" id="stat-palm">—</div>
+            <div class="stat-foot">Across your active clients</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Tarot readings <span class="stat-icon">✧</span></div>
+            <div class="stat-value" id="stat-tarot">—</div>
+            <div class="stat-foot">Across your active clients</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Average insight score <span class="stat-icon">◉</span></div>
+            <div class="stat-value" id="stat-score">—</div>
+            <div class="stat-foot">Based on available scored readings</div>
+          </article>
+
+
+
+        </div>
+
+
+
+        <div class="grid-2">
+
+
+
+          <section class="panel">
+
+
+
+            <div class="panel-head">
+              <div>
+                <h2>Recent activity</h2>
+                <p>Latest activity returned by your workspace</p>
+              </div><span class="badge">Live data</span>
+            </div>
+
+
+
+            <div id="recent-activity" class="activity-list">
+              <div class="loading">Loading recent activity…</div>
+            </div>
+
+
+
+          </section>
+
+
+
+          <section class="panel">
+
+
+
+            <div class="panel-head">
+              <div>
+                <h2>Quick actions</h2>
+                <p>Continue your consultation workflow</p>
+              </div>
+            </div>
+
+
+
+            <div class="activity-list">
+
+
+
+              <div class="activity">
+                <div class="activity-icon">＋</div>
+                <div><strong>Assign a client</strong><small>Add a client using their account ID.</small></div><span
+                  class="spacer"></span><button class="btn small" id="quick-add-client">Add</button>
+              </div>
+
+
+
+              <div class="activity">
+                <div class="activity-icon">▤</div>
+                <div><strong>Record a session</strong><small>Save notes and follow-up actions.</small></div><span
+                  class="spacer"></span><button class="btn small" id="quick-add-note">Create</button>
+              </div>
+
+
+
+              <div class="activity">
+                <div class="activity-icon">⌁</div>
+                <div><strong>Review analytics</strong><small>Explore the available client reading metrics.</small></div>
+                <span class="spacer"></span><button class="btn secondary small" data-goto="analytics">View</button>
+              </div>
+              <div class="activity">
+                <div class="activity-icon">✓</div>
+                <div><strong>Record an outcome</strong><small>Capture client-reported follow-up.</small></div><span
+                  class="spacer"></span><button class="btn small" id="quick-add-outcome">Record</button>
+                <div< /div>
+
+
+
+              </div>
+
+
+
+              <p class="footnote">Insight scores are informational summaries, not scientifically validated predictions.
+              </p>
+
+
+
+          </section>
+
+
+
+        </div>
+
+
+
+      </section>
+
+
+
+      <section class="page" id="page-clients">
+
+
+
+        <section class="panel">
+
+
+
+          <div class="panel-head">
+            <div>
+              <h2>Your assigned clients</h2>
+              <p>Only clients actively assigned to your account are listed.</p>
+            </div><button class="btn" id="add-client-btn">＋ Assign client</button>
+          </div>
+
+
+
+          <div class="toolbar"><input class="search" id="client-search"
+              placeholder="Search by name, email, or client ID…" aria-label="Search clients"></div>
+
+
+
+          <div id="clients-container">
+            <div class="loading">Loading assigned clients…</div>
+          </div>
+
+
+
+        </section>
+
+
+
+      </section>
+
+
+
+      <section class="page" id="page-notes">
+
+
+
+        <section class="panel">
+
+
+
+          <div class="panel-head">
+            <div>
+              <h2>Consultation notes</h2>
+              <p>Keep session summaries and follow-up actions in one place.</p>
+            </div><button class="btn" id="add-note-btn">＋ New note</button>
+          </div>
+
+
+
+          <div class="toolbar">
+
+
+
+            <select id="notes-client-filter" aria-label="Filter notes by client">
+              <option value="">All assigned clients</option>
+            </select>
+
+
+
+            <select id="notes-status-filter" aria-label="Filter notes by status">
+              <option value="">All statuses</option>
+              <option>IN_PROGRESS</option>
+              <option>COMPLETED</option>
+              <option>ON_HOLD</option>
+            </select>
+
+
+
+          </div>
+
+
+
+          <div id="notes-container">
+            <div class="loading">Loading consultation notes…</div>
+          </div>
+
+
+
+        </section>
+
+
+
+      </section>
+
+      <section class="page" id="page-bookings">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Booking management</h2>
+              <p>Review and respond to incoming consultation requests.</p>
+            </div>
+            <button class="btn secondary" id="refresh-bookings">
+              Refresh bookings
+            </button>
+          </div>
+
+          <p id="bookings-status" role="status" aria-live="polite">
+            Bookings have not been loaded yet.
+          </p>
+
+          <div id="bookings-container" style="margin-top:16px">
+            <div class="loading">Loading bookings...</div>
+          </div>
+        </section>
+      </section>
+
+
+      <!-- Professional Availability -->
+      <section class="page" id="page-availability">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Professional availability</h2>
+              <p>Manage your online status and consultation preferences.</p>
+            </div>
+          </div>
+
+          <form id="availability-form">
+            <div class="field">
+              <label>
+                <input type="checkbox" id="availability-online">
+                Online
+              </label>
+              <small>Show your online status in the Consultation Hub.</small>
+            </div>
+
+            <div class="field">
+              <label>
+                <input type="checkbox" id="availability-accepting">
+                Accepting bookings
+              </label>
+              <small>Allow users to request new consultations.</small>
+            </div>
+
+            <div class="field">
+              <label>
+                <input type="checkbox" id="availability-chat">
+                Support Chat
+              </label>
+            </div>
+
+            <div class="field">
+              <label>
+                <input type="checkbox" id="availability-voice">
+                Support Voice calls
+              </label>
+            </div>
+
+            <div class="field">
+              <label>
+                <input type="checkbox" id="availability-video">
+                Support Video calls
+              </label>
+            </div>
+
+            <button class="btn" type="submit" id="save-availability">
+              Save availability
+            </button>
+
+            <p id="availability-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </section>
+
+
+      <section class="page" id="page-analytics">
+
+
+
+        <div class="stats">
+
+
+
+          <article class="stat">
+            <div class="stat-head">Palmistry <span class="stat-icon">☼</span></div>
+            <div class="stat-value" id="analytics-palm">—</div>
+            <div class="stat-foot">Assigned-client readings</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Tarot <span class="stat-icon">✧</span></div>
+            <div class="stat-value" id="analytics-tarot">—</div>
+            <div class="stat-foot">Assigned-client readings</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Synthesized <span class="stat-icon">✦</span></div>
+            <div class="stat-value" id="analytics-synth">—</div>
+            <div class="stat-foot">Combined readings</div>
+          </article>
+
+
+
+          <article class="stat">
+            <div class="stat-head">Average insight score <span class="stat-icon">◉</span></div>
+            <div class="stat-value" id="analytics-score">—</div>
+            <div class="stat-foot">Only where score data is available</div>
+          </article>
+
+
+
+        </div>
+
+
+
+        <section class="panel">
+
+
+
+          <div class="panel-head">
+            <div>
+              <h2>Analytics details</h2>
+              <p>Metrics supplied by the backend; unavailable fields are not fabricated.</p>
+            </div><button class="btn secondary" id="refresh-analytics">Refresh</button>
+          </div>
+
+
+
+          <div id="analytics-details">
+            <div class="loading">Loading analytics…</div>
+          </div>
+
+
+
+        </section>
+
+
+
+        <section class="panel" id="feedback-outcome-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Client feedback &amp; follow-up outcomes</h2>
+              <p>Review client ratings and consultant-recorded outcomes.</p>
+            </div>
+            <button class="btn secondary" id="refresh-effectiveness">Refresh</button>
+          </div>
+          <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:0 0 12px">
+            <article class="stat">
+              <div class="stat-head">Feedback records</div>
+              <div class="stat-value" id="effect-feedback-count">—</div>
+              <div class="stat-foot">Submitted by clients</div>
+            </article>
+            <article class="stat">
+              <div class="stat-head">Average rating</div>
+              <div class="stat-value" id="effect-average-rating">—</div>
+              <div class="stat-foot">Out of 5 stars</div>
+            </article>
+            <article class="stat">
+              <div class="stat-head">Recorded outcomes</div>
+              <div class="stat-value" id="effect-outcome-count">—</div>
+              <div class="stat-foot">Follow-up records</div>
+            </article>
+            <article class="stat">
+              <div class="stat-head">Helpful rate</div>
+              <div class="stat-value" id="effect-helpful-rate">—</div>
+              <div class="stat-foot">Excludes not-followed-up records</div>
+            </article>
+          </div>
+          <div class="grid-2">
+            <div>
+              <h3>Rating distribution</h3>
+              <div id="effect-rating-distribution" class="activity-list" style="margin-top:10px">
+                <div class="loading">Loading feedback…</div>
+              </div>
+            </div>
+            <div>
+              <h3>Outcome breakdown</h3>
+              <div id="effect-outcome-distribution" class="activity-list" style="margin-top:10px">
+                <div class="loading">Loading outcomes…</div>
+              </div>
+            </div>
+          </div>
+          <p class="footnote" id="effectiveness-disclaimer">Self-reported observations do not establish that guidance
+            caused an outcome.</p>
+        </section>
+
+        <p class="footnote">These analytics describe stored reading records. They should not be interpreted as proof
+          that spiritual guidance causes an outcome.</p>
+
+
+
+      </section>
+
+
+
+    </main>
+
+
+
+  </div>
+
+
+
+  <div class="modal-backdrop" id="client-modal" role="dialog" aria-modal="true" aria-labelledby="client-modal-title">
+
+
+
+    <div class="modal">
+
+
+
+      <div class="modal-head">
+        <div>
+          <h2 id="client-modal-title">Assign a client</h2>
+          <p>Use the client's UUID from your user record.</p>
+        </div><button class="close" data-close="client-modal" aria-label="Close">×</button>
+      </div>
+
+
+
+      <form id="client-form">
+
+
+
+        <div class="field"><label for="client-id">Client user ID (UUID)</label><input id="client-id" required
+            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off"></div>
+
+
+
+        <div class="field"><label for="client-label">Optional label for your reference</label><input id="client-label"
+            placeholder="e.g. Career consultation client"></div>
+
+
+
+        <p class="footnote">The backend validates the assignment. The optional label is not sent unless your API
+          supports it.</p>
+
+
+
+        <div class="form-actions"><button type="button" class="btn secondary"
+            data-close="client-modal">Cancel</button><button class="btn" type="submit">Create assignment</button></div>
+
+
+
+      </form>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="modal-backdrop" id="note-modal" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
+
+
+
+    <div class="modal">
+
+
+
+      <div class="modal-head">
+        <div>
+          <h2 id="note-modal-title">New consultation note</h2>
+          <p>Record a session and its next steps.</p>
+        </div><button class="close" data-close="note-modal" aria-label="Close">×</button>
+      </div>
+
+
+
+      <form id="note-form">
+
+
+
+        <input id="note-id" type="hidden">
+
+
+
+        <div class="field"><label for="note-client">Assigned client</label><select id="note-client" required>
+            <option value="">Choose a client</option>
+          </select></div>
+
+
+
+        <div class="field"><label for="note-title">Session title</label><input id="note-title" required maxlength="200"
+            placeholder="e.g. Career direction reflection"></div>
+
+
+
+        <div class="field"><label for="note-body">Session notes</label><textarea id="note-body" required
+            placeholder="Summarize the discussion and reflective guidance…"></textarea></div>
+
+
+
+        <div class="field"><label for="note-actions">Follow-up actions (one per line)</label><textarea id="note-actions"
+            placeholder="Reflect on priorities&#10;Review progress next session"></textarea></div>
+
+
+
+        <div class="split">
+
+
+
+          <div class="field"><label for="note-status">Progress status</label><select id="note-status">
+              <option value="IN_PROGRESS">In progress</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="ON_HOLD">On hold</option>
+            </select></div>
+
+
+
+          <div class="field"><label for="note-followup">Next follow-up (optional)</label><input id="note-followup"
+              type="datetime-local"></div>
+
+
+
+        </div>
+
+
+
+        <div class="form-actions"><button type="button" class="btn secondary"
+            data-close="note-modal">Cancel</button><button class="btn" type="submit">Save note</button></div>
+
+
+
+      </form>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <div class="modal-backdrop" id="outcome-modal" role="dialog" aria-modal="true" aria-labelledby="outcome-modal-title">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2 id="outcome-modal-title">Record follow-up outcome</h2>
+          <p>Record what the client reported after a consultation.</p>
+        </div><button class="close" data-close="outcome-modal" aria-label="Close">×</button>
+      </div>
+      <form id="outcome-form">
+        <div class="field"><label for="outcome-client">Assigned client</label><select id="outcome-client" required>
+            <option value="">Choose a client</option>
+          </select></div>
+        <div class="field"><label for="outcome-reading">Reading ID (optional)</label><input id="outcome-reading"
+            placeholder="Reading UUID, if relevant"></div>
+        <div class="field"><label for="outcome-note">Consultation note ID (optional)</label><input id="outcome-note"
+            placeholder="Consultation note UUID, if relevant"></div>
+        <div class="field"><label for="outcome-value">Reported outcome</label><select id="outcome-value" required>
+            <option value="HELPFUL">Helpful</option>
+            <option value="NO_CHANGE">No change</option>
+            <option value="DIFFICULT">Difficult</option>
+            <option value="NOT_FOLLOWED_UP">Not followed up</option>
+          </select></div>
+        <div class="field"><label for="outcome-notes">Notes (optional)</label><textarea id="outcome-notes"
+            maxlength="2000" placeholder="Brief follow-up notes…"></textarea></div>
+        <div class="form-actions"><button type="button" class="btn secondary"
+            data-close="outcome-modal">Cancel</button><button class="btn" type="submit">Save outcome</button></div>
+      </form>
+    </div>
+  </div>
+
+  ```html
+  <!-- Consultant Chat Modal -->
+  <div id="consultant-chat-modal" class="modal-backdrop">
+    <div class="modal" style="max-width:700px;width:95%;">
+      <div class="modal-head">
+        <div>
+          <h2>Consultation Chat</h2>
+          <p id="consultant-chat-status">Connecting...</p>
+        </div>
+        <button type="button" class="close" data-close="consultant-chat-modal" aria-label="Close chat">
+          ×
+        </button>
+      </div>
+
+      <div id="consultant-chat-messages"
+        style="height:350px;overflow-y:auto;padding:12px;background:#f8fafc;border-radius:10px;">
+        <div class="empty">Loading messages...</div>
+      </div>
+
+      <form id="consultant-chat-form" style="display:flex;gap:8px;margin-top:14px;">
+        <input id="consultant-chat-input" type="text" maxlength="4000" placeholder="Type your message..." required
+          autocomplete="off" style="flex:1;min-width:0;">
+        <button id="consultant-chat-send" class="btn" type="submit">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+  ```
+  <script>
+
+
+
+    (() => {
+
+
+
+      "use strict";
+
+
+
+      const API_BASE = "http\://127.0.0.1:8000/api/v1";
+
+
+
+      const token = localStorage.getItem("access_token");
+
+
+
+      const state = {
+        me: null,
+        clients: [],
+        notes: [],
+        bookings: [],
+        dashboard: null,
+        analytics: null
+      };
+
+
+
+      const $ = (id) => document.getElementById(id);
+
+
+
+      const safe = (value) => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+
+
+      const first = (...values) => values.find(v => v !== undefined && v !== null && v !== "");
+
+
+
+      const asArray = (v) => Array.isArray(v) ? v : [];
+
+
+
+      const asObject = (v) => v && typeof v === "object" && !Array.isArray(v) ? v : {};
+
+
+
+      const numberText = (v, suffix = "") => v === undefined || v === null || v === "" ? "—" : `${v}${suffix}`;
+
+
+
+      const dateText = (v) => { if (!v) return "Date not provided"; const d = new Date(v); return Number.isNaN(d.getTime()) ? String(v) : d.toLocaleString(); };
+
+
+
+      function notice(message, type = "info") {
+
+
+
+        const box = $("notice"); box.textContent = message; box.className = `notice show ${type}`;
+
+
+
+        window.clearTimeout(notice.timer); notice.timer = window.setTimeout(() => box.classList.remove("show"), 6000);
+
+
+
+      }
+
+
+
+      async function api(path, options = {}) {
+
+
+
+        const headers = new Headers(options.headers || {});
+
+
+
+        headers.set("Authorization", `Bearer ${token}`);
+
+
+
+        if (options.body && !(options.body instanceof FormData) && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
+
+
+        let response;
+
+
+
+        try { response = await fetch(`${API_BASE}${path}`, { ...options, headers }); }
+
+
+
+        catch { throw new Error("Cannot reach the API. Check that FastAPI is running at http\://127.0.0.1:8000 and that CORS allows this frontend origin."); }
+
+
+
+        const text = await response.text();
+
+
+
+        let data = null;
+
+
+
+        if (text) { try { data = JSON.parse(text); } catch { data = { detail: text }; } }
+
+
+
+        if (response.status === 401) { localStorage.removeItem("access_token"); window.location.href = "index.html"; throw new Error("Your session expired. Please log in again."); }
+
+
+
+        if (!response.ok) {
+
+
+
+          const detail = data?.detail;
+
+
+
+          const message = Array.isArray(detail) ? detail.map(x => x.msg || JSON.stringify(x)).join("; ") : (typeof detail === "string" ? detail : `Request failed (${response.status}).`);
+
+
+
+          throw new Error(message);
+
+
+
+        }
+
+
+
+        return data;
+
+
+
+      }
+
+
+
+
+      function showPage(page) {
+        const copy = {
+          overview: [
+            "Your overview",
+            "A thoughtful view of your assigned clients and sessions."
+          ],
+          clients: [
+            "Assigned clients",
+            "Manage client assignments within your consultation scope."
+          ],
+          notes: [
+            "Session notes",
+            "Document consultations, progress, and follow-up actions."
+          ],
+          bookings: [
+            "Booking management",
+            "Review and respond to incoming consultation requests."
+          ],
+          availability: [
+            "Professional availability",
+            "Manage your online status and consultation preferences."
+          ],
+          analytics: [
+            "Reading analytics",
+            "Review activity and insight metrics for active assigned clients."
+          ]
+        };
+
+        if (!copy[page]) return;
+
+        document.querySelectorAll(".page").forEach(el =>
+          el.classList.toggle("active", el.id === `page-${page}`)
+        );
+
+        document.querySelectorAll(".nav button[data-page]").forEach(el =>
+          el.classList.toggle("active", el.dataset.page === page)
+        );
+
+        $("page-title").textContent = copy[page][0];
+        $("page-subtitle").textContent = copy[page][1];
+
+        if (page === "bookings") loadConsultationBookings();
+        if (page === "availability") loadMyAvailability();
+        if (page === "clients") loadClients();
+        if (page === "notes") loadNotes();
+
+        if (page === "analytics") {
+          loadAnalytics();
+          loadEffectiveness();
+        }
+      }
+
+
+      function renderConsultationBookings() {
+        const container = $("bookings-container");
+        if (!container) return;
+
+        if (!state.bookings.length) {
+          container.innerHTML = `
+      <div class="empty">
+        <strong>No consultation bookings found</strong>
+        Incoming consultation requests will appear here.
+      </div>`;
+          return;
+        }
+
+        container.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Booking</th>
+            <th>Scheduled time</th>
+            <th>Duration</th>
+            <th>Mode</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${state.bookings.map(booking => {
+          const id = first(booking.id, "");
+          const status = String(
+            booking.status || "PENDING"
+          ).toUpperCase();
+
+          const canRespond = status === "PENDING";
+
+          const statusClass =
+            status === "CONFIRMED" ? "green" :
+              ["REJECTED", "CANCELLED"].includes(status)
+                ? "amber" : "";
+
+          return `
+              <tr>
+                <td>
+                  <strong>${safe(id || "Booking")}</strong>
+                  <small>
+                    ${safe(booking.professional_type || "Consultation")}
+                  </small>
+                </td>
+                <td>${safe(dateText(booking.scheduled_at))}</td>
+                <td>${safe(numberText(booking.duration_minutes, " min"))}</td>
+                <td>${safe(booking.consultation_mode || "—")}</td>
+                <td>${safe(numberText(booking.amount))}</td>
+                <td>
+                  <span class="badge ${statusClass}">
+                    ${safe(status)}
+                  </span>
+                </td>
+                <td>
+                  ${canRespond ? `
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                      <button
+                        class="btn small"
+                        data-booking-action="CONFIRMED"
+                        data-booking-id="${safe(id)}">
+                        Confirm
+                      </button>
+                      <button
+                        class="btn danger small"
+                        data-booking-action="REJECTED"
+                        data-booking-id="${safe(id)}">
+                        Reject
+                      </button>
+                    </div>
+                  ` : (status === "CONFIRMED" &&
+              String(booking.consultation_mode || "").toUpperCase() === "CHAT"
+              ? `<button
+            class="btn small"
+            data-open-consultant-chat="${safe(id)}">
+            Open chat
+          </button>`
+              : "No action required")}
+                </td>
+              </tr>`;
+        }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+      }
+
+
+      function normalizeBookings(data) {
+        if (Array.isArray(data)) {
+          return data;
+        }
+
+        if (Array.isArray(data?.bookings)) {
+          return data.bookings;
+        }
+
+        if (Array.isArray(data?.items)) {
+          return data.items;
+        }
+
+        if (Array.isArray(data?.results)) {
+          return data.results;
+        }
+
+        return [];
+      }
+
+
+
+      async function loadConsultationBookings() {
+        const container = $("bookings-container");
+        const status = $("bookings-status");
+        const refreshButton = $("refresh-bookings");
+
+        if (!container) return;
+
+        if (refreshButton) refreshButton.disabled = true;
+
+        container.innerHTML =
+          `<div class="loading">Loading bookings...</div>`;
+
+        if (status) {
+          status.textContent =
+            "Loading incoming consultation requests...";
+        }
+
+        try {
+          const data = await api("/consultation-hub/bookings/me");
+
+          state.bookings = normalizeBookings(data);
+          renderConsultationBookings();
+
+          if (status) {
+            status.textContent =
+              `${state.bookings.length} booking(s) returned by the API.`;
+          }
+        } catch (error) {
+          container.innerHTML = `
+      <div class="empty">
+        <strong>Could not load bookings</strong>
+        ${safe(error.message)}
+      </div>`;
+
+          if (status) {
+            status.textContent = "Bookings could not be loaded.";
+          }
+        } finally {
+          if (refreshButton) refreshButton.disabled = false;
+        }
+      }
+
+      async function respondToConsultationBooking(id, action) {
+        if (!id || !["CONFIRMED", "REJECTED"].includes(action)) {
+          return;
+        }
+
+        const message = action === "CONFIRMED"
+          ? "Confirm this consultation booking?"
+          : "Reject this consultation booking?";
+
+        if (!confirm(message)) return;
+
+        try {
+          await api(
+            `/consultation-hub/bookings/${encodeURIComponent(id)}/respond`,
+            {
+              method: "PATCH",
+              body: JSON.stringify({ action })
+            }
+          );
+
+          notice(
+            action === "CONFIRMED"
+              ? "Booking confirmed successfully."
+              : "Booking rejected successfully.",
+            "success"
+          );
+
+          await loadConsultationBookings();
+        } catch (error) {
+          notice(error.message, "error");
+        }
+      }
+
+
+      // ---------- Consultant chat ----------
+
+      let consultantChatSocket = null;
+      let consultantChatBookingId = null;
+
+      function closeConsultantChat() {
+        if (consultantChatSocket) {
+          const socket = consultantChatSocket;
+          consultantChatSocket = null;
+          socket.close();
+        }
+
+        consultantChatBookingId = null;
+
+        $("consultant-chat-modal")?.classList.remove("open");
+      }
+
+      function renderConsultantChatMessage(message) {
+        const container = $("consultant-chat-messages");
+        if (!container || !message) return;
+
+        const id = String(message.id || "");
+
+        if (
+          id &&
+          [...container.querySelectorAll("[data-chat-message-id]")]
+            .some(el => el.dataset.chatMessageId === id)
+        ) return;
+
+        const mine =
+          String(message.sender_id || "") === String(state.me?.id || "");
+
+        const row = document.createElement("div");
+        row.style.display = "flex";
+        row.style.justifyContent = mine ? "flex-end" : "flex-start";
+        row.style.margin = "8px 0";
+
+        if (id) row.dataset.chatMessageId = id;
+
+        const bubble = document.createElement("div");
+        bubble.style.maxWidth = "80%";
+        bubble.style.padding = "10px 14px";
+        bubble.style.borderRadius = "12px";
+        bubble.style.background = mine ? "#e9ddff" : "#fff";
+        bubble.style.whiteSpace = "pre-wrap";
+        bubble.style.overflowWrap = "anywhere";
+
+        const text = document.createElement("div");
+        text.textContent = String(message.message || "");
+        bubble.appendChild(text);
+
+        const time = document.createElement("small");
+        const date = new Date(message.created_at);
+        time.textContent = Number.isNaN(date.getTime())
+          ? ""
+          : date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+
+        bubble.appendChild(time);
+        row.appendChild(bubble);
+        container.appendChild(row);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      async function openConsultantChat(bookingId) {
+        if (!bookingId || !token) {
+          notice("Booking ID or login token is missing.", "error");
+          return;
+        }
+
+        closeConsultantChat();
+        consultantChatBookingId = bookingId;
+
+        const modal = $("consultant-chat-modal");
+        const messages = $("consultant-chat-messages");
+        const status = $("consultant-chat-status");
+
+        if (!modal || !messages || !status) {
+          notice("Chat modal HTML is missing. Add it before the script tag.", "error");
+          return;
+        }
+
+        modal.classList.add("open");
+        messages.replaceChildren();
+        status.textContent = "Loading messages...";
+
+        try {
+          const data = await api(
+            `/consultation-hub/bookings/${encodeURIComponent(bookingId)}/chat/messages`
+          );
+
+          if (consultantChatBookingId !== bookingId) return;
+
+          const history = Array.isArray(data)
+            ? data
+            : (data.messages || data.items || []);
+
+          history.forEach(renderConsultantChatMessage);
+
+          if (!history.length) {
+            messages.textContent = "No messages yet. Start the conversation!";
+          }
+
+          const wsBase = API_BASE.replace(/^http/, "ws");
+          const url =
+            `${wsBase}/consultation-hub/bookings/` +
+            `${encodeURIComponent(bookingId)}/chat/ws` +
+            `?token=${encodeURIComponent(token)}`;
+
+          const socket = new WebSocket(url);
+          consultantChatSocket = socket;
+
+          socket.onopen = () => {
+            if (consultantChatSocket === socket) {
+              status.textContent = "Connected";
+            }
+          };
+
+          socket.onmessage = event => {
+            if (consultantChatSocket !== socket) return;
+
+            const payload = JSON.parse(event.data);
+
+            if (payload.type === "message") {
+              if (messages.textContent ===
+                "No messages yet. Start the conversation!") {
+                messages.replaceChildren();
+              }
+              renderConsultantChatMessage(payload);
+            } else if (payload.type === "error") {
+              notice(payload.detail || "Chat error.", "error");
+            }
+          };
+
+          socket.onerror = () => {
+            if (consultantChatSocket === socket) {
+              status.textContent = "WebSocket connection error.";
+            }
+          };
+
+          socket.onclose = () => {
+            if (consultantChatSocket === socket) {
+              status.textContent = "Disconnected";
+              consultantChatSocket = null;
+            }
+          };
+        } catch (error) {
+          status.textContent = "Could not load chat.";
+          notice(error.message, "error");
+        }
+      }
+
+      $("consultant-chat-form")?.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const input = $("consultant-chat-input");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        if (message.length > 2000) {
+          notice("Messages cannot exceed 2000 characters.", "error");
+          return;
+        }
+
+        if (!consultantChatSocket ||
+          consultantChatSocket.readyState !== WebSocket.OPEN) {
+          notice("Chat is not connected yet.", "error");
+          return;
+        }
+
+        consultantChatSocket.send(message);
+        input.value = "";
+      });
+
+
+      function getClientId(item) { return first(item.client_id, item.user_id, item.id, item.client?.id, item.user?.id, ""); }
+
+
+
+      function getClientName(item) { return first(item.client?.profile?.full_name, item.user?.profile?.full_name, item.profile?.full_name, item.full_name, item.name, item.client?.email, item.user?.email, item.email, getClientId(item), "Assigned client"); }
+
+
+
+      function getClientEmail(item) { return first(item.client?.email, item.user?.email, item.email, ""); }
+
+
+
+      function normalizeClients(data) { return asArray(Array.isArray(data) ? data : first(data?.clients, data?.assignments, data?.items, data?.results, data?.data, [])); }
+
+
+
+      function renderClients() {
+
+
+
+        const q = $("client-search").value.trim().toLowerCase();
+
+
+
+        const filtered = state.clients.filter(c => `${getClientName(c)} ${getClientEmail(c)} ${getClientId(c)}`.toLowerCase().includes(q));
+
+
+
+        if (!filtered.length) {
+
+
+
+          $("clients-container").innerHTML = `<div class="empty"><strong>${q ? "No matching clients" : "No active client assignments yet"}</strong>${q ? "Try a different search." : "Assign a client using their user UUID to begin."}</div>`;
+
+
+
+          return;
+
+
+
+        }
+
+
+
+        $("clients-container").innerHTML = `<div class="client-list">${filtered.map(c => {
+
+
+
+          const id = getClientId(c), name = getClientName(c), email = getClientEmail(c);
+
+
+
+          return `<div class="client-row"><div class="avatar">${safe(name.trim().slice(0, 1).toUpperCase() || "C")}</div><div><strong>${safe(name)}</strong><small>${safe(email || id)}</small><small>Assignment: ${safe(id || "ID not returned")}</small></div><span class="spacer"></span><button class="btn secondary small" data-client-readings="${safe(id)}">Readings</button><button class="btn danger small" data-deactivate="${safe(id)}">Deactivate</button></div>`;
+
+
+
+        }).join("")}</div>`;
+
+
+
+      }
+
+
+
+      function populateClientSelects() {
+
+
+
+        const opts = state.clients.map(c => `<option value="${safe(getClientId(c))}">${safe(getClientName(c))}</option>`).join("");
+
+
+
+        const currentFilter = $("notes-client-filter").value;
+
+
+
+        $("notes-client-filter").innerHTML = `<option value="">All assigned clients</option>${opts}`;
+
+
+
+        if ([...$("notes-client-filter").options].some(o => o.value === currentFilter)) $("notes-client-filter").value = currentFilter;
+
+
+
+        populateOutcomeClientSelect();
+
+        const noteCurrent = $("note-client").value;
+
+
+
+        $("note-client").innerHTML = `<option value="">Choose a client</option>${opts}`;
+
+
+
+        if ([...$("note-client").options].some(o => o.value === noteCurrent)) $("note-client").value = noteCurrent;
+
+
+
+      }
+
+
+
+      async function loadClients() {
+
+
+
+        $("clients-container").innerHTML = `<div class="loading">Loading assigned clients…</div>`;
+
+
+
+        try {
+
+
+
+          const data = await api("/spiritual-consultant/clients");
+
+
+
+          state.clients = normalizeClients(data);
+
+
+
+          renderClients(); populateClientSelects();
+
+
+
+        } catch (e) { $("clients-container").innerHTML = `<div class="empty"><strong>Could not load clients</strong>${safe(e.message)}</div>`; }
+
+
+
+      }
+
+
+
+      async function deactivateClient(id) {
+
+
+
+        if (!id || !confirm("Deactivate this client assignment? The client will no longer appear as actively assigned.")) return;
+
+
+
+        try { await api(`/spiritual-consultant/clients/${encodeURIComponent(id)}`, { method: "DELETE" }); notice("Client assignment deactivated.", "success"); await Promise.all([loadClients(), loadDashboard()]); }
+
+
+
+        catch (e) { notice(e.message, "error"); }
+
+
+
+      }
+
+
+
+      async function showClientReadings(id) {
+
+
+
+        if (!id) return notice("The API did not return a client ID for this assignment.", "error");
+
+
+
+        try {
+
+
+
+          const data = await api(`/spiritual-consultant/clients/${encodeURIComponent(id)}/readings`);
+
+
+
+          const readings = asArray(Array.isArray(data) ? data : first(data?.readings, data?.items, data?.results, []));
+
+
+
+          const content = readings.length ? `<div class="table-wrap"><table><thead><tr><th>Type</th><th>Created</th><th>Reading ID</th></tr></thead><tbody>${readings.map(r => `<tr><td>${safe(first(r.reading_type, r.type, "Reading"))}</td><td>${safe(dateText(first(r.created_at, r.createdAt)))}</td><td>${safe(first(r.id, r.reading_id, "—"))}</td></tr>`).join("")}</tbody></table></div>` : `<div class="empty"><strong>No readings returned</strong>This assigned client has no readings in the response.</div>`;
+
+
+
+          openInfoModal(`Client readings`, content);
+
+
+
+        } catch (e) { notice(e.message, "error"); }
+
+
+
+      }
+
+
+
+      function openInfoModal(title, content) {
+
+
+
+        let box = $("info-modal");
+
+
+
+        if (!box) {
+
+
+
+          box = document.createElement("div"); box.id = "info-modal"; box.className = "modal-backdrop";
+
+
+
+          box.innerHTML = `<div class="modal"><div class="modal-head"><div><h2 id="info-title"></h2></div><button class="close" data-close="info-modal" aria-label="Close">×</button></div><div id="info-content"></div></div>`;
+
+
+
+          document.body.appendChild(box);
+
+
+
+        }
+
+
+
+        $("info-title").textContent = title; $("info-content").innerHTML = content; box.classList.add("open");
+
+
+
+      }
+
+
+
+      async function loadNotes() {
+
+
+
+        $("notes-container").innerHTML = `<div class="loading">Loading consultation notes…</div>`;
+
+
+
+        try {
+
+
+
+          const params = new URLSearchParams();
+
+
+
+          const clientId = $("notes-client-filter").value;
+
+
+
+          if (clientId) params.set("client_id", clientId);
+
+
+
+          const data = await api(`/consultation-notes${params.toString() ? `?${params}` : ""}`);
+
+
+
+          state.notes = asArray(Array.isArray(data) ? data : first(data?.notes, data?.items, data?.results, []));
+
+
+
+          renderNotes();
+
+
+
+        } catch (e) { $("notes-container").innerHTML = `<div class="empty"><strong>Could not load consultation notes</strong>${safe(e.message)}<p>Check the consultation-notes route and whether this consultant has active client assignments.</p></div>`; }
+
+
+
+      }
+
+
+
+      function renderNotes() {
+
+
+
+        const status = $("notes-status-filter").value;
+
+
+
+        const notes = state.notes.filter(n => !status || n.progress_status === status);
+
+
+
+        if (!notes.length) { $("notes-container").innerHTML = `<div class="empty"><strong>No notes found</strong>Create a note for an actively assigned client, or adjust the filters.</div>`; return; }
+
+
+
+        $("notes-container").innerHTML = `<div class="note-list">${notes.map(n => {
+
+
+
+          const client = state.clients.find(c => getClientId(c) === n.client_id);
+
+
+
+          const statusClass = n.progress_status === "COMPLETED" ? "green" : n.progress_status === "ON_HOLD" ? "amber" : "";
+
+
+
+          const actions = asArray(n.follow_up_actions);
+
+
+
+          return `<article class="note-card"><div class="activity-icon">▤</div><div style="min-width:0;flex:1"><strong>${safe(n.title || "Consultation session")}</strong><small>${safe(client ? getClientName(client) : n.client_id)} · ${safe(dateText(n.created_at))}</small><p style="white-space:pre-wrap;margin:9px 0">${safe(n.session_notes || "")}</p>${actions.length ? `<small><b>Follow-up:</b> ${actions.map(safe).join(" · ")}</small>` : ""}${n.next_follow_up_at ? `<small><b>Next follow-up:</b> ${safe(dateText(n.next_follow_up_at))}</small>` : ""}<div style="margin-top:10px"><span class="badge ${statusClass}">${safe(n.progress_status || "IN_PROGRESS")}</span></div></div><button class="btn secondary small" data-edit-note="${safe(n.id)}">Edit</button></article>`;
+
+
+
+        }).join("")}</div>`;
+
+
+
+      }
+
+
+
+      function openModal(id) { $(id).classList.add("open"); }
+
+
+
+      function closeModal(id) { $(id).classList.remove("open"); }
+
+
+
+      function resetNoteForm() { $("note-form").reset(); $("note-id").value = ""; $("note-modal-title").textContent = "New consultation note"; $("note-status").value = "IN_PROGRESS"; }
+
+
+
+      function editNote(id) {
+
+
+
+        const n = state.notes.find(item => item.id === id); if (!n) return;
+
+
+
+        $("note-id").value = n.id; $("note-client").value = n.client_id; $("note-title").value = n.title || "";
+
+
+
+        $("note-body").value = n.session_notes || ""; $("note-actions").value = asArray(n.follow_up_actions).join("\n");
+
+
+
+        $("note-status").value = n.progress_status || "IN_PROGRESS";
+
+
+
+        if (n.next_follow_up_at) { const d = new Date(n.next_follow_up_at); $("note-followup").value = Number.isNaN(d.getTime()) ? "" : new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); } else $("note-followup").value = "";
+
+
+
+        $("note-modal-title").textContent = "Edit consultation note"; openModal("note-modal");
+
+
+
+      }
+
+
+
+      function toIsoOrNull(value) { if (!value) return null; const d = new Date(value); return Number.isNaN(d.getTime()) ? null : d.toISOString(); }
+
+
+
+      async function saveClient(event) {
+
+
+
+        event.preventDefault();
+
+
+
+        const id = $("client-id").value.trim();
+
+
+
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) return notice("Enter a valid client UUID.", "error");
+
+
+
+        try {
+
+
+
+          await api("/spiritual-consultant/clients", { method: "POST", body: JSON.stringify({ client_id: id }) });
+
+
+
+          closeModal("client-modal"); $("client-form").reset(); notice("Client assignment created.", "success");
+
+
+
+          await Promise.all([loadClients(), loadDashboard()]);
+
+
+
+        } catch (e) { notice(e.message, "error"); }
+
+
+
+      }
+
+
+
+      async function saveNote(event) {
+
+
+
+        event.preventDefault();
+
+
+
+        const id = $("note-id").value;
+
+
+
+        const payload = {
+
+
+
+          client_id: $("note-client").value,
+
+
+
+          title: $("note-title").value.trim(),
+
+
+
+          session_notes: $("note-body").value.trim(),
+
+
+
+          follow_up_actions: $("note-actions").value.split("\n").map(s => s.trim()).filter(Boolean),
+
+
+
+          progress_status: $("note-status").value,
+
+
+
+          next_follow_up_at: toIsoOrNull($("note-followup").value)
+
+
+
+        };
+
+
+
+        if (!payload.client_id) return notice("Choose an assigned client.", "error");
+
+
+
+        try {
+
+
+
+          if (id) {
+
+
+
+            delete payload.client_id;
+
+
+
+            await api(`/consultation-notes/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(payload) });
+
+
+
+          } else {
+
+
+
+            await api("/consultation-notes", { method: "POST", body: JSON.stringify(payload) });
+
+
+
+          }
+
+
+
+          closeModal("note-modal"); resetNoteForm(); notice(id ? "Consultation note updated." : "Consultation note saved.", "success"); await loadNotes();
+
+
+
+        } catch (e) { notice(e.message, "error"); }
+
+
+
+      }
+
+
+
+      function scoreValue(obj) {
+
+
+
+        for (const key of ["average_insight_score", "avg_insight_score", "insight_score_average", "average_score", "avg_score", "mean_insight_score"]) if (obj[key] !== undefined && obj[key] !== null) return obj[key];
+
+
+
+        return null;
+
+
+
+      }
+
+
+
+      function pickCount(obj, keys) { for (const k of keys) if (obj[k] !== undefined && obj[k] !== null) return obj[k]; return null; }
+
+
+
+      function setDashboardStats(data) {
+
+
+
+        const summary = asObject(data.stats || data.summary || {});
+
+
+
+        const clientsFromApi = first(
+
+
+
+          summary.active_clients,
+
+
+
+          data.active_assigned_clients,
+
+
+
+          data.active_client_count,
+
+
+
+          data.assigned_clients_count,
+
+
+
+          data.client_count,
+
+
+
+          data.total_clients
+
+
+
+        );
+
+
+
+        const clients = clientsFromApi ?? state.clients.length;
+
+
+
+        const counts = asObject(first(
+
+
+
+          data.reading_counts,
+
+
+
+          data.readings_by_type,
+
+
+
+          data.readings,
+
+
+
+          summary.reading_counts,
+
+
+
+          {}
+
+
+
+        ));
+
+
+
+        const palm = first(
+
+
+
+          summary.palmistry_readings,
+
+
+
+          data.palmistry_readings,
+
+
+
+          data.palmistry_count,
+
+
+
+          counts.PALMISTRY,
+
+
+
+          counts.palmistry
+
+
+
+        );
+
+
+
+        const tarot = first(
+
+
+
+          summary.tarot_readings,
+
+
+
+          data.tarot_readings,
+
+
+
+          data.tarot_count,
+
+
+
+          counts.TAROT,
+
+
+
+          counts.tarot
+
+
+
+        );
+
+
+
+        const score = first(scoreValue(summary), scoreValue(data));
+
+
+
+        $("stat-clients").textContent = numberText(clients);
+
+
+
+        $("stat-palm").textContent = numberText(palm);
+
+
+
+        $("stat-tarot").textContent = numberText(tarot);
+
+
+
+        $("stat-score").textContent =
+
+
+
+          score === null || score === undefined
+
+
+
+            ? "—"
+
+
+
+            : numberText(score, Number(score) <= 100 ? "/100" : "");
+
+
+
+        const activity = asArray(first(
+
+
+
+          data.recent_activity,
+
+
+
+          data.recent_activities,
+
+
+
+          data.activity,
+
+
+
+          data.recent_readings,
+
+
+
+          []
+
+
+
+        ));
+
+
+
+        $("recent-activity").innerHTML = activity.length
+
+
+
+          ? activity.slice(0, 8).map(a => `
+
+
+
+          <div class="activity">
+
+
+
+            <div class="activity-icon">✧</div>
+
+
+
+            <div>
+
+
+
+              <strong>${safe(first(
+
+
+
+            a.title, a.event, a.reading_type, a.action, "Activity"
+
+
+
+          ))}</strong>
+
+
+
+              <small>${safe(first(
+
+
+
+            a.client_name, a.client_email, a.description, a.message, ""
+
+
+
+          ))}</small>
+
+
+
+              <small>${safe(dateText(first(
+
+
+
+            a.created_at, a.timestamp, a.date
+
+
+
+          )))}</small>
+
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+        `).join("")
+
+
+
+          : `<div class="empty"><strong>No recent activity returned</strong>New activity will appear here when available from the API.</div>`;
+
+
+
+      }
+
+
+
+      async function loadDashboard() {
+
+
+
+        try { state.dashboard = asObject(await api("/spiritual-consultant/dashboard")); setDashboardStats(state.dashboard); }
+
+
+
+        catch (e) { $("recent-activity").innerHTML = `<div class="empty"><strong>Dashboard unavailable</strong>${safe(e.message)}</div>`;["stat-clients", "stat-palm", "stat-tarot", "stat-score"].forEach(id => $(id).textContent = "—"); }
+
+
+
+      }
+
+
+
+      function renderAnalytics(data) {
+
+
+
+        const d = asObject(data);
+
+
+
+        const summary = asObject(d.summary || d.stats || {});
+
+
+
+        const trends = asObject(d.user_trends);
+
+
+
+        const effectiveness = asObject(d.guidance_effectiveness);
+
+
+
+        const insights = asObject(d.consultation_insights);
+
+
+
+        const quality = asObject(d.data_quality);
+
+
+
+        const count = (value) => value === null || value === undefined ? "—" : numberText(value);
+
+
+
+        const score = first(summary.average_insight_score, effectiveness.average_insight_score);
+
+
+
+        $("analytics-palm").textContent = count(first(summary.palmistry_readings, d.palmistry_readings));
+
+
+
+        $("analytics-tarot").textContent = count(first(summary.tarot_readings, d.tarot_readings));
+
+
+
+        $("analytics-synth").textContent = count(first(summary.synthesized_readings, d.synthesized_readings));
+
+
+
+        $("analytics-score").textContent = score === null || score === undefined ? "—" : numberText(score, "/100");
+
+
+
+        const card = (label, value, detail = "") => `
+
+
+
+      <article class="stat">
+
+
+
+        <div class="stat-head">${safe(label)}</div>
+
+
+
+        <div class="stat-value">${safe(value)}</div>
+
+
+
+        ${detail ? `<div class="stat-foot">${safe(detail)}</div>` : ""}
+
+
+
+      </article>`;
+
+
+
+        const section = (title, subtitle, content) => `
+
+
+
+      <section class="panel">
+
+
+
+        <div class="panel-head"><div><h2>${safe(title)}</h2><p>${safe(subtitle)}</p></div></div>
+
+
+
+        ${content}
+
+
+
+      </section>`;
+
+
+
+        const renderList = (items, emptyText) => {
+
+
+
+          const list = asArray(items);
+
+
+
+          if (!list.length) return `<div class="empty">${safe(emptyText)}</div>`;
+
+
+
+          return `<div class="activity-list">${list.map(item => {
+
+
+
+            const row = asObject(item);
+
+
+
+            const label = first(row.label, row.topic, row.name, "Item");
+
+
+
+            const amount = first(row.occurrences, row.count, row.value, null);
+
+
+
+            return `<div class="activity"><div class="activity-icon">✦</div><div style="min-width:0;flex:1"><strong>${safe(label)}</strong></div><span class="badge">${amount === null ? "—" : safe(amount)}</span></div>`;
+
+
+
+          }).join("")}</div>`;
+
+
+
+        };
+
+
+
+        const monthly = asArray(first(trends.monthly_activity, d.monthly_activity, []));
+
+
+
+        const maxReadings = Math.max(1, ...monthly.map(item => Number(asObject(item).readings) || 0));
+
+
+
+        const monthlyHtml = monthly.length ? `
+
+
+
+      <div style="display:grid;gap:13px">
+
+
+
+        ${monthly.map(item => {
+
+
+
+          const row = asObject(item);
+
+
+
+          const readings = Number(row.readings) || 0;
+
+
+
+          const width = Math.max(0, Math.min(100, (readings / maxReadings) * 100));
+
+
+
+          return `<div>
+
+
+
+            <div style="display:flex;justify-content:space-between;gap:12px;font-size:12px">
+
+
+
+              <strong>${safe(row.month || "Unknown month")}</strong><span>${readings} readings</span>
+
+
+
+            </div>
+
+
+
+            <div class="bar-track"><div class="bar-fill" style="width:${width}%"></div></div>
+
+
+
+            <div class="stat-foot">Scored readings: ${safe(row.scored_readings ?? 0)} · Average insight score: ${row.average_insight_score == null ? "Not available" : safe(row.average_insight_score)}</div>
+
+
+
+          </div>`;
+
+
+
+        }).join("")}
+
+
+
+      </div>` : `<div class="empty">No timestamped monthly activity is available yet.</div>`;
+
+
+
+        const change = trends.reading_count_change_percent;
+
+
+
+        const changeText = change === null || change === undefined
+
+
+
+          ? "Not available"
+
+
+
+          : `${Number(change) > 0 ? "+" : ""}${change}%`;
+
+
+
+        const insightChange = trends.insight_score_change;
+
+
+
+        const insightChangeText = insightChange === null || insightChange === undefined
+
+
+
+          ? "Not available"
+
+
+
+          : `${Number(insightChange) > 0 ? "+" : ""}${insightChange} points`;
+
+
+
+        const guidanceStatus = effectiveness.status === "insufficient_outcome_data"
+
+
+
+          ? "Outcome data needed"
+
+
+
+          : first(effectiveness.status, "Not measured");
+
+
+
+        const guidanceContent = `
+
+
+
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0 0 12px">
+
+
+
+        ${card("Guidance status", guidanceStatus)}
+
+
+
+        ${card("Scored readings", count(effectiveness.scored_readings))}
+
+
+
+        ${card("Client feedback records", count(effectiveness.client_feedback_count))}
+
+
+
+        ${card("Measured outcomes", count(effectiveness.measured_outcome_count))}
+
+
+
+      </div>
+
+
+
+      <p>${safe(effectiveness.message || "Insight scores do not prove that guidance helped. Collect client feedback or follow-up outcomes to assess effectiveness.")}</p>`;
+
+
+
+        const distribution = asObject(insights.reading_type_distribution);
+
+
+
+        const distributionRows = Object.entries(distribution);
+
+
+
+        const distributionHtml = distributionRows.length ? `
+
+
+
+      <div class="table-wrap"><table><thead><tr><th>Reading type</th><th>Count</th></tr></thead><tbody>
+
+
+
+      ${distributionRows.map(([key, value]) => `<tr><td>${safe(key.replace(/_/g, " "))}</td><td>${safe(value)}</td></tr>`).join("")}
+
+
+
+      </tbody></table></div>` : `<div class="empty">Reading-type distribution is not available.</div>`;
+
+
+
+        const latest = insights.latest_reading_at ? dateText(insights.latest_reading_at) : "No timestamp available";
+
+
+
+        const topThemes = first(insights.most_common_themes, d.common_themes, []);
+
+
+
+        const lifeTerms = first(insights.frequent_life_trend_topics, d.life_trend_terms, []);
+
+
+
+        const recommendationTerms = first(insights.frequent_recommendation_topics, d.recommendation_terms, []);
+
+
+
+        const html = `
+
+
+
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+
+
+
+        ${card("Total readings", count(summary.total_readings))}
+
+
+
+        ${card("Assigned clients", count(summary.active_clients))}
+
+
+
+        ${card("Reading activity change", changeText, `${trends.current_month || "Current month"} vs ${trends.previous_month || "previous month"}`)}
+
+
+
+        ${card("Insight-score change", insightChangeText, "Only available when both months have scored readings")}
+
+
+
+      </div>
+
+
+
+      ${section("User trend analysis", "Monthly reading activity and available score trends", monthlyHtml)}
+
+
+
+      <div class="grid-2">
+
+
+
+        ${section("Consultation insights", "Recurring themes found in saved reading records", `
+
+
+
+          <h3 style="margin:0 0 10px">Common themes</h3>
+
+
+
+          ${renderList(topThemes, "No recurring themes found in the available records.")}
+
+
+
+          <h3 style="margin:18px 0 10px">Life-trend topics</h3>
+
+
+
+          ${renderList(lifeTerms, "No life-trend topics found in the available records.")}
+
+
+
+          <h3 style="margin:18px 0 10px">Recommendation topics</h3>
+
+
+
+          ${renderList(recommendationTerms, "No recommendation topics found in the available records.")}
+
+
+
+        `)}
+
+
+
+        ${section("Reading distribution", "Saved reading types and latest activity", `
+
+
+
+          ${distributionHtml}
+
+
+
+          <p class="footnote">Latest reading: ${safe(latest)}</p>
+
+
+
+        `)}
+
+
+
+      </div>
+
+
+
+      ${section("Guidance effectiveness", "Effectiveness requires feedback or observed follow-up outcomes", guidanceContent)}
+
+
+
+      ${section("Data quality", "Coverage of records included in these analytics", `
+
+
+
+        <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0">
+
+
+
+          ${card("Records analyzed", count(first(quality.records_analyzed, summary.total_readings)))}
+
+
+
+          ${card("Records with scores", count(first(quality.records_with_scores, summary.scored_readings)))}
+
+
+
+          ${card("Records with timestamps", count(first(quality.records_with_timestamps, summary.readings_with_timestamps)))}
+
+
+
+        </div>
+
+
+
+        <p class="footnote">${safe(d.disclaimer || "These analytics describe stored records and do not prove that guidance causes outcomes.")}</p>
+
+
+
+      `)}
+
+
+
+    `;
+
+
+
+        $("analytics-details").innerHTML = html;
+
+
+
+      }
+
+
+
+
+      function populateOutcomeClientSelect() {
+        const select = $("outcome-client");
+        if (!select) return;
+        const current = select.value;
+        const options = state.clients.map(c => `<option value="${safe(getClientId(c))}">${safe(getClientName(c))}</option>`).join("");
+        select.innerHTML = `<option value="">Choose a client</option>${options}`;
+        if ([...select.options].some(o => o.value === current)) select.value = current;
+      }
+
+      function renderBreakdown(containerId, data, labelTransform = value => value) {
+        const container = $(containerId);
+        const entries = Object.entries(asObject(data)).sort((a, b) => Number(b[1]) - Number(a[1]));
+        container.innerHTML = entries.length
+          ? entries.map(([key, value]) => `<div class="activity"><div class="activity-icon">•</div><div style="flex:1;min-width:0"><strong>${safe(labelTransform(key))}</strong></div><span class="badge">${safe(value)}</span></div>`).join("")
+          : `<div class="empty">No records yet.</div>`;
+      }
+
+      async function loadEffectiveness() {
+        $("effect-rating-distribution").innerHTML = `<div class="loading">Loading feedback…</div>`;
+        $("effect-outcome-distribution").innerHTML = `<div class="loading">Loading outcomes…</div>`;
+        try {
+          const data = asObject(await api("/spiritual-consultant/effectiveness"));
+          const feedback = asObject(data.feedback);
+          const outcomes = asObject(data.outcomes);
+          $("effect-feedback-count").textContent = numberText(feedback.count ?? 0);
+          $("effect-average-rating").textContent = feedback.average_rating == null ? "—" : `${Number(feedback.average_rating).toFixed(2)}/5`;
+          $("effect-outcome-count").textContent = numberText(outcomes.count ?? 0);
+          $("effect-helpful-rate").textContent = outcomes.helpful_rate_percent == null ? "—" : `${outcomes.helpful_rate_percent}%`;
+          renderBreakdown("effect-rating-distribution", feedback.rating_distribution, rating => `${rating} star${rating === "1" ? "" : "s"}`);
+          renderBreakdown("effect-outcome-distribution", outcomes.by_outcome, value => value.replaceAll("_", " "));
+          $("effectiveness-disclaimer").textContent = data.disclaimer || "Self-reported observations do not establish that guidance caused an outcome.";
+        } catch (e) {
+          $("effect-rating-distribution").innerHTML = `<div class="empty"><strong>Could not load effectiveness</strong>${safe(e.message)}</div>`;
+          $("effect-outcome-distribution").innerHTML = `<div class="empty">Outcome breakdown unavailable.</div>`;
+        }
+      }
+
+      async function saveOutcome(event) {
+        event.preventDefault();
+        const clientId = $("outcome-client").value;
+        if (!clientId) return notice("Choose an assigned client.", "error");
+        const payload = {
+          outcome: $("outcome-value").value,
+          notes: $("outcome-notes").value.trim() || null
+        };
+        const readingId = $("outcome-reading").value.trim();
+        const noteId = $("outcome-note").value.trim();
+        if (readingId) payload.reading_id = readingId;
+        if (noteId) payload.consultation_note_id = noteId;
+        try {
+          await api(`/spiritual-consultant/clients/${encodeURIComponent(clientId)}/outcomes`, {
+            method: "POST", body: JSON.stringify(payload)
+          });
+          closeModal("outcome-modal");
+          $("outcome-form").reset();
+          notice("Consultation outcome saved.", "success");
+          await loadEffectiveness();
+        } catch (e) {
+          notice(e.message, "error");
+        }
+      }
+
+      async function saveMyAvailability(event) {
+        event.preventDefault();
+
+        const button = $("save-availability");
+        const status = $("availability-status");
+
+        button.disabled = true;
+        status.textContent = "Saving availability...";
+
+        const payload = {
+          is_online: $("availability-online").checked,
+          accepting_bookings: $("availability-accepting").checked,
+          supports_chat: $("availability-chat").checked,
+          supports_voice: $("availability-voice").checked,
+          supports_video: $("availability-video").checked
+        };
+
+        try {
+          const result = await api("/consultation-hub/me/availability", {
+            method: "PUT",
+            body: JSON.stringify(payload)
+          });
+
+          status.textContent =
+            result.message || "Availability saved successfully.";
+
+          notice("Availability saved successfully.", "success");
+        } catch (error) {
+          status.textContent = "Save failed: " + error.message;
+          notice(error.message, "error");
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+
+      async function loadAnalytics() {
+
+
+
+        $("analytics-details").innerHTML = `<div class="loading">Loading analytics…</div>`;
+
+
+
+        try { state.analytics = asObject(await api("/spiritual-consultant/analytics")); renderAnalytics(state.analytics); }
+
+
+
+        catch (e) { $("analytics-details").innerHTML = `<div class="empty"><strong>Could not load analytics</strong>${safe(e.message)}</div>`; }
+
+
+
+      }
+
+      $("refresh-bookings")?.addEventListener(
+        "click",
+        loadConsultationBookings
+      );
+
+      document.addEventListener("click", event => {
+        const button = event.target.closest("[data-booking-action]");
+        if (!button) return;
+
+        respondToConsultationBooking(
+          button.dataset.bookingId,
+          button.dataset.bookingAction
+        );
+      });
+
+
+      async function initialize() {
+
+
+
+        if (!token) { window.location.href = "index.html"; return; }
+
+
+
+        try {
+
+
+
+          state.me = await api("/users/me");
+
+
+
+          const role = String(state.me?.role || "").toLowerCase().replace(/[_-]/g, " ").trim();
+
+
+
+          if (role !== "spiritual consultant") {
+
+
+
+            document.querySelector("main").innerHTML = `<section class="panel" style="max-width:700px;margin:10vh auto"><div class="eyebrow">Access restricted</div><h1>Consultant access required</h1><p>This workspace is available only to accounts whose backend role is <b>Spiritual Consultant</b>. Your current role is <b>${safe(state.me?.role || "unknown")}</b>.</p><p style="margin-top:14px">Your role is checked from the authenticated API response, not from a browser-side selection.</p><button class="btn" style="margin-top:20px" id="restricted-logout">Log out</button></section>`;
+
+
+
+            $("restricted-logout").addEventListener("click", logout); return;
+
+
+
+          }
+
+
+
+          const name = first(state.me.profile?.full_name, state.me.full_name, state.me.email?.split("@")[0], "Consultant");
+
+
+
+          $("user-name").textContent = name; $("avatar").textContent = name.trim().slice(0, 2).toUpperCase();
+
+
+
+          await Promise.all([loadDashboard(), loadClients()]);
+          await loadEffectiveness();
+
+
+
+          await loadNotes();
+
+
+
+        } catch (e) { notice(e.message, "error"); }
+
+
+
+      }
+
+
+
+      function logout() { localStorage.removeItem("access_token"); sessionStorage.clear(); window.location.href = "index.html"; }
+
+
+
+      document.querySelectorAll(".nav button[data-page]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
+
+
+
+      document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.goto)));
+
+
+
+      $("logout-btn").addEventListener("click", logout);
+
+
+
+      $("add-client-btn").addEventListener("click", () => openModal("client-modal"));
+
+
+
+      $("quick-add-client").addEventListener("click", () => openModal("client-modal"));
+
+
+
+      $("add-note-btn").addEventListener("click", () => { resetNoteForm(); populateClientSelects(); openModal("note-modal"); });
+
+
+
+      $("quick-add-note").addEventListener("click", () => { resetNoteForm(); populateClientSelects(); openModal("note-modal"); });
+
+
+
+      $("client-form").addEventListener("submit", saveClient);
+
+
+
+      $("note-form").addEventListener("submit", saveNote);
+
+
+
+      $("client-search").addEventListener("input", renderClients);
+
+
+
+      $("notes-client-filter").addEventListener("change", loadNotes);
+
+
+
+      $("notes-status-filter").addEventListener("change", renderNotes);
+
+
+
+      $("refresh-analytics").addEventListener("click", loadAnalytics);
+      $("refresh-effectiveness").addEventListener("click", loadEffectiveness);
+      $("outcome-form").addEventListener("submit", saveOutcome);
+      $("availability-form").addEventListener(
+        "submit",
+        saveMyAvailability
+      );
+      $("quick-add-outcome").addEventListener("click", () => { populateOutcomeClientSelect(); openModal("outcome-modal"); });
+
+      document.addEventListener("click", e => {
+
+        const close = e.target.closest("[data-close]");
+        if (close) {
+          if (close.dataset.close === "consultant-chat-modal") {
+            closeConsultantChat();
+          } else {
+            closeModal(close.dataset.close);
+          }
+        }
+
+        const deactivate = e.target.closest("[data-deactivate]"); if (deactivate) deactivateClient(deactivate.dataset.deactivate);
+
+        const readings = e.target.closest("[data-client-readings]"); if (readings) showClientReadings(readings.dataset.clientReadings);
+
+        const edit = e.target.closest("[data-edit-note]"); if (edit) editNote(edit.dataset.editNote);
+
+        const chatButton = e.target.closest("[data-open-consultant-chat]");
+        if (chatButton) {
+          const bookingId = chatButton.dataset.openConsultantChat;
+          openConsultantChat(bookingId);
+        }
+
+        if (e.target.classList.contains("modal-backdrop")) {
+          if (e.target.id === "consultant-chat-modal") {
+            closeConsultantChat();
+          } else {
+            e.target.classList.remove("open");
+          }
+        }
+
+      });
+      initialize();
+    })();
+  </script>
+</body>
+
+</html>
